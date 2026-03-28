@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StockProNex - Manage Your Stock Efficiently</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -30,55 +30,82 @@
         .brand-pro { color: #0d6efd; font-weight: bold; }
         .brand-nex { font-weight: bold; }
 
+        /* ===== Animated Logo ===== */
+        .logo-expand-container { display: flex; justify-content: center; align-items: baseline; flex-direction: row; }
+        .logo-word { display: inline-flex; align-items: baseline; flex-direction: row; }
+        .logo-letter { display: inline-block; }
+        .logo-rest {
+            display: inline-block;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            padding-right: 0.15em;
+            margin-right: -0.15em;
+            animation: expandWord 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.8s;
+        }
+        @keyframes expandWord {
+            0% { max-width: 0; opacity: 0; }
+            40% { opacity: 0; }
+            100% { max-width: 400px; opacity: 1; }
+        }
+        .subtitle-fade {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards 2s;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         /* ===== Animated Theme Toggle ===== */
         .theme-toggle {
             position: relative;
-            width: 64px;
-            height: 32px;
+            width: 50px;
+            height: 26px;
             border-radius: 9999px;
             cursor: pointer;
             border: none;
             outline: none;
             padding: 0;
-            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
+            transition: background-color 0.4s ease;
         }
         .theme-toggle--light {
-            background: linear-gradient(135deg, #60a5fa, #38bdf8, #7dd3fc);
-            box-shadow: 0 0 16px rgba(96, 165, 250, 0.4), inset 0 1px 2px rgba(255,255,255,0.3);
+            background-color: #cbd5e1; /* slate-300 */
         }
         .theme-toggle--dark {
-            background: linear-gradient(135deg, #1e293b, #334155, #1e1b4b);
-            box-shadow: 0 0 16px rgba(99, 102, 241, 0.3), inset 0 1px 2px rgba(255,255,255,0.05);
+            background-color: #334155; /* slate-700 */
         }
-
         .theme-toggle__thumb {
             position: absolute;
-            top: 3px;
-            width: 26px;
-            height: 26px;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
         .theme-toggle--light .theme-toggle__thumb {
-            transform: translateX(3px);
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.6), 0 0 24px rgba(251, 191, 36, 0.3);
+            transform: translateX(0);
+            background-color: #ffffff;
         }
         .theme-toggle--dark .theme-toggle__thumb {
-            transform: translateX(35px);
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            box-shadow: 0 0 12px rgba(203, 213, 225, 0.4), 0 0 24px rgba(203, 213, 225, 0.2);
+            transform: translateX(24px);
+            background-color: #0f172a; /* slate-900 */
         }
-
-        /* Sun icon */
-        .theme-toggle__sun {
+        .theme-toggle__icon {
             position: absolute;
-            width: 16px;
-            height: 16px;
-            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 14px;
+            height: 14px;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-toggle__sun {
+            color: #f59e0b; /* amber-500 */
         }
         .theme-toggle--light .theme-toggle__sun {
             opacity: 1;
@@ -86,63 +113,21 @@
         }
         .theme-toggle--dark .theme-toggle__sun {
             opacity: 0;
-            transform: rotate(180deg) scale(0.5);
+            transform: rotate(-90deg) scale(0.5);
         }
-
-        /* Moon icon */
         .theme-toggle__moon {
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #fbbf24; /* amber-400 */
         }
         .theme-toggle--light .theme-toggle__moon {
             opacity: 0;
-            transform: rotate(-180deg) scale(0.5);
+            transform: rotate(90deg) scale(0.5);
         }
         .theme-toggle--dark .theme-toggle__moon {
             opacity: 1;
             transform: rotate(0deg) scale(1);
         }
-
-        /* Stars decoration (dark mode) */
-        .theme-toggle__stars {
-            position: absolute;
-            top: 7px;
-            left: 10px;
-            transition: opacity 0.4s ease 0.1s;
-        }
-        .theme-toggle--light .theme-toggle__stars { opacity: 0; }
-        .theme-toggle--dark .theme-toggle__stars { opacity: 1; }
-
-        .theme-toggle__star {
-            fill: white;
-            animation: twinkle 2s infinite alternate;
-        }
-        .theme-toggle__star:nth-child(2) { animation-delay: 0.5s; }
-        .theme-toggle__star:nth-child(3) { animation-delay: 1s; }
-
-        @keyframes twinkle {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        /* Clouds decoration (light mode) */
-        .theme-toggle__clouds {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            transition: opacity 0.4s ease 0.1s;
-        }
-        .theme-toggle--light .theme-toggle__clouds { opacity: 0.8; }
-        .theme-toggle--dark .theme-toggle__clouds { opacity: 0; }
-
-        /* Hover glow */
-        .theme-toggle:hover {
-            filter: brightness(1.1);
-        }
-        .theme-toggle:active .theme-toggle__thumb {
-            width: 30px;
+        .theme-toggle:focus-visible {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3b82f6;
         }
 
         /* Page transitions */
@@ -188,28 +173,20 @@
                                 :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
                                 :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'"
                                 title="Toggle theme">
-                            <!-- Stars (visible in dark mode) -->
-                            <svg class="theme-toggle__stars" width="20" height="16" viewBox="0 0 20 16">
-                                <circle class="theme-toggle__star" cx="4" cy="4" r="1.5"/>
-                                <circle class="theme-toggle__star" cx="12" cy="2" r="1"/>
-                                <circle class="theme-toggle__star" cx="8" cy="10" r="1.2"/>
-                            </svg>
-                            <!-- Clouds (visible in light mode) -->
-                            <svg class="theme-toggle__clouds" width="20" height="12" viewBox="0 0 20 12">
-                                <circle cx="5" cy="8" r="4" fill="white" opacity="0.6"/>
-                                <circle cx="10" cy="6" r="5" fill="white" opacity="0.5"/>
-                                <circle cx="15" cy="8" r="3.5" fill="white" opacity="0.4"/>
-                            </svg>
-                            <!-- Thumb with Sun/Moon -->
                             <div class="theme-toggle__thumb">
-                                <!-- Sun Icon -->
-                                <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-                                    <circle cx="12" cy="12" r="4"/>
-                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                                <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                                 </svg>
-                                <!-- Moon Icon -->
-                                <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.5" stroke-linecap="round">
-                                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                                <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                                 </svg>
                             </div>
                         </button>
@@ -246,24 +223,32 @@
             <div class="flex flex-col items-center text-center space-y-5">
                 <!-- Big StockProNex Branding -->
                 <div>
-                    <span class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter italic leading-none inline-block">
-                        <span class="text-gray-900 dark:text-white">Stock</span><span class="text-blue-600">Pro</span><span class="text-gray-700 dark:text-gray-400">Nex</span>
+                    <span class="logo-expand-container text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter italic leading-none inline-flex">
+                        <span class="text-gray-900 dark:text-white logo-word">
+                            <span class="logo-letter">S</span><span class="logo-rest">tock</span>
+                        </span>
+                        <span class="text-blue-600 logo-word">
+                            <span class="logo-letter">P</span><span class="logo-rest">ro</span>
+                        </span>
+                        <span class="text-gray-700 dark:text-gray-400 logo-word">
+                            <span class="logo-letter">N</span><span class="logo-rest">ex</span>
+                        </span>
                     </span>
                 </div>
 
                 <!-- Tagline -->
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gray-900 dark:text-white leading-tight">
+                <h1 class="subtitle-fade text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gray-900 dark:text-white leading-tight">
                     <span class="block">Manage your inventory</span>
                     <span class="block text-blue-600 mt-1">like a Pro</span>
                 </h1>
 
                 <!-- Description -->
-                <p class="max-w-2xl text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed">
+                <p class="subtitle-fade max-w-2xl text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed" style="animation-delay: 2.2s;">
                     <span class="font-bold text-gray-900 dark:text-white">Stock</span><span class="font-bold text-blue-600">Pro</span><span class="font-bold text-gray-700 dark:text-gray-400">Nex</span> provides the simplest way to track your stock, value, and assets. Secure, fast, and easy to use.
                 </p>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                <div class="subtitle-fade flex flex-col sm:flex-row items-center justify-center gap-4 pt-2" style="animation-delay: 2.4s;">
                     <a href="{{ route('register') }}"
                         class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 shadow-lg transition-all">
                         Start Free Trial

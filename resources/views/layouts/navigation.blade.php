@@ -87,23 +87,20 @@
                             </div>
                         @endif
 
-                        <svg class="theme-toggle__stars" width="20" height="16" viewBox="0 0 20 16">
-                            <circle class="theme-toggle__star" cx="4" cy="4" r="1.5"/>
-                            <circle class="theme-toggle__star" cx="12" cy="2" r="1"/>
-                            <circle class="theme-toggle__star" cx="8" cy="10" r="1.2"/>
-                        </svg>
-                        <svg class="theme-toggle__clouds" width="20" height="12" viewBox="0 0 20 12">
-                            <circle cx="5" cy="8" r="4" fill="white" opacity="0.6"/>
-                            <circle cx="10" cy="6" r="5" fill="white" opacity="0.5"/>
-                            <circle cx="15" cy="8" r="3.5" fill="white" opacity="0.4"/>
-                        </svg>
                         <div class="theme-toggle__thumb">
-                            <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-                                <circle cx="12" cy="12" r="4"/>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+                            <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                             </svg>
-                            <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.5" stroke-linecap="round">
-                                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                            <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                             </svg>
                         </div>
                     </button>

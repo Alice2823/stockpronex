@@ -2,12 +2,52 @@
 
     <div class="w-full max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
 
+        <!-- Logo Animation Styles -->
+        <style>
+            .logo-expand-container { display: flex; justify-content: center; align-items: baseline; flex-direction: row; }
+            .brand-stock, .brand-pro, .brand-nex { display: inline-flex; align-items: baseline; flex-direction: row; }
+            .logo-letter { display: inline-block; }
+            .logo-rest {
+                display: inline-block;
+                max-width: 0; 
+                opacity: 0;
+                overflow: hidden;
+                white-space: nowrap;
+                padding-right: 0.15em;
+                margin-right: -0.15em;
+                /* Add a tiny padding/margin adjustment if needed, but flex baseline usually works */
+                animation: expandWord 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                animation-delay: 0.8s;
+            }
+            @keyframes expandWord {
+                0% { max-width: 0; opacity: 0; }
+                40% { opacity: 0; }
+                100% { max-width: 150px; opacity: 1; }
+            }
+            .subtitle-fade {
+                opacity: 0;
+                animation: fadeIn 0.8s ease forwards 2s;
+            }
+            @keyframes fadeIn {
+                0% { opacity: 0; transform: translateY(8px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+        </style>
+
         <!-- Logo -->
-        <div class="text-center mb-10">
-            <h2 class="text-4xl font-black tracking-tight mt-4">
-                <span class="brand-stock">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex">Nex</span>
+        <div class="text-center mb-10 text-4xl font-black tracking-tight mt-4 italic">
+            <h2 class="logo-expand-container">
+                <span class="brand-stock dark:text-white">
+                    <span class="logo-letter">S</span><span class="logo-rest">tock</span>
+                </span>
+                <span class="brand-pro text-blue-600 dark:text-blue-500">
+                    <span class="logo-letter">P</span><span class="logo-rest">ro</span>
+                </span>
+                <span class="brand-nex text-gray-400 dark:text-gray-400">
+                    <span class="logo-letter">N</span><span class="logo-rest">ex</span>
+                </span>
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">Inventory Management System</p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2 subtitle-fade not-italic">Inventory Management System</p>
         </div>
 
         <!-- Session Status -->
