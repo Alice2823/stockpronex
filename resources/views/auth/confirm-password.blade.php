@@ -1,0 +1,45 @@
+<x-guest-layout>
+
+    <div class="w-full max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
+
+        <!-- Logo -->
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-black tracking-tight mt-4">
+                <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro text-blue-600 dark:text-blue-500">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">Confirm Your Identity</p>
+        </div>
+
+        <div class="mb-6 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+        </div>
+
+        <!-- Errors -->
+        @if ($errors->any())
+            <div class="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.confirm') }}">
+            @csrf
+
+            <!-- Password -->
+            <div>
+                <x-label for="password" :value="__('Password')" />
+                <x-password-input id="password" class="block mt-1 w-full" name="password" required autocomplete="current-password" />
+            </div>
+
+            <div class="mt-6">
+                <button type="submit"
+                        class="w-full bg-gray-900 dark:bg-blue-600 text-white py-3 px-4 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200 dark:shadow-none uppercase tracking-widest text-sm">
+                    {{ __('Confirm') }}
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</x-guest-layout>
