@@ -137,5 +137,16 @@
     "Transactions": "Transactions",
     "ONLINE": "EN LIGNE",
     "CASH": "ESPÈCES",
-    "TOTAL": "TOTAL"
+    "TOTAL": "TOTAL",
+    "Profit Management": "Gestion des Bénéfices",
+    "Overall Profit Earned:": "Bénéfice Total Réalisé:",
+    "Stock Wise Profit Breakdowns": "Répartition des Bénéfices par Stock",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "Suivi des bénéfices en temps réel calculé uniquement en soustrayant le prix d'achat des quantités vendues.",
+    "Cost (MRP):": "Coût (Prix de détail):",
+    "Selling Price:": "Prix de Vente:",
+    "Units Sold:": "Unités Vendues:",
+    "Stock Profit": "Bénéfice du Stock",
+    "No stocks available": "Aucun stock disponible",
+    "Profit tracking metrics will appear here once you add stock inventory.": "Les indicateurs de suivi des bénéfices apparaîtront ici une fois que vous aurez ajouté l'inventaire des stocks.",
+    "Profit Manage": "Gérer les Bénéfices"
 }

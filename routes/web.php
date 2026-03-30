@@ -91,6 +91,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/payments/analytics-data', [App\Http\Controllers\PaymentController::class, 'getAnalyticsData'])
         ->name('dashboard.payments.analytics');
 
+    Route::get('/dashboard/profit', [App\Http\Controllers\ProfitController::class, 'index'])
+        ->name('dashboard.profit');
+    
+    Route::get('/dashboard/profit/export/pdf', [App\Http\Controllers\ProfitController::class, 'exportPdf'])
+        ->name('dashboard.profit.export.pdf');
+
+    Route::get('/dashboard/profit/export/excel', [App\Http\Controllers\ProfitController::class, 'exportExcel'])
+        ->name('dashboard.profit.export.excel');
+
 
 
 

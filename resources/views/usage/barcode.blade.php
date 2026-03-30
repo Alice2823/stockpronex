@@ -115,9 +115,18 @@
                                         <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Phone Number *</label>
                                         <input type="text" id="phone" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white">
                                     </div>
-                                    <div>
-                                        <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Shipping Address *</label>
-                                        <textarea id="address" rows="2" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white"></textarea>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Shipping Address *</label>
+                                            <textarea id="address" rows="2" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white"></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Discount (%)</label>
+                                            <div class="relative">
+                                                <input type="number" id="discount_input" step="0.5" min="0" max="100" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-red-500 transition-all text-sm text-gray-900 dark:text-white" placeholder="0.00" oninput="updateCartUI()">
+                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs">%</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -182,8 +191,9 @@
         let isProcessing = false;
         let lastScannedCode = null;
         let lastScanTime = 0;
-        let lastInvoiceId = null;
         const SCAN_DEBOUNCE_MS = 500;
+        const lastInvoiceId = null;
+        const taxPercentage = {{ Auth::user()->getTaxPercentage() }};
         const currencySymbol = "{{ Auth::user()->currency === 'INR' ? '₹' : (Auth::user()->currency === 'USD' ? '$' : Auth::user()->currency) }}";
 
         // Phone validation regex: supports +CountryCode followed by digits
@@ -230,6 +240,13 @@
         function fetchBarcodeDetails(barcode, type) {
             if (!barcode || isProcessing) return;
             
+            // Prevent adding the same record twice
+            if (cart.some(item => item.barcode === barcode)) {
+                showStatus('Already in Cart', 'This item is already added to your cart.', 'error');
+                if (type === 'manual') document.getElementById('manual_barcode_value').value = '';
+                return;
+            }
+
             const prefix = type === 'scan' ? 'scan_' : 'manual_';
             const containerId = type === 'scan' ? 'scan-result-container' : 'manual_product_info';
             
@@ -323,12 +340,40 @@
                 `;
             });
 
+            // Calculate Discount
+            const discountInput = document.getElementById('discount_input');
+            const discountPercent = parseFloat(discountInput.value) || 0;
+            const discountAmount = (subtotal * discountPercent) / 100;
+            const discountedSubtotal = subtotal - discountAmount;
+            
+            // Calculate Tax
+            const taxAmount = (discountedSubtotal * taxPercentage) / 100;
+            const finalTotal = discountedSubtotal + taxAmount;
+
             // Add Total Summary
             html += `
-                <div class="mt-4 pt-4 border-t border-dashed border-gray-100 dark:border-gray-800">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">Total</span>
-                        <span class="text-lg font-black text-blue-600">${currencySymbol}${subtotal.toFixed(2)}</span>
+                <div class="mt-4 pt-4 border-t border-dashed border-gray-100 dark:border-gray-800 space-y-2">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        <span>Items Subtotal</span>
+                        <span>${currencySymbol}${subtotal.toFixed(2)}</span>
+                    </div>
+                    ${discountPercent > 0 ? `
+                    <div class="flex justify-between items-center text-[10px] font-bold text-red-500 uppercase tracking-widest">
+                        <span>Discount (${discountPercent}%)</span>
+                        <span>-${currencySymbol}${discountAmount.toFixed(2)}</span>
+                    </div>
+                    ` : ''}
+                    <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-t border-gray-50 dark:border-gray-800/50 pt-1">
+                        <span>Net Total</span>
+                        <span>${currencySymbol}${discountedSubtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                        <span>Tax (${taxPercentage}%)</span>
+                        <span>${currencySymbol}${taxAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-800">
+                        <span class="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">Total Bill</span>
+                        <span class="text-xl font-black text-blue-600">${currencySymbol}${finalTotal.toFixed(2)}</span>
                     </div>
                 </div>
             `;
@@ -361,6 +406,7 @@
                 customer_name: cName,
                 phone: phone,
                 address: address,
+                discount: document.getElementById('discount_input').value || 0,
                 company_name: document.getElementById('company_name').value || '',
                 payment_method: document.querySelector('input[name="payment_method"]:checked').value
             };
@@ -368,24 +414,56 @@
             isProcessing = true;
             showStatus('Processing...', 'Generating invoice and updating stock...', 'loading');
 
-            fetch("{{ route('usage.barcode.multi') }}", {
-                method: "POST",
+            fetch('/usage/barcode/multi', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Accept": "application/json"
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify(payload)
             })
-            .then(res => res.json())
+            .then(async res => {
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    let errorMessage = `Status ${res.status}`;
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.message || errorMessage;
+                    } catch (e) {
+                        // Not JSON, use truncated text
+                        errorMessage += ': ' + (errorText.substring(0, 50) || 'Unknown Error');
+                    }
+                    throw new Error(errorMessage);
+                }
+                return res.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
-                    lastInvoiceId = data.data?.invoice_id;
-                    showStatus('Success!', 'Invoice generated successfully.', 'success');
+                    // Clear cart upon success to prevent duplicate submissions
+                    cart = [];
+                    updateCartUI();
+                    
+                    showStatus('Success!', data.message || 'Invoice generated successfully.', 'success');
+                    
+                    // Add a download button to the success overlay
+                    if (data.data && data.data.invoice_id) {
+                        const statusOverlay = document.getElementById('status-overlay');
+                        const downloadBtn = document.createElement('a');
+                        downloadBtn.href = `/invoice/${data.data.invoice_id}/download`;
+                        downloadBtn.className = "mt-4 inline-flex items-center justify-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg";
+                        downloadBtn.innerHTML = `
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download Invoice
+                        `;
+                        const statusContent = statusOverlay.querySelector('.bg-white');
+                        if (statusContent) statusContent.appendChild(downloadBtn);
+                    }
                     
                     // Trigger WhatsApp send if phone provided and invoice_id exists
-                    if (lastInvoiceId && phone && phone !== 'N/A') {
-                        sendWhatsAppInvoice(lastInvoiceId);
+                    if (data.data?.invoice_id && phone && phone !== 'N/A') {
+                        sendWhatsAppInvoice(data.data.invoice_id);
                     }
                 } else {
                     showStatus('Failed', data.message || 'Could not process items.', 'error');

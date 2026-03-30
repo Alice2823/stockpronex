@@ -232,23 +232,34 @@ class StockUsageController extends Controller
 
         // --- NEW: Automatic Invoice Generation for Regular Usage ---
         $taxPercentage = Auth::user()->getTaxPercentage();
+        $discountPercentage = (float)$request->input('discount_percentage', 0);
         $subtotal = $stock->price * $request->quantity;
-        $taxAmount = ($subtotal * $taxPercentage) / 100;
-        $totalAmount = $subtotal + $taxAmount;
+        
+        $discountAmount = ($subtotal * $discountPercentage) / 100;
+        $netSubtotal = $subtotal - $discountAmount;
+        $taxAmount = ($netSubtotal * $taxPercentage) / 100;
+        $totalAmount = $netSubtotal + $taxAmount;
+
         $invoiceNumber = $this->generateInvoiceNumber();
+
+        // Calculate per-item discount for profit tracking
+        $perItemDiscount = $request->quantity > 0 ? ($discountAmount / $request->quantity) : 0;
 
         // Construct items array for detailed invoice tracking
         $invoiceItems = [];
         for ($i = 0; $i < $request->quantity; $i++) {
             $attrs = $request->business_attributes[$i] ?? [];
             $invoiceItems[] = [
+                'stock_id' => $stock->id, // Added for profit tracking consistency
                 'name' => $stock->name,
                 'brand' => $attrs['brand'] ?? $stock->business_attributes['brand'] ?? null,
                 'model' => $attrs['model'] ?? $stock->business_attributes['model'] ?? null,
                 'imei' => $attrs['imei'] ?? null,
                 'serial' => $attrs['serial_number'] ?? null,
-                'barcode' => $rawTrackingData[$i] ?? 'N/A', // Use RAW data here
+                'barcode' => $rawTrackingData[$i] ?? 'N/A',
                 'unit_price' => $stock->price,
+                'mrp' => $stock->mrp ?? 0, // Store MRP at time of sale
+                'discount_amount' => $perItemDiscount, // Store discount at time of sale
             ];
         }
 
@@ -256,19 +267,21 @@ class StockUsageController extends Controller
             'user_id' => Auth::id(),
             'stock_id' => $stock->id,
             'usage_id' => $usage->id,
-            'barcode' => $rawTrackingData[0] ?? 'N/A', // Use RAW data here
+            'barcode' => $rawTrackingData[0] ?? 'N/A',
             'customer_name' => $request->customer_name ?: 'General Customer',
             'company_name' => null,
             'phone' => $request->customer_phone ?: 'N/A',
             'address' => $request->customer_address ?: 'N/A',
             'amount' => $totalAmount,
             'subtotal' => $subtotal,
+            'discount_percentage' => $discountPercentage,
+            'discount_amount' => $discountAmount,
             'total_amount' => $totalAmount,
             'tax_percentage' => $taxPercentage,
             'tax_amount' => $taxAmount,
             'invoice_number' => $invoiceNumber,
             'payment_method' => $request->payment_method ?? 'cash',
-            'items' => $invoiceItems, // Store the detailed items list
+            'items' => $invoiceItems, 
         ]);
         // ---------------------------------------------------------
 

@@ -161,5 +161,16 @@
     "Transactions": "વ્યવહારો",
     "ONLINE": "ઓનલાઇન",
     "CASH": "રોકડ",
-    "TOTAL": "કુલ"
+    "TOTAL": "કુલ",
+    "Profit Management": "નફાનું સંચાલન",
+    "Overall Profit Earned:": "કુલ કમાયેલ નફો:",
+    "Stock Wise Profit Breakdowns": "સ્ટોક મુજબ નફાની વિગતો",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "વેચાયેલ જથ્થામાંથી ખરીદ કિંમત બાદ કરીને ગણતરી કરેલ રીઅલ-ટાઇમ પ્રોફિટ ટ્રેકિંગ.",
+    "Cost (MRP):": "કિંમત (MRP):",
+    "Selling Price:": "વેચાણ કિંમત:",
+    "Units Sold:": "વેચાયેલ એકમો:",
+    "Stock Profit": "સ્ટોક નફો",
+    "No stocks available": "કોઈ સ્ટોક ઉપલબ્ધ નથી",
+    "Profit tracking metrics will appear here once you add stock inventory.": "સ્ટોક ઇન્વેન્ટરી ઉમેર્યા પછી અહીં નફા ટ્રેકિંગ મેટ્રિક્સ દેખાશે.",
+    "Profit Manage": "નફાનું સંચાલન"
 }

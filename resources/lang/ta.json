@@ -137,5 +137,16 @@
     "Transactions": "பரிவர்த்தனைகள்",
     "ONLINE": "ஆன்லைன்",
     "CASH": "ரொக்கம்",
-    "TOTAL": "மொத்தம்"
+    "TOTAL": "மொத்தம்",
+    "Profit Management": "லாப மேலாண்மை",
+    "Overall Profit Earned:": "மொத்த ஈட்டப்பட்ட லாபம்:",
+    "Stock Wise Profit Breakdowns": "பங்கு வாரியான லாப விவரங்கள்",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "விற்கப்பட்ட அளவிலிருந்து வாங்கிய விலையைக் கழிப்பதன் மூலம் கணக்கிடப்பட்ட நிகழ்நேர லாபக் கண்காணிப்பு.",
+    "Cost (MRP):": "அடக்க விலை (MRP):",
+    "Selling Price:": "விற்பனை விலை:",
+    "Units Sold:": "விற்பனையான அலகுகள்:",
+    "Stock Profit": "பங்கு லாபம்",
+    "No stocks available": "பங்குகள் எதுவும் இல்லை",
+    "Profit tracking metrics will appear here once you add stock inventory.": "பங்கு இருப்பைச் சேர்த்தவுடன் லாபக் கண்காணிப்பு அளவீடுகள் இங்கே தோன்றும்.",
+    "Profit Manage": "லாப மேலாண்மை"
 }

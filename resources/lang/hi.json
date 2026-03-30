@@ -161,5 +161,16 @@
     "Transactions": "लेनदेन",
     "ONLINE": "ऑनलाइन",
     "CASH": "नकद",
-    "TOTAL": "कुल"
+    "TOTAL": "कुल",
+    "Profit Management": "लाभ प्रबंधन",
+    "Overall Profit Earned:": "कुल अर्जित लाभ:",
+    "Stock Wise Profit Breakdowns": "स्टॉक वार लाभ विवरण",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "बेची गई मात्रा में से खरीद मूल्य घटाकर गणना की गई रीयल-टाइम लाभ ट्रैकिंग।",
+    "Cost (MRP):": "लागत (MRP):",
+    "Selling Price:": "विक्रय मूल्य:",
+    "Units Sold:": "बेची गई इकाइयाँ:",
+    "Stock Profit": "स्टॉक लाभ",
+    "No stocks available": "कोई स्टॉक उपलब्ध नहीं है",
+    "Profit tracking metrics will appear here once you add stock inventory.": "स्टॉक इन्वेंट्री जोड़ने के बाद यहां लाभ ट्रैकिंग मेट्रिक्स दिखाई देंगे।",
+    "Profit Manage": "लाभ प्रबंधन"
 }

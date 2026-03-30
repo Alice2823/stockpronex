@@ -14,6 +14,8 @@ class Invoice extends Model
         'barcode',
         'invoice_number',
         'subtotal',
+        'discount_percentage',
+        'discount_amount',
         'amount',
         'tax_amount',
         'tax_percentage',

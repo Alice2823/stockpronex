@@ -410,6 +410,16 @@
                 <td class="total-label">Subtotal</td>
                 <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->subtotal ?? $invoice->amount, 2) }}</td>
             </tr>
+            @if($invoice->discount_percentage > 0)
+            <tr class="total-row">
+                <td class="total-label" style="color: #ef4444;">Discount ({{ number_format($invoice->discount_percentage, 1) }}%)</td>
+                <td class="total-value" style="color: #ef4444;">-{{ $currencySymbol }}&nbsp;{{ number_format($invoice->discount_amount, 2) }}</td>
+            </tr>
+            <tr class="total-row">
+                <td class="total-label">Net Amount</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format(($invoice->subtotal ?? $invoice->amount) - $invoice->discount_amount, 2) }}</td>
+            </tr>
+            @endif
             <tr class="total-row">
                 <td class="total-label">Tax ({{ number_format($invoice->tax_percentage ?? 0, 1) }}%)</td>
                 <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tax_amount ?? 0, 2) }}</td>

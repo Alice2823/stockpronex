@@ -161,5 +161,16 @@
     "Transactions": "व्यवहार",
     "ONLINE": "ऑनलाइन",
     "CASH": "रोख",
-    "TOTAL": "एकूण"
+    "TOTAL": "एकूण",
+    "Profit Management": "नफा व्यवस्थापन",
+    "Overall Profit Earned:": "एकूण कमावलेला नफा:",
+    "Stock Wise Profit Breakdowns": "स्टॉक नुसार नफ्याचा तपशील",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "विकलेल्या प्रमाणामधून खरेदी किंमत वजा करून मोजलेले रिअल-टाइम नफा ट्रॅकिंग.",
+    "Cost (MRP):": "किंमत (MRP):",
+    "Selling Price:": "विक्री किंमत:",
+    "Units Sold:": "विकलेली युनिट्स:",
+    "Stock Profit": "स्टॉक नफा",
+    "No stocks available": "कोणताही स्टॉक उपलब्ध नाही",
+    "Profit tracking metrics will appear here once you add stock inventory.": "स्टॉक इन्व्हेंटरी जोडल्यानंतर येथे नफा ट्रॅकिंग मेट्रिक्स दिसतील.",
+    "Profit Manage": "नफा व्यवस्थापन"
 }

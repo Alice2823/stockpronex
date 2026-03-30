@@ -36,14 +36,20 @@
                             </x-select>
                         </div>
 
-                        <!-- Quantity -->
-                        <div class="mt-4">
-                            <x-label for="quantity" :value="__('Quantity Used')" />
-                            <x-input id="quantity" class="block mt-1 w-full" type="number" name="quantity" min="1"
-                                required />
-                            @error('quantity')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <x-label for="quantity" :value="__('Quantity Used')" />
+                                <x-input id="quantity" class="block mt-1 w-full" type="number" name="quantity" min="1"
+                                    required />
+                                @error('quantity')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <x-label for="discount_percentage" :value="__('Discount (%)')" />
+                                <x-input id="discount_percentage" class="block mt-1 w-full" type="number" name="discount_percentage" min="0" max="100" step="0.01" value="0" />
+                                <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">{{ __('Applied to subtotal before tax') }}</p>
+                            </div>
                         </div>
 
                         <!-- Business-Specific Mandatory Fields Container -->
@@ -298,6 +304,8 @@
                         if (!attrMap[idx]) attrMap[idx] = {};
                         attrMap[idx][subKey] = value;
                     }
+                } else if (key === 'discount_percentage') {
+                    data[key] = parseFloat(value) || 0;
                 } else if (key !== '_token') {
                     data[key] = value;
                 }

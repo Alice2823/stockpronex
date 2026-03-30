@@ -137,5 +137,16 @@
     "Transactions": "Transacciones",
     "ONLINE": "EN LÍNEA",
     "CASH": "EFECTIVO",
-    "TOTAL": "TOTAL"
+    "TOTAL": "TOTAL",
+    "Profit Management": "Gestión de Beneficios",
+    "Overall Profit Earned:": "Beneficio Total Ganado:",
+    "Stock Wise Profit Breakdowns": "Desglose de Beneficios por Stock",
+    "Real-time profit tracking calculated purely from amounts sold minus purchase price.": "Seguimiento de beneficios en tiempo real calculado puramente restando el precio de compra de las cantidades vendidas.",
+    "Cost (MRP):": "Costo (PVP):",
+    "Selling Price:": "Precio de Venta:",
+    "Units Sold:": "Unidades Vendidas:",
+    "Stock Profit": "Beneficio del Stock",
+    "No stocks available": "No hay acciones disponibles",
+    "Profit tracking metrics will appear here once you add stock inventory.": "Las métricas de seguimiento de beneficios aparecerán aquí una vez que agregue el inventario de existencias.",
+    "Profit Manage": "Gestionar Beneficio"
 }

@@ -273,9 +273,14 @@
                                     <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                                     {{ __('Individual Unit Tracking') }}
                                 </h3>
-                                <div class="flex items-center bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">
-                                    <input type="checkbox" id="enable_tracking" name="enable_tracking" value="1" class="rounded border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-800" checked>
-                                    <label for="enable_tracking" class="ml-2 text-xs font-bold text-indigo-700 dark:text-indigo-400">{{ __('Track Unit Details') }}</label>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="autoGenerateAllBarcodes()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg transition-all active:scale-95">
+                                        {{ __('Auto-Generate All') }}
+                                    </button>
+                                    <div class="flex items-center bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">
+                                        <input type="checkbox" id="enable_tracking" name="enable_tracking" value="1" class="rounded border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-800" checked>
+                                        <label for="enable_tracking" class="ml-2 text-xs font-bold text-indigo-700 dark:text-indigo-400">{{ __('Track Unit Details') }}</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -396,8 +401,25 @@
                 input.value = barcode;
                 // Add highlight effect
                 const row = input.closest('.unit-row');
-                row.classList.add('ring-2', 'ring-indigo-400');
-                setTimeout(() => row.classList.remove('ring-2', 'ring-indigo-400'), 1000);
+                row.classList.add('ring-2', 'ring-indigo-400', 'bg-indigo-50/50', 'dark:bg-indigo-900/20');
+                setTimeout(() => row.classList.remove('ring-2', 'ring-indigo-400', 'bg-indigo-50/50', 'dark:bg-indigo-900/20'), 1000);
+            }
+        }
+
+        function autoGenerateAllBarcodes() {
+            const qty = parseInt(quantityInput.value) || 0;
+            const isEnabled = enableTrackingItem.checked;
+            
+            if (!isEnabled || qty <= 0) {
+                alert('Please enter quantity and enable tracking first.');
+                return;
+            }
+            
+            for (let i = 1; i <= qty; i++) {
+                const input = document.getElementById(`unit_barcode_${i}`);
+                if (input && !input.value) {
+                    generateUnitBarcode(i);
+                }
             }
         }
 

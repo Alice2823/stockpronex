@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Notifications\LowStockNotification;
 
 class Stock extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -85,5 +86,10 @@ class Stock extends Model
     public function units()
     {
         return $this->hasMany(StockUnit::class);
+    }
+
+    public function usages()
+    {
+        return $this->hasMany(StockUsage::class);
     }
 }

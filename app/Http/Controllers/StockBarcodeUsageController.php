@@ -32,6 +32,7 @@ class StockBarcodeUsageController extends Controller
             'phone' => 'required|string',
             'address' => 'required|string',
             'amount' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0|max:100',
             'payment_method' => 'nullable|string|in:cash,online',
         ]);
 
@@ -54,27 +55,49 @@ class StockBarcodeUsageController extends Controller
             $usage = $this->recordUsage($stock, $unit, $barcodeModel, $barcodeValue, $customerData);
             
             $taxPercentage = Auth::user()->getTaxPercentage();
-            $subtotal = $customerData['amount'];
-            $taxAmount = ($subtotal * $taxPercentage) / 100;
-            $totalAmount = $subtotal + $taxAmount;
+            $subtotal = (float)$customerData['amount'];
+            $discountPercentage = (float)($customerData['discount'] ?? 0);
+            $discountAmount = ($subtotal * $discountPercentage) / 100;
+            $discountedSubtotal = $subtotal - $discountAmount;
+            
+            $taxAmount = ($discountedSubtotal * $taxPercentage) / 100;
+            $totalAmount = $discountedSubtotal + $taxAmount;
+
+            $mrp = $stock->mrp ?? 0;
+            $processedItems = [[
+                'barcode' => $unit->barcode ?? $barcodeModel->barcode ?? $barcodeValue,
+                'name' => $stock->name,
+                'unit_price' => $subtotal,
+                'mrp' => $mrp,
+                'discount_amount' => $discountAmount,
+                'usage_id' => $usage->id,
+                'imei' => $unit->imei_number ?? null,
+                'serial' => $unit->serial_number ?? null,
+                'brand' => $stock->business_attributes['brand'] ?? null,
+                'model' => $stock->business_attributes['model_number'] ?? null,
+            ]];
 
             $invoiceNumber = $this->generateInvoiceNumber();
             $invoice = \App\Models\Invoice::create([
                 'user_id' => Auth::id(),
                 'stock_id' => $stock->id,
                 'usage_id' => $usage->id,
-                'barcode' => $unit->barcode ?? $barcodeModel->barcode ?? $barcodeValue,
+                'barcode' => $processedItems[0]['barcode'],
                 'customer_name' => $customerData['customer_name'],
                 'company_name' => $customerData['company_name'] ?? null,
                 'phone' => $customerData['phone'],
                 'address' => $customerData['address'],
                 'invoice_number' => $invoiceNumber,
                 'subtotal' => $subtotal,
+                'discount_percentage' => $discountPercentage,
+                'discount_amount' => $discountAmount,
                 'tax_amount' => $taxAmount,
+                'tax_percentage' => $taxPercentage,
                 'total_amount' => $totalAmount,
-                'amount' => $totalAmount, // amount is used for final compatibility
+                'amount' => $totalAmount,
                 'payment_method' => $customerData['payment_method'] ?? 'cash',
                 'status' => 'paid',
+                'items' => $processedItems,
             ]);
 
             DB::commit();
@@ -108,6 +131,7 @@ class StockBarcodeUsageController extends Controller
             'company_name' => 'nullable|string',
             'phone' => 'required|string',
             'address' => 'required|string',
+            'discount' => 'nullable|numeric|min:0|max:100',
             'payment_method' => 'required|string|in:cash,online',
         ]);
 
@@ -133,9 +157,11 @@ class StockBarcodeUsageController extends Controller
                 }
 
                 $processedItems[] = [
+                    'stock_id' => $stock->id,
                     'barcode' => $item['barcode'],
                     'name' => $stock->name,
-                    'unit_price' => $item['unit_price'],
+                    'unit_price' => (float)$item['unit_price'],
+                    'mrp' => (float)($stock->mrp ?? 0),
                     'usage_id' => $usage->id,
                     'imei' => $unit->imei_number ?? null,
                     'serial' => $unit->serial_number ?? null,
@@ -146,8 +172,17 @@ class StockBarcodeUsageController extends Controller
             }
 
             $taxPercentage = Auth::user()->getTaxPercentage();
-            $taxAmount = ($totalSubtotal * $taxPercentage) / 100;
-            $totalAmount = $totalSubtotal + $taxAmount;
+            $discountPercentage = (float)$request->input('discount', 0);
+            $totalDiscountAmount = ($totalSubtotal * $discountPercentage) / 100;
+
+            // Enforce proportional discount on each item for accurate profit tracking
+            foreach ($processedItems as &$pItem) {
+                $pItem['discount_amount'] = ($pItem['unit_price'] * $discountPercentage) / 100;
+            }
+            
+            $discountedSubtotal = $totalSubtotal - $totalDiscountAmount;
+            $taxAmount = ($discountedSubtotal * $taxPercentage) / 100;
+            $totalAmount = $discountedSubtotal + $taxAmount;
 
             $invoiceNumber = $this->generateInvoiceNumber();
             $invoice = \App\Models\Invoice::create([
@@ -157,6 +192,8 @@ class StockBarcodeUsageController extends Controller
                 'barcode' => $request->items[0]['barcode'],
                 'invoice_number' => $invoiceNumber,
                 'subtotal' => $totalSubtotal,
+                'discount_percentage' => $discountPercentage,
+                'discount_amount' => $totalDiscountAmount,
                 'tax_amount' => $taxAmount,
                 'tax_percentage' => $taxPercentage,
                 'total_amount' => $totalAmount,
