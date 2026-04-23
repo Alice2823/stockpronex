@@ -149,7 +149,7 @@ function sendOtp(){
 
     let email = document.getElementById('email').value;
 
-    fetch("{{ url('/send-otp') }}", {
+    fetch(window.location.origin + "/send-otp", {
 
         method: "POST",
 
@@ -188,7 +188,7 @@ function sendOtp(){
 
 function registerUser(){
 
-    fetch("{{ url('/register-otp') }}", {
+    fetch(window.location.origin + "/send-otp", {
 
         method: "POST",
 
