@@ -3,26 +3,17 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class ChangeNotesToTextInStockUsagesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::statement('ALTER TABLE stock_usages MODIFY notes TEXT');
+        DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE TEXT');
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        \Illuminate\Support\Facades\DB::statement('ALTER TABLE stock_usages MODIFY notes VARCHAR(255)');
+        DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE VARCHAR(255)');
     }
 }
