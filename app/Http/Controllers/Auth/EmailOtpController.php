@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class EmailOtpController extends Controller
 {
@@ -37,6 +38,9 @@ class EmailOtpController extends Controller
                 ]
             );
 
+            // 🔥 DEBUG LOG (VERY IMPORTANT)
+            Log::info("OTP GENERATED: " . $otp);
+
             Mail::raw("Your StockProNex OTP is: $otp", function ($message) use ($request) {
                 $message->to($request->email)
                         ->subject("StockProNex Email OTP");
@@ -49,10 +53,13 @@ class EmailOtpController extends Controller
 
         } catch (\Exception $e) {
 
+            // 🔥 SHOW REAL ERROR IN LOGS
+            Log::error("OTP ERROR: " . $e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 200);
+            ]);
         }
     }
 
@@ -111,11 +118,12 @@ class EmailOtpController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error("REGISTER ERROR: " . $e->getMessage());
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
         }
     }
-
 }
