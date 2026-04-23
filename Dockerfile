@@ -36,4 +36,4 @@ RUN php artisan config:cache || true
 EXPOSE 8080
 
 # Start server (NO MIGRATION HERE)
-CMD php -S 0.0.0.0:8080 -t public
+CMD php artisan migrate --force || true && php -S 0.0.0.0:8080 -t public
