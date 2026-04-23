@@ -20,50 +20,50 @@ class EmailOtpController extends Controller
     | SEND OTP
     |--------------------------------------------------------------------------
     */
-    public function sendOtp(Request $request)
-    {
-        try {
+     public function sendOtp(Request $request)
+{
+    try {
 
-            $request->validate([
-                'email' => 'required|email|unique:users,email'
-            ]);
+        $request->validate([
+            'email' => 'required|email'
+        ]);
 
-            $otp = rand(100000, 999999);
+        $otp = rand(100000, 999999);
 
-            EmailOtp::updateOrCreate(
-                ['email' => $request->email],
-                [
-                    'otp' => $otp,
-                    'expires_at' => Carbon::now()->addMinutes(10)
-                ]
-            );
+        EmailOtp::updateOrCreate(
+            ['email' => $request->email],
+            [
+                'otp' => $otp,
+                'expires_at' => Carbon::now()->addMinutes(10)
+            ]
+        );
 
-            // 🔥 DEBUG LOG (VERY IMPORTANT)
-            Log::info("OTP GENERATED: " . $otp);
+        \Log::info("OTP for ".$request->email." is ".$otp);
 
-            Mail::raw("Your StockProNex OTP is: $otp", function ($message) use ($request) {
-                $message->to($request->email)
-                        ->subject("StockProNex Email OTP");
-            });
+        \Log::info("TRYING TO SEND OTP");
 
-            return response()->json([
-                'success' => true,
-                'message' => 'OTP sent successfully'
-            ]);
+        Mail::raw("Your StockProNex OTP is: $otp", function ($message) use ($request) {
+            $message->to($request->email)
+                    ->subject("StockProNex Email OTP");
+        });
 
-        } catch (\Exception $e) {
+        \Log::info("MAIL SENT SUCCESSFULLY");
 
-            // 🔥 SHOW REAL ERROR IN LOGS
-            Log::error("OTP ERROR: " . $e->getMessage());
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully'
+        ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
+    } catch (\Exception $e) {
+
+        \Log::error("OTP ERROR: ".$e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]);
     }
-
-
+}
     /*
     |--------------------------------------------------------------------------
     | REGISTER USER
