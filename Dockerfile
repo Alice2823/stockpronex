@@ -29,10 +29,11 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Laravel setup
 RUN php artisan key:generate || true
+RUN php artisan config:clear || true
 RUN php artisan config:cache || true
 
 # Expose port
 EXPOSE 8080
 
-# ✅ RUN MIGRATION AT START (IMPORTANT)
-CMD php artisan migrate --force && php -S 0.0.0.0:8080 -t public
+# Start server (NO MIGRATION HERE)
+CMD php -S 0.0.0.0:8080 -t public
