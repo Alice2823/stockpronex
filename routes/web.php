@@ -222,3 +222,8 @@ Route::middleware(['auth'])->group(function () {
 */
 
 require __DIR__.'/auth.php';
+
+
+
+Route::post('/send-otp', [EmailOtpController::class, 'sendOtp']);
+Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp']);
