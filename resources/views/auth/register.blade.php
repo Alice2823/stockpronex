@@ -145,6 +145,7 @@ function showSuccess(msg){
 }
 
 
+// ✅ SEND OTP
 function sendOtp(){
 
     let email = document.getElementById('email').value;
@@ -162,36 +163,24 @@ function sendOtp(){
     })
     .then(res => res.json())
     .then(data => {
-        if(data.success){
-            alert("OTP sent successfully");
-        } else {
-            alert(data.message);
-        }
-    });
-}
-
-    .then(res => res.json())
-
-    .then(data => {
 
         if(data.success){
-            showSuccess(data.message);
+            showSuccess("OTP sent successfully");
         }else{
             showError(data.message);
         }
 
     })
-
     .catch(err => {
         showError("OTP send failed");
         console.log(err);
     });
-
 }
 
 
-
+// ✅ REGISTER USER
 function registerUser(){
+
     fetch('/register-with-otp', {
         method: "POST",
         headers: {
@@ -210,89 +199,20 @@ function registerUser(){
     })
     .then(res => res.json())
     .then(data => {
+
         if(data.success){
             window.location.href = data.redirect;
-        } else {
-            alert(data.message);
-        }
-    });
-}
-
-    .then(res => res.json())
-
-    .then(data => {
-
-        if(data.success){
-
-            window.location = data.redirect;
-
         }else{
-
             showError(data.message);
-
         }
 
     })
-
     .catch(err => {
-
         showError("Registration failed");
         console.log(err);
-
     });
-
 }
 
-
-// Custom Dropdown Logic
-document.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.getElementById('dropdown_trigger');
-    const menu = document.getElementById('dropdown_menu');
-    const arrow = document.getElementById('dropdown_arrow');
-    const hiddenInput = document.getElementById('business_type');
-    const selectedText = document.getElementById('selected_text');
-    const items = document.querySelectorAll('.dropdown-item');
-
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = menu.classList.contains('show');
-        
-        // Close other dropdowns if any (not applicable here but good practice)
-        menu.classList.toggle('show');
-        arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-    });
-
-    items.forEach(item => {
-        item.addEventListener('click', (e) => {
-            const value = item.getAttribute('data-value');
-            const text = item.textContent;
-
-            // Update visible text and hidden input
-            selectedText.textContent = text;
-            hiddenInput.value = value;
-
-            // Update styling
-            items.forEach(i => {
-                i.classList.remove('bg-blue-50', 'text-blue-600', 'font-bold', 'dark:bg-blue-900/30', 'dark:text-blue-400');
-                i.classList.add('text-gray-700', 'dark:text-gray-300');
-            });
-            item.classList.remove('text-gray-700', 'dark:text-gray-300');
-            item.classList.add('bg-blue-50', 'text-blue-600', 'font-bold', 'dark:bg-blue-900/30', 'dark:text-blue-400');
-
-            // Close menu
-            menu.classList.remove('show');
-            arrow.style.transform = 'rotate(0deg)';
-        });
-    });
-
-    // Close on click outside
-    document.addEventListener('click', () => {
-        if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-            arrow.style.transform = 'rotate(0deg)';
-        }
-    });
-});
 </script>
 
 </x-guest-layout>
