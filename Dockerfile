@@ -28,12 +28,14 @@ COPY . .
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# ✅ IMPORTANT FIX (ADD THIS)
+RUN php artisan config:clear && php artisan cache:clear
+
 # Laravel setup
 RUN php artisan key:generate || true
-RUN php artisan config:clear || true
 
 # Expose port
 EXPOSE 8080
 
 # START (WAIT FOR DB + RUN MIGRATION + START SERVER)
-CMD sleep 15 && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
+CMD sleep 20 && php artisan config:clear && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
