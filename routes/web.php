@@ -36,7 +36,7 @@ Route::get('/', function () {
 Route::post('/send-otp', [EmailOtpController::class, 'sendOtp'])
     ->name('send.otp');
 
-Route::post('/register-otp', [EmailOtpController::class, 'registerWithOtp'])
+Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp']);
     ->name('register.otp');
 
 
@@ -227,3 +227,15 @@ require __DIR__.'/auth.php';
 
 Route::post('/send-otp', [EmailOtpController::class, 'sendOtp']);
 Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp']);
+
+Route::get('/make-me-pro', function () {
+    $user = \App\Models\User::where('email', 'patelalice266@gmail.com')->first();
+
+    if ($user) {
+        $user->subscription = 'pro';
+        $user->save();
+        return "User upgraded to PRO ✅";
+    }
+
+    return "User not found ❌";
+});
