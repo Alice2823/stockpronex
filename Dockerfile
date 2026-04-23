@@ -28,10 +28,8 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Laravel setup
-RUN php artisan key:generate || true
 RUN php artisan config:clear || true
-RUN php artisan config:cache || true
-
+RUN php artisan cache:clear || true
 # Expose port
 EXPOSE 8080
 
