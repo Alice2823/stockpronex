@@ -149,21 +149,26 @@ function sendOtp(){
 
     let email = document.getElementById('email').value;
 
-    fetch(window.location.origin + "/register", {
-
+    fetch('/send-otp', {
         method: "POST",
-
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
-
         body: JSON.stringify({
             email: email
         })
-
     })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            alert("OTP sent successfully");
+        } else {
+            alert(data.message);
+        }
+    });
+}
 
     .then(res => res.json())
 
@@ -187,29 +192,31 @@ function sendOtp(){
 
 
 function registerUser(){
-
-    fetch(window.location.origin + "/register", {
-
+    fetch('/register-with-otp', {
         method: "POST",
-
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
-
         body: JSON.stringify({
-
             first_name: document.getElementById('first_name').value,
             last_name: document.getElementById('last_name').value,
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
             otp: document.getElementById('otp').value,
             business_type: document.getElementById('business_type').value
-
         })
-
     })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            window.location.href = data.redirect;
+        } else {
+            alert(data.message);
+        }
+    });
+}
 
     .then(res => res.json())
 
