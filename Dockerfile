@@ -29,7 +29,10 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Clear cache
-RUN php artisan config:clear && php artisan cache:clear
+RUN php artisan config:clear \
+ && php artisan route:clear \
+ && php artisan cache:clear \
+ && php artisan view:clear
 
 # Generate key
 RUN php artisan key:generate || true
