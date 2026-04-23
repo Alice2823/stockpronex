@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    libzip-dev
+    libzip-dev \
+    default-mysql-client
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
@@ -28,10 +29,11 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Laravel setup
+RUN php artisan key:generate || true
 RUN php artisan config:clear || true
-RUN php artisan cache:clear || true
+
 # Expose port
 EXPOSE 8080
 
-# Start server (NO MIGRATION HERE)
-CMD sleep 20 && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
+# START (WAIT FOR DB + RUN MIGRATION + START SERVER)
+CMD sleep 15 && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
