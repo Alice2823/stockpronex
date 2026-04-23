@@ -30,7 +30,7 @@
                     "currency": "INR",
                     "name": "StockProNex",
                     "description": "{{ ucfirst($plan) }} Plan ({{ ucfirst($cycle) }})",
-                    "order_id": "{{ $orderId }}",
+                    "order_id": "{{ $orders[$plan][$cycle] ?? '' }}",
                     "handler": function (response){
                         document.getElementById('razorpay_payment_id_{{ $plan }}_{{ $cycle }}').value = response.razorpay_payment_id;
                         document.getElementById('razorpay_order_id_{{ $plan }}_{{ $cycle }}').value = response.razorpay_order_id;
