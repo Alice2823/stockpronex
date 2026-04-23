@@ -15,4 +15,8 @@ return [
         'template_name' => env('WHATSAPP_TEMPLATE_NAME', 'hello_world'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
 ];

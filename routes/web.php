@@ -12,6 +12,7 @@ use App\Http\Controllers\StockBarcodeUsageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WhatsappController;
+use App\Http\Controllers\AiAssistantController;
 
 
 /*
@@ -188,6 +189,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('invoice/{id}/whatsapp/resend', [WhatsappController::class, 'resend'])
         ->name('invoice.whatsapp.resend');
+
+    /*
+    |--------------------------------------------------------------------------
+    | AI ASSISTANT ROUTES
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/ai/chat', [AiAssistantController::class, 'chat'])
+        ->name('ai.chat');
+
+    Route::get('/ai/suggestions', [AiAssistantController::class, 'suggestions'])
+        ->name('ai.suggestions');
 
     /*
     |--------------------------------------------------------------------------

@@ -65,7 +65,25 @@ class SocialAuthController extends Controller
 
             Auth::login($user);
 
-            return redirect('/dashboard');
+            // Save to recent logins cookie
+            $recentLogins = [];
+            $cookie = request()->cookie('recent_logins');
+            if ($cookie) {
+                $recentLogins = json_decode($cookie, true) ?: [];
+            }
+            $recentLogins = array_values(array_filter($recentLogins, function ($login) use ($user) {
+                return $login['email'] !== $user->email;
+            }));
+            array_unshift($recentLogins, [
+                'name' => $user->name ?? ($user->first_name . ' ' . $user->last_name),
+                'email' => $user->email,
+                'initial' => strtoupper(substr($user->first_name ?? $user->name ?? 'U', 0, 1)),
+                'business_name' => $user->business_name,
+            ]);
+            $recentLogins = array_slice($recentLogins, 0, 5);
+            $cookieObj = \Illuminate\Support\Facades\Cookie::make('recent_logins', json_encode($recentLogins), 525600, '/', null, false, false);
+
+            return redirect('/dashboard')->withCookie($cookieObj);
 
         }
         catch (Exception $e)
