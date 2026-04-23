@@ -38,4 +38,4 @@ RUN php artisan key:generate || true
 EXPOSE 8080
 
 # START (WAIT FOR DB + RUN MIGRATION + START SERVER)
-CMD sleep 20 && php artisan config:clear && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
+CMD sleep 20 && php artisan config:clear && php artisan cache:clear && php artisan config:cache && php artisan migrate --force && php -S 0.0.0.0:8080 -t public
