@@ -36,7 +36,7 @@ Route::get('/', function () {
 Route::post('/send-otp', [EmailOtpController::class, 'sendOtp'])
     ->name('send.otp');
 
-Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp']);
+Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp'])
     ->name('register.otp');
 
 
