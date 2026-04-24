@@ -59,6 +59,10 @@
                         </li>
                         <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
                             <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            {{ __('Profit Management') }}
+                        </li>
+                        <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
+                            <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             {{ __('Payment Received Dashboard') }}
                         </li>
                         <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
@@ -119,6 +123,10 @@
                             <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             Advanced Analytics
                         </li>
+                        <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
+                            <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            {{ __('Profit Management') }}
+                        </li>
                     </ul>
 
                     <div x-show="billingCycle === 'monthly'">
@@ -156,6 +164,10 @@
                         <li class="flex items-center text-gray-700 dark:text-gray-300 font-bold">
                             <svg class="h-5 w-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                             {{ __('Advanced Analytics') }}
+                        </li>
+                        <li class="flex items-center text-gray-700 dark:text-gray-300 font-bold">
+                            <svg class="h-5 w-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            {{ __('Profit Management') }}
                         </li>
                         <li class="flex items-center text-gray-700 dark:text-gray-300">
                             <svg class="h-5 w-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>

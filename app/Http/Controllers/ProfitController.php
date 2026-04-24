@@ -17,6 +17,9 @@ class ProfitController extends Controller
      */
     public function index()
     {
+        if (!Auth::user()->hasFeature('profit_manage')) {
+            return redirect()->route('subscription.index');
+        }
         $data = $this->getProfitData();
         return view('profit.index', $data);
     }

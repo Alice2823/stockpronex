@@ -388,6 +388,45 @@
                 </div>
             </div>
 
+            <!-- Support -->
+            <div x-data="{ open: false }" class="bg-blue-50 dark:bg-blue-900/10 shadow-2xl rounded-3xl border border-blue-100 dark:border-blue-900/20 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
+                    <header>
+                        <h2 class="text-xl font-black text-blue-900 dark:text-blue-500 flex items-center gap-2 group-hover:text-blue-600 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            {{ __('Support') }}
+                        </h2>
+                        <p class="mt-1 text-sm text-blue-600 dark:text-blue-400/60">
+                            {{ __('Need help? Contact our support team directly.') }}
+                        </p>
+                    </header>
+                    <svg class="w-6 h-6 transform transition-transform duration-300 text-blue-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-2xl border border-blue-100 dark:border-blue-900/40 flex items-center gap-6">
+                            <div class="h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">{{ __('Email Support') }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ __('If you face any problems, feel free to reach out to us at:') }}</p>
+                                <a href="mailto:allipatel33@gmail.com" class="text-xl font-black text-blue-600 dark:text-blue-400 hover:underline decoration-2 underline-offset-4">
+                                    allipatel33@gmail.com
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Delete Account -->
             <div x-data="{ open: false }" class="bg-red-50 dark:bg-red-900/10 shadow-2xl rounded-3xl border border-red-100 dark:border-red-900/20 transition-all duration-300 overflow-hidden">
                 <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">

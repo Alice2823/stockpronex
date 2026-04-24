@@ -36,8 +36,13 @@
                             @endif
                         </div>
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard.profit')" :active="request()->routeIs('dashboard.profit')">
-                        {{ __('Profit Manage') }}
+                    <x-nav-link :href="Auth::user()->hasFeature('profit_manage') ? route('dashboard.profit') : route('subscription.index')" :active="request()->routeIs('dashboard.profit')">
+                        <div class="flex items-center">
+                            {{ __('Profit Manage') }}
+                            @if(!Auth::user()->hasFeature('profit_manage'))
+                                <svg class="h-3 w-3 ml-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
+                            @endif
+                        </div>
                     </x-nav-link>
 
 
@@ -281,7 +286,8 @@
                     <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard.payments') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
                     <span class="text-[10px] font-bold {{ request()->routeIs('dashboard.payments') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Payments</span>
                 </a>
-                <a href="{{ route('dashboard.profit') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard.profit') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
+                <a href="{{ Auth::user()->hasFeature('profit_manage') ? route('dashboard.profit') : route('subscription.index') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard.profit') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95 relative">
+                    @if(!Auth::user()->hasFeature('profit_manage'))<div class="absolute top-1.5 right-1.5"><svg class="h-3 w-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></div>@endif
                     <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard.profit') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5">
                         @if(Auth::user()->currency == 'INR')
                             <span class="text-xl font-bold font-serif leading-none">₹</span>

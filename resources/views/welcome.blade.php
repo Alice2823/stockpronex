@@ -214,7 +214,12 @@
                     <!-- Animated Theme Toggle -->
                     <div x-data="{
                         dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                        hasAccess: @auth {{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }} @else false @endauth,
                         toggle() {
+                            if (!this.hasAccess) {
+                                window.location.href = '{{ route('register') }}';
+                                return;
+                            }
                             this.dark = !this.dark;
                             if (this.dark) {
                                 document.documentElement.classList.add('dark');
@@ -224,11 +229,18 @@
                                 localStorage.theme = 'light';
                             }
                         }
-                    }">
+                    }" class="relative">
                         <button @click="toggle()" 
                                 :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
                                 :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'"
                                 title="Toggle theme">
+                            
+                            <template x-if="!hasAccess">
+                                <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white">
+                                    <svg class="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
+                                </div>
+                            </template>
+
                             <div class="theme-toggle__thumb">
                                 <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="5"></circle>

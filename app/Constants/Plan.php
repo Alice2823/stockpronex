@@ -46,6 +46,7 @@ class Plan
                 'analytics' => false,
                 'payments' => false,
                 'barcode' => false,
+                'profit_manage' => false,
             ],
             self::STANDARD => [
                 'light_mode' => true,
@@ -53,6 +54,7 @@ class Plan
                 'analytics' => false,
                 'payments' => true,
                 'barcode' => false,
+                'profit_manage' => false,
             ],
             self::PRO => [
                 'light_mode' => true,
@@ -60,6 +62,7 @@ class Plan
                 'analytics' => true,
                 'payments' => true,
                 'barcode' => true,
+                'profit_manage' => true,
             ],
         ];
 
