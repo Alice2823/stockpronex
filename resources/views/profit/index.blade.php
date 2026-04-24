@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight flex items-center">
                 <svg class="w-7 h-7 mr-2 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -8,24 +8,26 @@
                 {{ __('Profit Management') }}
             </h2>
             
-        <div class="flex flex-col sm:flex-row items-center gap-4">
-            <div class="flex items-center gap-2 mr-4">
-                <a href="{{ route('dashboard.profit.export.pdf') }}" class="flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-4 sm:mt-0 w-full sm:w-auto">
+            <div class="flex flex-row items-center gap-2 mr-0 sm:mr-4 w-full sm:w-auto">
+                <a href="{{ route('dashboard.profit.export.pdf') }}" class="w-full sm:w-auto flex items-center justify-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6l-4-4H9z"/><path d="M12 2.5V6a1 1 0 001 1h3.5L12 2.5z"/></svg>
                     PDF
                 </a>
-                <a href="{{ route('dashboard.profit.export.excel') }}" class="flex items-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+                </a>
+                <a href="{{ route('dashboard.profit.export.excel') }}" class="w-full sm:w-auto flex items-center justify-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                     EXCEL
                 </a>
             </div>
             
-            <div class="flex flex-col sm:flex-row gap-3">
-                <div class="bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-bold px-4 py-2 rounded-lg border border-red-200 dark:border-red-800 shadow-sm flex items-center">
+            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <div class="w-full sm:w-auto bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-bold px-4 py-2 rounded-lg border border-red-200 dark:border-red-800 shadow-sm flex items-center justify-between sm:justify-start">
                     <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Total Discounts:') }}</span>
                     <span class="text-lg">₹{{ number_format($totalOverallDiscount, 2) }}</span>
                 </div>
-                <div class="bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 font-bold px-4 py-2 rounded-lg border border-green-200 dark:border-green-800 shadow-sm flex items-center">
+                </div>
+                <div class="w-full sm:w-auto bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 font-bold px-4 py-2 rounded-lg border border-green-200 dark:border-green-800 shadow-sm flex items-center justify-between sm:justify-start">
                     <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Net Profit Earned:') }}</span>
                     <span class="text-xl">₹{{ number_format($totalOverallProfit, 2) }}</span>
                 </div>

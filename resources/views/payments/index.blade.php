@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight">
                 {{ __('Payment Received') }}
             </h2>
@@ -113,7 +113,7 @@
                 <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center bg-gray-50 dark:bg-gray-800/50 gap-4">
                     <h3 class="text-lg leading-6 font-bold text-gray-900 dark:text-white uppercase tracking-tight">{{ __('Payment History') }}</h3>
                     
-                    <form method="GET" action="{{ route('dashboard.payments') }}" class="flex flex-wrap items-center gap-3">
+                    <form method="GET" action="{{ route('dashboard.payments') }}" class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 w-full md:w-auto">
                         <div class="flex items-center space-x-2">
                             <label for="start_date" class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">{{ __('From') }}</label>
                             <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="text-sm rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 py-1.5">
@@ -126,7 +126,7 @@
                             {{ __('Filter') }}
                         </button>
                         
-                        <div class="flex items-center ml-2 border-l border-gray-300 dark:border-gray-700 pl-4 gap-2">
+                        <div class="flex flex-wrap items-center mt-2 sm:mt-0 sm:ml-2 border-t sm:border-t-0 sm:border-l border-gray-300 dark:border-gray-700 pt-3 sm:pt-0 sm:pl-4 gap-2 w-full sm:w-auto">
                             <button type="button" id="toggleAnalytics" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-bold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm transition-all" title="{{ __('Show Analytics') }}">
                                 <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />

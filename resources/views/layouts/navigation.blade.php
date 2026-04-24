@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center group transition-all duration-300">
-                        <span class="text-3xl font-black tracking-tighter uppercase italic leading-none">
+                        <span class="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic leading-none">
                             <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro text-blue-600 dark:text-blue-500">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
                         </span>
                     </a>
@@ -262,6 +262,23 @@
             <x-responsive-nav-link :href="route('dashboard.profit')" :active="request()->routeIs('dashboard.profit')">
                 {{ __('Profit Manage') }}
             </x-responsive-nav-link>
+
+            <div class="px-4 py-2">
+                @if(Auth::user()->is_subscribed)
+                    <div class="inline-flex items-center justify-center w-full px-4 py-2 font-bold text-sm premium-badge shadow-sm transition-all duration-300">
+                        <span class="mr-1.5 text-blue-500">⭐</span>
+                        {{ __('Premium Member') }}
+                    </div>
+                @else
+                    <a href="{{ route('subscription.index') }}" 
+                       class="nav-upgrade-btn flex items-center justify-center w-full px-4 py-2.5 rounded-lg font-bold text-sm bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-sm">
+                        <svg class="w-4 h-4 mr-1.5 text-yellow-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        {{ __('Upgrade to Premium') }}
+                    </a>
+                @endif
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->
