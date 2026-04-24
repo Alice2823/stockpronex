@@ -64,67 +64,67 @@
             </div>
 
             <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
                 <!-- Total Stock -->
-                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-blue-500 dark:border-blue-600 transition-colors duration-300">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-blue-500 dark:border-blue-600 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Remaining Stock') }}</p>
-                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white" id="card_total_stock">-</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">{{ __('Current Snapshot') }}</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Remaining Stock') }}</p>
+                            <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_total_stock">-</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">{{ __('Current Snapshot') }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Total Used -->
-                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-red-500 dark:border-red-600 transition-colors duration-300">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-red-500 dark:border-red-600 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Total Used') }}</p>
-                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white" id="card_total_used">-</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Used') }}</p>
+                            <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_total_used">-</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Total Added -->
-                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-green-500 dark:border-green-600 transition-colors duration-300">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-green-500 dark:border-green-600 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Stock Added') }}</p>
-                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white" id="card_total_added">-</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Stock Added') }}</p>
+                            <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_total_added">-</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Low Stock -->
-                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-yellow-500 dark:border-yellow-600 transition-colors duration-300">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-yellow-500 dark:border-yellow-600 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Low Stock Items') }}</p>
-                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white" id="card_low_stock">-</p>
-                            <p class="text-xs text-gray-400 dark:text-gray-500">&lt; 10 {{ __('Units') }}</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Low Stock Items') }}</p>
+                            <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_low_stock">-</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">&lt; 10 {{ __('Units') }}</p>
                         </div>
                     </div>
                 </div>

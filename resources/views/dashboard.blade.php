@@ -23,55 +23,55 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <!-- Summary Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <!-- Total Items -->
                 <div
-                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+                            <svg class="h-5 w-5 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Total Stock Items') }}</p>
-                            <p class="text-3xl font-black text-gray-800 dark:text-white">{{ $stocks->count() }}</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Stock Items') }}</p>
+                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white">{{ $stocks->count() }}</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Total Value -->
                 <div
-                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center">
-                            <span class="text-3xl font-black">₹</span>
+                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center">
+                            <span class="text-xl sm:text-3xl font-black">₹</span>
                         </div>
 
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
-                            <p class="text-3xl font-black text-gray-800 dark:text-white">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
+                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white leading-tight">
                                 ₹{{ number_format($stocks->sum(function ($stock) {
-    return $stock->price * $stock->quantity; }), 2) }}
+    return $stock->price * $stock->quantity; }), 0) }}
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Top Item -->
+                <!-- Total Units -->
                 <div
-                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-md sm:rounded-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400">
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800 col-span-2 md:col-span-1">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400">
+                            <svg class="h-5 w-5 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-tight">{{ __('Total Units') }}</p>
-                            <p class="text-3xl font-black text-gray-800 dark:text-white">{{ number_format($stocks->sum('quantity')) }}
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Units') }}</p>
+                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white">{{ number_format($stocks->sum('quantity')) }}
                             </p>
                         </div>
                     </div>

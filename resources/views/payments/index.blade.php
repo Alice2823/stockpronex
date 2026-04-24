@@ -4,72 +4,74 @@
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight">
                 {{ __('Payment Received') }}
             </h2>
-            <a href="{{ route('dashboard') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white font-medium flex items-center transition-colors">
-                <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                {{ __('Back to Dashboard') }}
-            </a>
         </div>
     </x-slot>
 
     <div class="py-12 bg-white dark:bg-gray-950 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <a href="{{ route('dashboard') }}" class="group inline-flex items-center px-5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl text-xs font-black uppercase tracking-widest text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-500 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 active:scale-95">
+                    <svg class="h-4 w-4 mr-2.5 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    {{ __('Back to Dashboard') }}
+                </a>
+            </div>
             
             <!-- Payment Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Total Revenue -->
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300">
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg">
                     <div class="flex items-center justify-between">
-                        <div class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Total Revenue') }}</div>
-                        <div class="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                        <div>
+                            <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Total Revenue') }}</div>
+                            <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
+                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 0) }}
+                            </div>
+                        </div>
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-baseline">
-                        <div class="text-3xl font-black text-gray-900 dark:text-white">
-                            {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 2) }}
-                        </div>
-                    </div>
-                    <div class="mt-1 text-base text-gray-500 dark:text-gray-400 font-bold tracking-tight">{{ $summary['onlineCount'] + $summary['cashCount'] }} {{ __('transactions') }}</div>
+                    <div class="mt-4 text-[10px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">{{ $summary['onlineCount'] + $summary['cashCount'] }} {{ __('transactions') }}</div>
                 </div>
 
                 <!-- Online Payments -->
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300">
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg">
                     <div class="flex items-center justify-between">
-                        <div class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Online Payments') }}</div>
-                        <div class="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
+                        <div>
+                            <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Online Payments') }}</div>
+                            <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
+                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'], 0) }}
+                            </div>
+                        </div>
+                        <div class="p-3 bg-green-100 dark:bg-green-900/40 rounded-xl">
                             <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-baseline">
-                        <div class="text-3xl font-black text-gray-900 dark:text-white">
-                            {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'], 2) }}
-                        </div>
-                    </div>
-                    <div class="mt-1 text-base text-gray-500 dark:text-gray-400 font-bold tracking-tight">{{ $summary['onlineCount'] }} {{ __('online transactions') }}</div>
+                    <div class="mt-4 text-[10px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">{{ $summary['onlineCount'] }} {{ __('online transactions') }}</div>
                 </div>
 
                 <!-- Cash Payments -->
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300">
+                <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg">
                     <div class="flex items-center justify-between">
-                        <div class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Cash Payments') }}</div>
-                        <div class="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                        <div>
+                            <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Cash Payments') }}</div>
+                            <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
+                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['cashTotal'], 0) }}
+                            </div>
+                        </div>
+                        <div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl">
                             <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-baseline">
-                        <div class="text-3xl font-black text-gray-900 dark:text-white">
-                            {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['cashTotal'], 2) }}
-                        </div>
-                    </div>
-                    <div class="mt-1 text-base text-gray-500 dark:text-gray-400 font-bold tracking-tight">{{ $summary['cashCount'] }} {{ __('cash transactions') }}</div>
+                    <div class="mt-4 text-[10px] text-gray-500 dark:text-gray-400 font-bold tracking-widest uppercase">{{ $summary['cashCount'] }} {{ __('cash transactions') }}</div>
                 </div>
             </div>
  
