@@ -41,27 +41,9 @@
                     </div>
                 </div>
 
-                <!-- Total Value -->
-                <div
-                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
-                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
-                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center">
-                            <span class="text-xl sm:text-3xl font-black">₹</span>
-                        </div>
-
-                        <div>
-                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
-                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white leading-tight">
-                                ₹{{ number_format($stocks->sum(function ($stock) {
-    return $stock->price * $stock->quantity; }), 0) }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Total Units -->
                 <div
-                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800 col-span-2 md:col-span-1">
+                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
                     <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
                         <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400">
                             <svg class="h-5 w-5 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,6 +54,24 @@
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Units') }}</p>
                             <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white">{{ number_format($stocks->sum('quantity')) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Value -->
+                <div
+                    class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800 col-span-2 md:col-span-1">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
+                        <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center">
+                            <span class="text-xl sm:text-3xl font-black">₹</span>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
+                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white leading-tight">
+                                ₹{{ number_format($stocks->sum(function ($stock) {
+    return $stock->price * $stock->quantity; }), 0) }}
                             </p>
                         </div>
                     </div>
