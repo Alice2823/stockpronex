@@ -199,19 +199,18 @@
 <body class="antialiased bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 fixed w-full z-50 top-0 transition-colors duration-500">
+    <nav x-data="{ mobileMenuOpen: false }" class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 fixed w-full z-50 top-0 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="shrink-0 flex items-center">
-                        <a href="/" class="flex items-center">
-                            <span class="text-2xl font-bold tracking-tight">
-                                <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
-                            </span>
-                        </a>
-                    </div>
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center group">
+                        <span class="text-xl sm:text-2xl font-bold tracking-tight transition-transform group-hover:scale-105">
+                            <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
+                        </span>
+                    </a>
                 </div>
-                <div class="flex items-center space-x-4">
+
+                <div class="flex items-center space-x-2 sm:space-x-4">
                     <!-- Animated Theme Toggle -->
                     <div x-data="{
                         dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
@@ -249,20 +248,58 @@
                         </button>
                     </div>
 
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}"
-                                class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Log in</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition">Get
-                                    Started</a>
-                            @endif
-                        @endauth
-                    @endif
+                    <!-- Desktop Nav -->
+                    <div class="hidden md:flex items-center space-x-4">
+                        @if (Route::has('login'))
+                            @auth
+                                <a href="{{ url('/dashboard') }}"
+                                    class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Dashboard</a>
+                            @else
+                                <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Log in</a>
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-lg shadow-blue-500/20">Get Started</a>
+                                @endif
+                            @endauth
+                        @endif
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden flex items-center">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 p-2 transition-colors">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             class="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-xl"
+             @click.away="mobileMenuOpen = false">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}"
+                            class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">Log in</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}"
+                                class="block px-4 py-3 rounded-xl text-base font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 text-center transition-all">Get Started</a>
+                        @endif
+                    @endauth
+                @endif
             </div>
         </div>
     </nav>
@@ -368,7 +405,7 @@
                         <div class="relative flex items-center justify-center p-12 bg-gray-50/20 dark:bg-gray-900/20 overflow-hidden">
                             <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.2),transparent_70%)] opacity-50"></div>
                             <div class="relative w-full transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-1000">
-                                <img src="{{ asset('images/ai-assistant-mockup.png') }}" alt="AI Mockup" class="w-full h-auto rounded-[2.5rem] shadow-[0_64px_120px_-32px_rgba(0,0,0,0.7)] border border-white/10">
+                                <img src="{{ asset('images/inventory-dashboard.png') }}" alt="Inventory AI Dashboard" class="w-full h-auto rounded-[2.5rem] shadow-[0_64px_120px_-32px_rgba(0,0,0,0.7)] border border-white/10">
                                 <div class="absolute -bottom-6 sm:-bottom-8 left-1/2 -translate-x-1/2 w-[98%] sm:w-[90%] p-4 sm:p-6 rounded-3xl bg-white/10 backdrop-blur-[60px] border border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 shadow-2xl overflow-hidden group/overlay">
                                     <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent"></div>
                                     <div class="relative flex items-center space-x-4">
@@ -404,7 +441,7 @@
                             Professional barcode tracking using your phone's built-in camera.
                         </p>
                         <div class="relative mt-auto overflow-hidden rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-inner group-hover:border-blue-500/30 transition-all duration-500">
-                            <img src="{{ asset('images/barcode-feature.png') }}" alt="Scanning" class="w-full h-auto transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-1000">
+                            <img src="{{ asset('images/barcode-feature-v2.png') }}" alt="Scanning" class="w-full h-auto transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-1000">
                         </div>
                     </div>
                 </div>

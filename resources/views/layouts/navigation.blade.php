@@ -235,165 +235,127 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-gray-100 dark:border-gray-800 transition-all">
-        <div class="pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('usage.index')" :active="request()->routeIs('usage.*')">
-                {{ __('Stock Usage') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="Auth::user()->hasFeature('analytics') ? route('dashboard.analytics') : route('subscription.index')" :active="request()->routeIs('dashboard.analytics')">
-                <div class="flex items-center">
-                    {{ __('Analytics') }}
-                    @if(!Auth::user()->hasFeature('analytics'))
-                        <svg class="h-3 w-3 ml-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
-                    @endif
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden transition-all">        <!-- User Profile Card -->
+        <div class="px-4 pt-4 pb-4 bg-gradient-to-r from-blue-600 to-indigo-700">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-black text-lg border border-white/30">
+                    {{ substr(Auth::user()->name, 0, 1) }}
                 </div>
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="Auth::user()->hasFeature('payments') ? route('dashboard.payments') : route('subscription.index')" :active="request()->routeIs('dashboard.payments')">
-                <div class="flex items-center">
-                    {{ __('Payment Received') }}
-                    @if(!Auth::user()->hasFeature('payments'))
-                        <svg class="h-3 w-3 ml-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
-                    @endif
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-black text-white uppercase tracking-tight truncate">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-blue-200 truncate">{{ Auth::user()->email }}</p>
                 </div>
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard.profit')" :active="request()->routeIs('dashboard.profit')">
-                {{ __('Profit Manage') }}
-            </x-responsive-nav-link>
+            </div>
+            
+            <!-- Upgrade Banner moved to top -->
+            @if(Auth::user()->is_subscribed)
+                <div class="flex items-center justify-center w-full px-4 py-2 rounded-xl font-bold text-sm bg-white/10 backdrop-blur-sm text-white border border-white/20">
+                    <span class="mr-1.5 text-yellow-300">⭐</span> {{ __('Premium Member') }}
+                </div>
+            @else
+                <a href="{{ route('subscription.index') }}" class="nav-upgrade-btn flex items-center justify-center w-full px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-indigo-600 shadow-lg hover:shadow-xl transition-all">
+                    <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    {{ __('Upgrade to Premium') }}
+                </a>
+            @endif
+        </div>
 
-            <div class="px-4 py-2">
-                @if(Auth::user()->is_subscribed)
-                    <div class="inline-flex items-center justify-center w-full px-4 py-2 font-bold text-sm premium-badge shadow-sm transition-all duration-300">
-                        <span class="mr-1.5 text-blue-500">⭐</span>
-                        {{ __('Premium Member') }}
+        <!-- Navigation Grid -->
+        <div class="p-4 bg-white dark:bg-gray-900">
+            <div class="grid grid-cols-3 gap-2.5">
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div>
+                    <span class="text-[10px] font-bold {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Dashboard</span>
+                </a>
+                <a href="{{ route('usage.index') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('usage.*') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('usage.*') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+                    <span class="text-[10px] font-bold {{ request()->routeIs('usage.*') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Stock</span>
+                </a>
+                <a href="{{ Auth::user()->hasFeature('analytics') ? route('dashboard.analytics') : route('subscription.index') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard.analytics') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95 relative">
+                    @if(!Auth::user()->hasFeature('analytics'))<div class="absolute top-1.5 right-1.5"><svg class="h-3 w-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></div>@endif
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard.analytics') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                    <span class="text-[10px] font-bold {{ request()->routeIs('dashboard.analytics') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Analytics</span>
+                </a>
+                <a href="{{ Auth::user()->hasFeature('payments') ? route('dashboard.payments') : route('subscription.index') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard.payments') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95 relative">
+                    @if(!Auth::user()->hasFeature('payments'))<div class="absolute top-1.5 right-1.5"><svg class="h-3 w-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></div>@endif
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard.payments') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+                    <span class="text-[10px] font-bold {{ request()->routeIs('dashboard.payments') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Payments</span>
+                </a>
+                <a href="{{ route('dashboard.profit') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard.profit') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard.profit') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5">
+                        @if(Auth::user()->currency == 'INR')
+                            <span class="text-xl font-bold font-serif leading-none">₹</span>
+                        @elseif(Auth::user()->currency == 'USD')
+                            <span class="text-xl font-bold font-serif leading-none">$</span>
+                        @else
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        @endif
                     </div>
-                @else
-                    <a href="{{ route('subscription.index') }}" 
-                       class="nav-upgrade-btn flex items-center justify-center w-full px-4 py-2.5 rounded-lg font-bold text-sm bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-sm">
-                        <svg class="w-4 h-4 mr-1.5 text-yellow-300" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        {{ __('Upgrade to Premium') }}
-                    </a>
-                @endif
+                    <span class="text-[10px] font-bold {{ request()->routeIs('dashboard.profit') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Profit</span>
+                </a>
+                <a href="{{ route('profile.edit') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('profile.edit') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
+                    <div class="h-10 w-10 rounded-xl {{ request()->routeIs('profile.edit') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                    <span class="text-[10px] font-bold {{ request()->routeIs('profile.edit') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">Settings</span>
+                </a>
             </div>
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-            <div class="px-4">
-                <div class="font-bold text-base text-gray-800 dark:text-gray-100">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                    {{ __('Account Settings') }}
-                </x-responsive-nav-link>
-                <!-- Theme Toggle (Mobile) -->
+        <!-- Quick Settings -->
+        <div class="px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800">
+            <div class="flex flex-col gap-3 mb-4">
+                <!-- Dark Mode -->
                 <div x-data="{ 
                     dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
                     toggle() {
                         this.dark = !this.dark;
-                        if (this.dark) {
-                            document.documentElement.classList.add('dark');
-                            localStorage.theme = 'dark';
-                        } else {
-                            document.documentElement.classList.remove('dark');
-                            localStorage.theme = 'light';
-                        }
+                        if (this.dark) { document.documentElement.classList.add('dark'); localStorage.theme = 'dark'; }
+                        else { document.documentElement.classList.remove('dark'); localStorage.theme = 'light'; }
                     }
-                }" class="border-b border-gray-100 dark:border-gray-700 px-4 py-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-bold text-gray-700 dark:text-gray-300" x-text="dark ? '{{ __('Dark Mode') }}' : '{{ __('Light Mode') }}'"></span>
-                        <button @click="if (!{{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }}) { window.location.href = '{{ route('subscription.index') }}'; return; } toggle()" 
-                                :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
-                                title="Toggle theme"
-                                class="relative">
-                            
-                            @if(!Auth::user()->hasFeature('dark_mode'))
-                                <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white">
-                                    <svg class="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
-                                </div>
-                            @endif
-
-                            <svg class="theme-toggle__stars" width="20" height="16" viewBox="0 0 20 16">
-                                <circle class="theme-toggle__star" cx="4" cy="4" r="1.5"/>
-                                <circle class="theme-toggle__star" cx="12" cy="2" r="1"/>
-                                <circle class="theme-toggle__star" cx="8" cy="10" r="1.2"/>
-                            </svg>
-                            <svg class="theme-toggle__clouds" width="20" height="12" viewBox="0 0 20 12">
-                                <circle cx="5" cy="8" r="4" fill="white" opacity="0.6"/>
-                                <circle cx="10" cy="6" r="5" fill="white" opacity="0.5"/>
-                                <circle cx="15" cy="8" r="3.5" fill="white" opacity="0.4"/>
-                            </svg>
-                            <div class="theme-toggle__thumb">
-                                <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-                                    <circle cx="12" cy="12" r="4"/>
-                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-                                </svg>
-                                <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.5" stroke-linecap="round">
-                                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Language Switcher (Mobile) -->
-                <div x-data="{ open: false }" class="border-b border-gray-100 dark:border-gray-700">
-                    <button @click="open = !open" class="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <div class="flex items-center">
-                            <svg class="h-4 w-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5c-.356 2.446-1.276 4.706-2.703 6.643M6.412 9a11.97 11.97 0 002.828 4.605m0 0a12.001 12.001 0 01-3.262 3.064m3.262-3.064l-.505.5" />
-                            </svg>
-                            {{ __('Language') }}
+                }" class="flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 shadow-sm">
+                    <span class="text-sm font-bold text-gray-600 dark:text-gray-400 flex items-center" x-text="dark ? '🌙 Dark Mode' : '☀️ Light Mode'"></span>
+                    <button @click="if (!{{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }}) { window.location.href = '{{ route('subscription.index') }}'; return; } toggle()" 
+                            :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'" class="relative">
+                        @if(!Auth::user()->hasFeature('dark_mode'))
+                            <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white"><svg class="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></div>
+                        @endif
+                        <div class="theme-toggle__thumb">
+                            <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                         </div>
-                        <svg class="h-4 w-4 transform transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
                     </button>
-                    <div x-show="open" x-collapse class="bg-gray-50 dark:bg-gray-800/50 py-1">
-                        <form method="POST" action="{{ route('profile.update') }}">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" name="language" value="en" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'en' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                English
-                            </button>
-                            <button type="submit" name="language" value="hi" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'hi' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                Hindi
-                            </button>
-                            <button type="submit" name="language" value="gu" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'gu' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                Gujarati
-                            </button>
-                            <button type="submit" name="language" value="mr" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'mr' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                Marathi
-                            </button>
-                            <button type="submit" name="language" value="ta" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'ta' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                Tamil
-                            </button>
-                            <button type="submit" name="language" value="es" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'es' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                Spanish
-                            </button>
-                            <button type="submit" name="language" value="fr" class="w-full text-left px-12 py-3 text-xs font-bold {{ App::getLocale() == 'fr' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400' }}">
-                                French
-                            </button>
+                </div>
+                
+                <!-- Language -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 shadow-sm focus:outline-none">
+                        <span class="text-sm font-bold text-gray-600 dark:text-gray-400 flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5c-.356 2.446-1.276 4.706-2.703 6.643M6.412 9a11.97 11.97 0 002.828 4.605m0 0a12.001 12.001 0 01-3.262 3.064m3.262-3.064l-.505.5" /></svg>
+                            Language
+                        </span>
+                        <svg class="h-4 w-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="open" x-collapse class="mt-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-lg overflow-hidden">
+                        <form method="POST" action="{{ route('profile.update') }}" class="p-2">
+                            @csrf @method('PATCH')
+                            <div class="grid grid-cols-2 gap-1.5">
+                                @foreach(['en' => 'English', 'hi' => 'Hindi', 'gu' => 'Gujarati', 'mr' => 'Marathi', 'ta' => 'Tamil', 'es' => 'Spanish', 'fr' => 'French'] as $code => $name)
+                                    <button type="submit" name="language" value="{{ $code }}" class="text-left px-3 py-2 rounded-xl text-sm font-bold {{ App::getLocale() == $code ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800' }} transition-colors">{{ $name }}</button>
+                                @endforeach
+                            </div>
                         </form>
                     </div>
                 </div>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                        this.closest('form').submit();" class="text-red-600 dark:text-red-400 font-bold">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
             </div>
+            
+            <!-- Logout -->
+            <!-- Logout -->
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full flex items-center justify-center p-3.5 rounded-2xl text-sm font-bold text-red-500 bg-white dark:bg-gray-900 border border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all shadow-sm">
+                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    {{ __('Log Out') }}
+                </button>
+            </form>
         </div>
     </div>
 </nav>
