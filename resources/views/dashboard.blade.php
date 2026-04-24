@@ -64,13 +64,13 @@
                     class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:shadow-md rounded-2xl sm:rounded-lg p-4 sm:p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800 col-span-2 md:col-span-1">
                     <div class="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-4">
                         <div class="p-2.5 sm:p-3 rounded-xl sm:rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center">
-                            <span class="text-xl sm:text-3xl font-black">₹</span>
+                            <span class="text-xl sm:text-3xl font-black">{{ Auth::user()->currency_symbol }}</span>
                         </div>
 
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
                             <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white leading-tight">
-                                ₹{{ number_format($stocks->sum(function ($stock) {
+                                {{ Auth::user()->currency_symbol }}{{ number_format($stocks->sum(function ($stock) {
     return $stock->price * $stock->quantity; }), 0) }}
                             </p>
                         </div>
@@ -151,10 +151,10 @@
                                             {{ __('Quantity') }}</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                                            {{ __('Price/Unit') }} ({{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }})</th>
+                                            {{ __('Price/Unit') }} ({{ Auth::user()->currency_symbol }})</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                                            {{ __('Total Value') }} ({{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }})</th>
+                                            {{ __('Total Value') }} ({{ Auth::user()->currency_symbol }})</th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">
                                             {{ __('Description') }}</th>
@@ -201,11 +201,11 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-300">₹{{ number_format($stock->price, 2) }}</div>
+                                                <div class="text-sm text-gray-900 dark:text-gray-300">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm font-black text-gray-800 dark:text-white">
-                                                    ₹{{ number_format($stock->price * $stock->quantity, 2) }}</div>
+                                                    {{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
@@ -277,11 +277,11 @@
                                     <div class="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1">
                                         <div>
                                             <div class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Price/Unit') }}</div>
-                                            <div class="text-sm font-black text-gray-900 dark:text-white">₹{{ number_format($stock->price, 2) }}</div>
+                                            <div class="text-sm font-black text-gray-900 dark:text-white">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</div>
                                         </div>
                                         <div>
                                             <div class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Total Value') }}</div>
-                                            <div class="text-sm font-black text-blue-600 dark:text-blue-400">₹{{ number_format($stock->price * $stock->quantity, 2) }}</div>
+                                            <div class="text-sm font-black text-blue-600 dark:text-blue-400">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</div>
                                         </div>
                                     </div>
 
@@ -345,7 +345,7 @@
 
             <!-- Footer Area -->
             <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 pb-8 uppercase tracking-widest font-black">
-                &copy; {{ date('Y') }} <span class="brand-stock dark:text-gray-100">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>. {{ __('System managed securely.') }}
+                &copy; {{ date('Y') }} <span class="brand-stock dark:text-gray-100">{{ __('Stock') }}</span><span class="brand-pro">{{ __('Pro') }}</span><span class="brand-nex dark:text-gray-400">{{ __('Nex') }}</span>. {{ __('System managed securely.') }}
             </div>
 
         </div>

@@ -119,7 +119,7 @@
                     return this.currency === 'INR' ? '{{ __('GST Number') }}' : '{{ __('Tax Number / VAT') }}';
                 },
                 get taxPlaceholder() {
-                    return this.currency === 'INR' ? 'e.g. 27AAAAA0000A1Z5' : '{{ __('Enter your tax or VAT number') }}';
+                    return this.currency === 'INR' ? 'e.g. 27AAAAA0000A1Z5' : '{{ __("Enter your tax or VAT number") }}';
                 }
             }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
                 <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
@@ -156,21 +156,21 @@
                             <div>
                                 <x-label for="business_type" :value="__('Business Type')" />
                                 <select id="business_type" name="business_type" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
-                                    <option value="General Inventory" {{ $user->business_type == 'General Inventory' ? 'selected' : '' }}>General Inventory (Default)</option>
-                                    <option value="Gold / Jewellery" {{ $user->business_type == 'Gold / Jewellery' ? 'selected' : '' }}>Gold & Jewellery Business</option>
-                                    <option value="Electronics" {{ $user->business_type == 'Electronics' ? 'selected' : '' }}>Electronics Store</option>
-                                    <option value="Grocery" {{ $user->business_type == 'Grocery' ? 'selected' : '' }}>Grocery / Supermarket</option>
-                                    <option value="Clothing" {{ $user->business_type == 'Clothing' ? 'selected' : '' }}>Clothing / Fashion Store</option>
-                                    <option value="Medical Store" {{ $user->business_type == 'Medical Store' ? 'selected' : '' }}>Medical / Pharmacy Store</option>
-                                    <option value="Hardware" {{ $user->business_type == 'Hardware' ? 'selected' : '' }}>Hardware / Construction Materials</option>
-                                    <option value="Mobile Shop" {{ $user->business_type == 'Mobile Shop' ? 'selected' : '' }}>Mobile Phone Shop</option>
-                                    <option value="Automobile parts" {{ $user->business_type == 'Automobile parts' ? 'selected' : '' }}>Automobile Parts Store</option>
-                                    <option value="Furniture" {{ $user->business_type == 'Furniture' ? 'selected' : '' }}>Furniture Store</option>
-                                    <option value="Cosmetic" {{ $user->business_type == 'Cosmetic' ? 'selected' : '' }}>Cosmetic & Beauty Store</option>
-                                    <option value="Book Store" {{ $user->business_type == 'Book Store' ? 'selected' : '' }}>Book Store / Stationery</option>
-                                    <option value="Restaurant" {{ $user->business_type == 'Restaurant' ? 'selected' : '' }}>Restaurant / Food Inventory</option>
-                                    <option value="Agricultural" {{ $user->business_type == 'Agricultural' ? 'selected' : '' }}>Agricultural Products</option>
-                                    <option value="Wholesale" {{ $user->business_type == 'Wholesale' ? 'selected' : '' }}>Wholesale Distributor</option>
+                                    <option value="General Inventory" {{ $user->business_type == 'General Inventory' ? 'selected' : '' }}>{{ __('General Inventory (Default)') }}</option>
+                                    <option value="Gold / Jewellery" {{ $user->business_type == 'Gold / Jewellery' ? 'selected' : '' }}>{{ __('Gold & Jewellery Business') }}</option>
+                                    <option value="Electronics" {{ $user->business_type == 'Electronics' ? 'selected' : '' }}>{{ __('Electronics Store') }}</option>
+                                    <option value="Grocery" {{ $user->business_type == 'Grocery' ? 'selected' : '' }}>{{ __('Grocery / Supermarket') }}</option>
+                                    <option value="Clothing" {{ $user->business_type == 'Clothing' ? 'selected' : '' }}>{{ __('Clothing / Fashion Store') }}</option>
+                                    <option value="Medical Store" {{ $user->business_type == 'Medical Store' ? 'selected' : '' }}>{{ __('Medical / Pharmacy Store') }}</option>
+                                    <option value="Hardware" {{ $user->business_type == 'Hardware' ? 'selected' : '' }}>{{ __('Hardware / Construction Materials') }}</option>
+                                    <option value="Mobile Shop" {{ $user->business_type == 'Mobile Shop' ? 'selected' : '' }}>{{ __('Mobile Phone Shop') }}</option>
+                                    <option value="Automobile parts" {{ $user->business_type == 'Automobile parts' ? 'selected' : '' }}>{{ __('Automobile Parts Store') }}</option>
+                                    <option value="Furniture" {{ $user->business_type == 'Furniture' ? 'selected' : '' }}>{{ __('Furniture Store') }}</option>
+                                    <option value="Cosmetic" {{ $user->business_type == 'Cosmetic' ? 'selected' : '' }}>{{ __('Cosmetic & Beauty Store') }}</option>
+                                    <option value="Book Store" {{ $user->business_type == 'Book Store' ? 'selected' : '' }}>{{ __('Book Store / Stationery') }}</option>
+                                    <option value="Restaurant" {{ $user->business_type == 'Restaurant' ? 'selected' : '' }}>{{ __('Restaurant / Food Inventory') }}</option>
+                                    <option value="Agricultural" {{ $user->business_type == 'Agricultural' ? 'selected' : '' }}>{{ __('Agricultural Products') }}</option>
+                                    <option value="Wholesale" {{ $user->business_type == 'Wholesale' ? 'selected' : '' }}>{{ __('Wholesale Distributor') }}</option>
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('business_type')" />
                             </div>
@@ -214,30 +214,30 @@
                 currency: '{{ $user->currency ?? 'USD' }}',
                 get paymentLabel() {
                     const labels = {
-                        'INR': 'UPI ID',
-                        'USD': 'PayPal Email',
-                        'GBP': 'Revolut / Bank ID',
-                        'EUR': 'SEPA / PayPal ID'
+                        'INR': '{{ __("UPI ID") }}',
+                        'USD': '{{ __("PayPal Email") }}',
+                        'GBP': '{{ __("Revolut / Bank ID") }}',
+                        'EUR': '{{ __("SEPA / PayPal ID") }}'
                     };
-                    return labels[this.currency] || 'Payment ID';
+                    return labels[this.currency] || '{{ __("Payment ID") }}';
                 },
                 get paymentPlaceholder() {
                     const placeholders = {
-                        'INR': 'e.g. yourname@upi',
-                        'USD': 'e.g. you@email.com',
-                        'GBP': 'e.g. @yourrevtag',
-                        'EUR': 'e.g. you@email.com'
+                        'INR': '{{ __("e.g. yourname@upi") }}',
+                        'USD': '{{ __("e.g. you@email.com") }}',
+                        'GBP': '{{ __("e.g. @yourrevtag") }}',
+                        'EUR': '{{ __("e.g. you@email.com") }}'
                     };
-                    return placeholders[this.currency] || 'Enter your payment ID';
+                    return placeholders[this.currency] || '{{ __("Enter your payment ID") }}';
                 },
                 get paymentHint() {
                     const hints = {
-                        'INR': 'Your UPI ID will be used to generate a payment QR code on invoices. Customers can scan and pay directly.',
-                        'USD': 'Your PayPal email will appear as a QR code on invoices for easy online payments.',
-                        'GBP': 'Your Revolut tag or bank ID will be shown as a QR code on invoices.',
-                        'EUR': 'Your SEPA/PayPal ID will be used to generate a payment QR code on invoices.'
+                        'INR': '{{ __("Your UPI ID will be used to generate a payment QR code on invoices. Customers can scan and pay directly.") }}',
+                        'USD': '{{ __("Your PayPal email will appear as a QR code on invoices for easy online payments.") }}',
+                        'GBP': '{{ __("Your Revolut tag or bank ID will be shown as a QR code on invoices.") }}',
+                        'EUR': '{{ __("Your SEPA/PayPal ID will be used to generate a payment QR code on invoices.") }}'
                     };
-                    return hints[this.currency] || 'Your payment ID will be shown on invoices for customer payments.';
+                    return hints[this.currency] || '{{ __("Your payment ID will be shown on invoices for customer payments.") }}';
                 }
             }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
                 <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">

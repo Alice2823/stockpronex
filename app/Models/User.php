@@ -43,6 +43,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the currency symbol based on user's preference.
+     */
+    public function getCurrencySymbolAttribute()
+    {
+        $symbols = [
+            'USD' => '$',
+            'INR' => '₹',
+            'GBP' => '£',
+            'EUR' => '€',
+        ];
+
+        return $symbols[$this->currency] ?? '$';
+    }
+
     public function barcodes()
     {
         return $this->hasMany(StockBarcode::class);

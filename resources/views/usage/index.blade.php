@@ -210,7 +210,7 @@
             </div>
 
             <div class="mt-8 pb-6 text-center text-[11px] font-black tracking-widest text-gray-500 dark:text-gray-400 uppercase">
-                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">STOCK</span><span class="text-blue-600 dark:text-blue-500">PRONEX</span>. SYSTEM MANAGED SECURELY.
+                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">{{ __('STOCK') }}</span><span class="text-blue-600 dark:text-blue-500">{{ __('PRONEX') }}</span>. {{ __('SYSTEM MANAGED SECURELY.') }}
             </div>
         </div>
     </div>

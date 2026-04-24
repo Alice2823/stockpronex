@@ -23,11 +23,11 @@
                 <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <div class="w-full sm:w-auto bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-bold px-4 py-2 rounded-lg border border-red-200 dark:border-red-800 shadow-sm flex items-center justify-between sm:justify-start">
                         <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Total Discounts:') }}</span>
-                        <span class="text-lg">₹{{ number_format($totalOverallDiscount, 2) }}</span>
+                        <span class="text-lg">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallDiscount, 2) }}</span>
                     </div>
                     <div class="w-full sm:w-auto bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 font-bold px-4 py-2 rounded-lg border border-green-200 dark:border-green-800 shadow-sm flex items-center justify-between sm:justify-start">
                         <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Net Profit Earned:') }}</span>
-                        <span class="text-xl">₹{{ number_format($totalOverallProfit, 2) }}</span>
+                        <span class="text-xl">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallProfit, 2) }}</span>
                     </div>
                 </div>
             </div>
@@ -59,14 +59,14 @@
                                     <div>
                                         <h4 class="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">{{ $stock->name }}</h4>
                                         <div class="flex flex-wrap text-sm text-gray-500 dark:text-gray-400 mt-1 gap-x-4 font-medium">
-                                            <span class="inline-flex items-center"><span class="font-bold text-gray-700 dark:text-gray-300 mr-1">{{ __('Cost (MRP):') }}</span> ₹{{ number_format($stock->mrp ?? 0, 2) }}</span>
-                                            <span class="inline-flex items-center"><span class="font-bold text-gray-700 dark:text-gray-300 mr-1">{{ __('Selling Price:') }}</span> ₹{{ number_format($stock->price, 2) }}</span>
+                                            <span class="inline-flex items-center"><span class="font-bold text-gray-700 dark:text-gray-300 mr-1">{{ __('Cost (MRP):') }}</span> {{ Auth::user()->currency_symbol }}{{ number_format($stock->mrp ?? 0, 2) }}</span>
+                                            <span class="inline-flex items-center"><span class="font-bold text-gray-700 dark:text-gray-300 mr-1">{{ __('Selling Price:') }}</span> {{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</span>
                                             <span class="inline-flex items-center text-blue-600 dark:text-blue-400"><span class="mr-1">{{ __('Total Units Sold:') }}</span> {{ number_format($stock->units_sold ?? 0) }}</span>
                                         </div>
                                         @if(($stock->total_discount ?? 0) > 0)
                                             <div class="mt-2 flex items-center">
                                                 <span class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-red-100 dark:border-red-900/50">
-                                                    {{ __('Total Discounts Given:') }} ₹{{ number_format($stock->total_discount, 2) }}
+                                                    {{ __('Total Discounts Given:') }} {{ Auth::user()->currency_symbol }}{{ number_format($stock->total_discount, 2) }}
                                                 </span>
                                             </div>
                                         @endif
@@ -79,14 +79,14 @@
                                         <div class="text-left sm:text-right hidden sm:block">
                                             <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{{ __('Gross Profit') }}</p>
                                             <p class="text-base font-bold text-gray-700 dark:text-gray-300">
-                                                ₹{{ number_format($stock->gross_profit ?? 0, 2) }}
+                                                {{ Auth::user()->currency_symbol }}{{ number_format($stock->gross_profit ?? 0, 2) }}
                                             </p>
                                         </div>
                                     @endif
                                     <div class="text-left sm:text-right">
                                         <p class="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">{{ __('Net Profit') }}</p>
                                         <p class="text-2xl font-black {{ $stock->calculated_profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                            {{ $stock->calculated_profit >= 0 ? '+' : '-' }}₹{{ number_format(abs($stock->calculated_profit), 2) }}
+                                            {{ $stock->calculated_profit >= 0 ? '+' : '-' }}{{ Auth::user()->currency_symbol }}{{ number_format(abs($stock->calculated_profit), 2) }}
                                         </p>
                                     </div>
                                 </div>
@@ -116,10 +116,10 @@
                                                     <td class="py-2 pr-4 text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $sale->date->setTimezone('Asia/Kolkata')->format('d M y, h:ia') }}</td>
                                                     <td class="py-2 pr-4 text-xs font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">{{ $sale->invoice_number }}</td>
                                                     <td class="py-2 pr-4 text-xs text-right font-medium text-gray-700 dark:text-gray-300">{{ $sale->qty }}</td>
-                                                    <td class="py-2 pr-4 text-xs text-right font-medium text-gray-700 dark:text-gray-300">₹{{ number_format($sale->gross_profit, 2) }}</td>
-                                                    <td class="py-2 pr-4 text-xs text-right font-bold text-red-500 dark:text-red-400">₹{{ number_format($sale->discount, 2) }}</td>
+                                                    <td class="py-2 pr-4 text-xs text-right font-medium text-gray-700 dark:text-gray-300">{{ Auth::user()->currency_symbol }}{{ number_format($sale->gross_profit, 2) }}</td>
+                                                    <td class="py-2 pr-4 text-xs text-right font-bold text-red-500 dark:text-red-400">{{ Auth::user()->currency_symbol }}{{ number_format($sale->discount, 2) }}</td>
                                                     <td class="py-2 text-xs text-right font-black tracking-tight {{ $sale->net_profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                                        {{ $sale->net_profit >= 0 ? '+' : '-' }}₹{{ number_format(abs($sale->net_profit), 2) }}
+                                                        {{ $sale->net_profit >= 0 ? '+' : '-' }}{{ Auth::user()->currency_symbol }}{{ number_format(abs($sale->net_profit), 2) }}
                                                     </td>
                                                 </tr>
                                             @endforeach

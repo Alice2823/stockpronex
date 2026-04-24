@@ -26,7 +26,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Total Revenue') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
@@ -44,7 +44,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Online Payments') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['onlineTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['onlineTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-green-100 dark:bg-green-900/40 rounded-xl">
@@ -62,7 +62,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Cash Payments') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}{{ number_format($summary['cashTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['cashTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl">
@@ -180,7 +180,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-black text-gray-900 dark:text-white">
-                                            {{ Auth::user()->currency == 'INR' ? '₹' : (Auth::user()->currency == 'GBP' ? '£' : (Auth::user()->currency == 'EUR' ? '€' : '$')) }}
+                                            {{ Auth::user()->currency_symbol }}
                                             {{ number_format($invoice->amount, 2) }}
                                         </div>
                                     </td>
@@ -227,7 +227,7 @@
             </div>
 
             <div class="mt-8 pb-6 text-center text-[11px] font-black tracking-widest text-gray-500 dark:text-gray-400 uppercase">
-                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">STOCK</span><span class="text-blue-600 dark:text-blue-500">PRONEX</span>. SYSTEM MANAGED SECURELY.
+                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">{{ __('STOCK') }}</span><span class="text-blue-600 dark:text-blue-500">{{ __('PRONEX') }}</span>. {{ __('SYSTEM MANAGED SECURELY.') }}
             </div>
         </div>
     </div>

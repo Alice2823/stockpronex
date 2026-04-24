@@ -14,7 +14,7 @@
                     <svg class="h-4 w-4 mr-2.5 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back to Dashboard
+                    {{ __('Back to Dashboard') }}
                 </a>
             </div>
             
@@ -25,8 +25,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-3 3h6l-3-3V4zM5 8h14M5 8a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V10a2 2 0 00-2-2M5 8l7 4 7-4" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-black text-gray-800 tracking-tight">Ready to Scan</h3>
-                    <p class="text-gray-500 mt-2">Point your camera at a <span class="brand-stock">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex">Nex</span> barcode to process it.</p>
+                    <h3 class="text-2xl font-black text-gray-800 tracking-tight">{{ __('Ready to Scan') }}</h3>
+                    <p class="text-gray-500 mt-2">{{ __('Point your camera at a') }} <span class="brand-stock">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex">Nex</span> {{ __('barcode to process it.') }}</p>
                 </div>
 
                 <!-- Scanner Container -->
@@ -35,7 +35,7 @@
                     
                     <div class="absolute bottom-2 left-0 right-0 text-center z-10">
                         <span class="bg-black/60 text-white text-[10px] px-3 py-1 rounded-full font-bold shadow-sm backdrop-blur-sm">
-                            Tip: Scan the square QR code for faster results
+                            {{ __('Tip: Scan the square QR code for faster results') }}
                         </span>
                     </div>
                     
@@ -52,15 +52,15 @@
                             <div class="w-full border-t border-gray-200"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-3 bg-white text-gray-400 font-medium">OR ENTER MANUALLY</span>
+                            <span class="px-3 bg-white text-gray-400 font-medium">{{ __('OR ENTER MANUALLY') }}</span>
                         </div>
                     </div>
 
                     <div class="mt-6 flex space-x-2">
-                        <x-input type="text" id="manual-barcode" class="flex-1" placeholder="Enter Code (e.g. STK-1-001)" />
+                        <x-input type="text" id="manual-barcode" class="flex-1" placeholder="{{ __('Enter Code (e.g. STK-1-001)') }}" />
                         <button onclick="processBarcode(document.getElementById('manual-barcode').value)"
                             class="px-6 py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-black transition-all shadow-lg active:scale-95">
-                            Submit
+                            {{ __('Submit') }}
                         </button>
                     </div>
                 </div>
@@ -80,16 +80,16 @@
             <!-- Instructions -->
             <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 opacity-60 hover:opacity-100 transition-opacity">
                 <div class="bg-white/50 p-6 rounded-2xl text-center border border-gray-100">
-                    <div class="text-blue-500 font-bold mb-2">1. Lighting</div>
-                    <p class="text-xs text-gray-600">Ensure the barcode is well-lit and not reflective.</p>
+                    <div class="text-blue-500 font-bold mb-2">1. {{ __('Lighting') }}</div>
+                    <p class="text-xs text-gray-600">{{ __('Ensure the barcode is well-lit and not reflective.') }}</p>
                 </div>
                 <div class="bg-white/50 p-6 rounded-2xl text-center border border-gray-100">
-                    <div class="text-blue-500 font-bold mb-2">2. Margins are Required</div>
-                    <p class="text-xs text-gray-600">Ensure there is at least a small white border (quiet zone) around the barcode, especially left/right.</p>
+                    <div class="text-blue-500 font-bold mb-2">2. {{ __('Margins are Required') }}</div>
+                    <p class="text-xs text-gray-600">{{ __('Ensure there is at least a small white border (quiet zone) around the barcode, especially left/right.') }}</p>
                 </div>
                 <div class="bg-white/50 p-6 rounded-2xl text-center border border-gray-100">
-                    <div class="text-blue-500 font-bold mb-2">3. Use QR for Screens</div>
-                    <p class="text-xs text-gray-600">If scanning from a phone/laptop screen, try the square QR code for instant results.</p>
+                    <div class="text-blue-500 font-bold mb-2">3. {{ __('Use QR for Screens') }}</div>
+                    <p class="text-xs text-gray-600">{{ __('If scanning from a phone/laptop screen, try the square QR code for instant results.') }}</p>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@
             barcode = barcode.trim();
             
             isProcessing = true;
-            showStatus('Processing...', 'Updating stock records...', 'blue');
+            showStatus('{{ __("Processing...") }}', '{{ __("Updating stock records...") }}', 'blue');
 
             fetch("{{ route('barcode.mark-used') }}", {
                 method: "POST",
@@ -133,14 +133,14 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showStatus('Success!', data.message, 'green');
+                    showStatus('{{ __("Success!") }}', data.message, 'green');
                     // Reset after 3 seconds to allow next scan
                     setTimeout(() => {
                         resetStatus();
                         isProcessing = false;
                     }, 3000);
                 } else {
-                    showStatus('Error', data.message, 'red');
+                    showStatus('{{ __("Error") }}', data.message, 'red');
                     setTimeout(() => {
                         resetStatus();
                         isProcessing = false;
@@ -148,7 +148,7 @@
                 }
             })
             .catch(error => {
-                showStatus('Error', 'System connectivity issue.', 'red');
+                showStatus('{{ __("Error") }}', '{{ __("System connectivity issue.") }}', 'red');
                 setTimeout(() => {
                     resetStatus();
                     isProcessing = false;
