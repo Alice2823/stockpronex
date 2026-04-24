@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\ProfitExport;
@@ -14,6 +15,12 @@ class ProfitController extends Controller
     /**
      * Display the profit analytics for all user's stocks
      */
+    public function index()
+    {
+        $data = $this->getProfitData();
+        return view('profit.index', $data);
+    }
+
     /**
      * Export profit breakdown to professional PDF
      */
@@ -33,34 +40,44 @@ class ProfitController extends Controller
         return Excel::download(new ProfitExport($data), 'Profit_Data_' . now()->format('d_M_Y') . '.xlsx');
     }
 
-    public function index()
-    {
-        $data = $this->getProfitData();
-        return view('profit.index', $data);
-    }
-
     /**
-     * Common logic to calculate profit across all stocks
+     * Accurate profit calculation based on Invoice records
      */
     private function getProfitData()
     {
         $user = Auth::user();
-        $stocks = Stock::where('user_id', $user->id)
-                    ->withSum('usages', 'quantity')
-                    ->get();
-                    
-        $invoices = \App\Models\Invoice::where('user_id', $user->id)->get();
+        
+        // 1. Fetch all invoices for the user with their usage records
+        $invoices = Invoice::with(['usage', 'stock' => function($q) {
+            $q->withTrashed();
+        }])->where('user_id', $user->id)->get();
 
-        $stockDiscounts = [];
         $totalOverallDiscount = 0;
+        $totalOverallProfit = 0;
+        
+        // Map to store aggregated profit per stock ID
+        $stockMetrics = [];
 
         foreach ($invoices as $invoice) {
             $items = $invoice->items;
+            
+            // Handle both new multi-item format and old single-item format
             if (!is_array($items)) {
-                if ($invoice->stock_id && $invoice->discount_amount > 0) {
-                    $stockDiscounts[$invoice->stock_id] = ($stockDiscounts[$invoice->stock_id] ?? 0) + $invoice->discount_amount;
-                    $totalOverallDiscount += $invoice->discount_amount;
-                }
+                $stockId = $invoice->stock_id;
+                if (!$stockId) continue;
+                
+                $qty = $invoice->usage ? $invoice->usage->quantity : 1;
+                $mrp = $invoice->stock ? $invoice->stock->mrp : 0;
+                $price = $invoice->stock ? $invoice->stock->price : 0;
+                $discount = (float)($invoice->discount_amount ?? 0);
+                
+                $gross = ($price - $mrp) * $qty;
+                $net = $gross - $discount;
+                
+                $this->updateStockMetric($stockMetrics, $stockId, $gross, $discount, $net, $qty, $invoice);
+                
+                $totalOverallDiscount += $discount;
+                $totalOverallProfit += $net;
                 continue;
             }
 
@@ -68,30 +85,44 @@ class ProfitController extends Controller
                 $stockId = $item['stock_id'] ?? $invoice->stock_id;
                 if (!$stockId) continue;
 
+                $mrp = (float)($item['mrp'] ?? 0);
+                $price = (float)($item['unit_price'] ?? 0);
                 $discount = (float)($item['discount_amount'] ?? 0);
-                $stockDiscounts[$stockId] = ($stockDiscounts[$stockId] ?? 0) + $discount;
+                
+                $gross = ($price - $mrp); // unit gross profit
+                $net = $gross - $discount; // unit net profit
+                
+                $this->updateStockMetric($stockMetrics, $stockId, $gross, $discount, $net, 1, $invoice);
+                
                 $totalOverallDiscount += $discount;
+                $totalOverallProfit += $net;
             }
         }
-
-        $totalOverallProfit = 0;
-
+        
+        // 2. Fetch all stocks (active + deleted ones that have sales)
+        $stockIds = array_keys($stockMetrics);
+        $activeStockIds = Stock::where('user_id', $user->id)->pluck('id')->toArray();
+        $allRelevantStockIds = array_unique(array_merge($stockIds, $activeStockIds));
+        
+        $stocks = Stock::withTrashed()
+                    ->whereIn('id', $allRelevantStockIds)
+                    ->where('user_id', $user->id)
+                    ->get();
+                    
         foreach ($stocks as $stock) {
-            $mrp = $stock->mrp ?? 0;
-            $sellingPrice = $stock->price ?? 0;
-            $qty = $stock->usages_sum_quantity ?? 0;
-            $discount = $stockDiscounts[$stock->id] ?? 0;
-
-            $grossProfit = ($sellingPrice - $mrp) * $qty;
-            $netProfit = $grossProfit - $discount;
-
-            $stock->calculated_profit = $netProfit;
-            $stock->gross_profit = $grossProfit;
-            $stock->total_discount = $discount;
-            $stock->units_sold = $qty;
-
-            $totalOverallProfit += $netProfit;
+            $metrics = $stockMetrics[$stock->id] ?? ['gross' => 0, 'discount' => 0, 'net' => 0, 'units' => 0, 'history' => []];
+            
+            $stock->gross_profit = $metrics['gross'];
+            $stock->total_discount = $metrics['discount'];
+            $stock->calculated_profit = $metrics['net'];
+            $stock->units_sold = $metrics['units'];
+            $stock->sales_history = collect($metrics['history'])->sortByDesc('date')->values();
         }
+        
+        // Only return stocks that have either sales OR are still active
+        $stocks = $stocks->filter(function($s) {
+            return $s->units_sold > 0 || !$s->deleted_at;
+        })->sortByDesc('calculated_profit');
 
         return [
             'stocks' => $stocks,
@@ -99,5 +130,47 @@ class ProfitController extends Controller
             'totalOverallDiscount' => $totalOverallDiscount,
             'generationDate' => now()->format('d-m-Y H:i')
         ];
+    }
+
+    /**
+     * Helper to update aggregated metrics
+     */
+    private function updateStockMetric(&$metrics, $stockId, $gross, $discount, $net, $qty, $invoice)
+    {
+        if (!isset($metrics[$stockId])) {
+            $metrics[$stockId] = [
+                'gross' => 0, 
+                'discount' => 0, 
+                'net' => 0, 
+                'units' => 0,
+                'history' => []
+            ];
+        }
+        
+        $metrics[$stockId]['gross'] += $gross;
+        $metrics[$stockId]['discount'] += $discount;
+        $metrics[$stockId]['net'] += $net;
+        $metrics[$stockId]['units'] += $qty;
+        
+        // Add to history (group by invoice)
+        $existingHistoryKey = collect($metrics[$stockId]['history'])->search(fn($h) => $h->invoice_number == $invoice->invoice_number);
+        
+        if ($existingHistoryKey !== false) {
+            $metrics[$stockId]['history'][$existingHistoryKey]->qty += $qty;
+            $metrics[$stockId]['history'][$existingHistoryKey]->gross_profit += $gross;
+            $metrics[$stockId]['history'][$existingHistoryKey]->discount += $discount;
+            $metrics[$stockId]['history'][$existingHistoryKey]->net_profit += $net;
+        } else {
+            $metrics[$stockId]['history'][] = (object)[
+                'date' => $invoice->created_at,
+                'invoice_number' => $invoice->invoice_number,
+                'qty' => $qty,
+                'mrp' => ($qty > 0) ? ($invoice->stock ? $invoice->stock->mrp : 0) : 0, // Fallback
+                'price' => ($qty > 0) ? ($invoice->stock ? $invoice->stock->price : 0) : 0, // Fallback
+                'discount' => $discount,
+                'gross_profit' => $gross,
+                'net_profit' => $net
+            ];
+        }
     }
 }
