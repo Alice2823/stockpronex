@@ -213,6 +213,55 @@ function registerUser(){
     });
 }
 
+// ✅ DROPDOWN LOGIC
+document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.getElementById('dropdown_trigger');
+    const menu = document.getElementById('dropdown_menu');
+    const arrow = document.getElementById('dropdown_arrow');
+    const selectedText = document.getElementById('selected_text');
+    const hiddenInput = document.getElementById('business_type');
+    const items = document.querySelectorAll('.dropdown-item');
+
+    // Toggle dropdown
+    trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menu.classList.toggle('show');
+        if (menu.classList.contains('show')) {
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!menu.contains(e.target) && !trigger.contains(e.target)) {
+            menu.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Select item
+    items.forEach(item => {
+        item.addEventListener('click', function() {
+            // Update UI
+            selectedText.textContent = this.textContent;
+            hiddenInput.value = this.getAttribute('data-value');
+            
+            // Highlight selected item
+            items.forEach(i => {
+                i.classList.remove('text-blue-600', 'dark:text-blue-400', 'font-bold', 'bg-blue-50', 'dark:bg-blue-900/30');
+                i.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            this.classList.remove('text-gray-700', 'dark:text-gray-300');
+            this.classList.add('text-blue-600', 'dark:text-blue-400', 'font-bold', 'bg-blue-50', 'dark:bg-blue-900/30');
+
+            // Close dropdown
+            menu.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+        });
+    });
+});
 </script>
 
 </x-guest-layout>
