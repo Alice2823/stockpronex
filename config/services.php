@@ -20,8 +20,8 @@ return [
     ],
 
     'turnstile' => [
-        'site_key' => env('TURNSTILE_SITE_KEY'),
-        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+        'site_key' => trim(env('TURNSTILE_SITE_KEY')),
+        'secret_key' => trim(env('TURNSTILE_SECRET_KEY')),
     ],
 
 ];
