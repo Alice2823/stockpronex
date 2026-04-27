@@ -195,10 +195,6 @@
             </div>
         @endif
 
-        <!-- Debug Turnstile Site Key (Temporary) -->
-        <div class="mb-4 text-xs text-gray-500 text-center border border-dashed border-gray-300 dark:border-gray-700 p-2 rounded" style="display: {{ config('app.debug') ? 'block' : 'none' }}">
-            Debug Site Key: {{ config('services.turnstile.site_key') ?: 'NOT SET (NULL)' }}
-        </div>
 
         <!-- Errors -->
         @if ($errors->any())
