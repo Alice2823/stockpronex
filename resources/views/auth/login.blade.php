@@ -1,5 +1,22 @@
 <x-guest-layout>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
+    <script>
+        window.onloadTurnstileCallback = function () {
+            window.renderVisibleTurnstiles();
+        };
+
+        window.renderVisibleTurnstiles = function () {
+            if (typeof turnstile !== 'undefined') {
+                document.querySelectorAll('.cf-turnstile:not([data-rendered])').forEach(function(el) {
+                    // Only render if the element is currently visible on screen
+                    if (el.offsetParent !== null) {
+                        turnstile.render(el);
+                        el.setAttribute('data-rendered', 'true');
+                    }
+                });
+            }
+        };
+    </script>
 
     <div
         class="w-full max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
@@ -217,8 +234,20 @@
                 recentLogins: {{ json_encode($recentLogins) }},
                 
                 init() {
-                    // Turnstile auto-renders via the standard API script.
-                    // No need for explicit manual rendering which causes 'loaded multiple times' error.
+                    this.$watch('showFullForm', value => {
+                        if (value) {
+                            this.$nextTick(() => {
+                                if (window.renderVisibleTurnstiles) window.renderVisibleTurnstiles();
+                            });
+                        }
+                    });
+                    this.$watch('selectedAccount', value => {
+                        if (value) {
+                            this.$nextTick(() => {
+                                if (window.renderVisibleTurnstiles) window.renderVisibleTurnstiles();
+                            });
+                        }
+                    });
                 },
 
                 selectAccount(login) {
