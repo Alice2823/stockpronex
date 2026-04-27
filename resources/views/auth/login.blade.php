@@ -8,11 +8,8 @@
         window.renderVisibleTurnstiles = function () {
             if (typeof turnstile !== 'undefined') {
                 document.querySelectorAll('.cf-turnstile:not([data-rendered])').forEach(function(el) {
-                    // Only render if the element is currently visible on screen
-                    if (el.offsetParent !== null) {
-                        turnstile.render(el);
-                        el.setAttribute('data-rendered', 'true');
-                    }
+                    turnstile.render(el);
+                    el.setAttribute('data-rendered', 'true');
                 });
             }
         };
