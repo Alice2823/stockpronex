@@ -18,7 +18,7 @@ return [
     'gemini' => [
         'api_key' => env('GEMINI_API_KEY'),
     ],
-    
+
     'turnstile' => [
         'site_key' => env('TURNSTILE_SITE_KEY'),
         'secret' => env('TURNSTILE_SECRET_KEY'),
