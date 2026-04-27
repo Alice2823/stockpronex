@@ -195,6 +195,11 @@
             </div>
         @endif
 
+        <!-- Debug Turnstile Site Key (Temporary) -->
+        <div class="mb-4 text-xs text-gray-500 text-center border border-dashed border-gray-300 dark:border-gray-700 p-2 rounded" style="display: {{ config('app.debug') ? 'block' : 'none' }}">
+            Debug Site Key: {{ config('services.turnstile.site_key') ?: 'NOT SET (NULL)' }}
+        </div>
+
         <!-- Errors -->
         @if ($errors->any())
             <div class="mb-4 text-red-600 text-sm">
@@ -212,24 +217,8 @@
                 recentLogins: {{ json_encode($recentLogins) }},
                 
                 init() {
-                    this.$watch('showFullForm', value => {
-                        if (value) this.renderTurnstile();
-                    });
-                    this.$watch('selectedAccount', value => {
-                        if (value) this.renderTurnstile();
-                    });
-                },
-
-                renderTurnstile() {
-                    this.$nextTick(() => {
-                        if (window.turnstile) {
-                            const elements = document.querySelectorAll('.cf-turnstile:not([data-rendered])');
-                            elements.forEach(el => {
-                                turnstile.render(el);
-                                el.setAttribute('data-rendered', 'true');
-                            });
-                        }
-                    });
+                    // Turnstile auto-renders via the standard API script.
+                    // No need for explicit manual rendering which causes 'loaded multiple times' error.
                 },
 
                 selectAccount(login) {
@@ -419,8 +408,5 @@
             </a>
         </div>
     </div> {{-- End of the Box --}}
-
-    {{-- Turnstile Script (at the bottom to ensure DOM is ready) --}}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
 </x-guest-layout>

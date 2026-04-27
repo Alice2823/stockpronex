@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
         $response = \Illuminate\Support\Facades\Http::asForm()->post(
             'https://challenges.cloudflare.com/turnstile/v0/siteverify',
             [
-                'secret' => config('services.turnstile.secret'),
+                'secret' => config('services.turnstile.secret_key'),
                 'response' => $request->input('cf-turnstile-response'),
                 'remoteip' => $request->ip(),
             ]
