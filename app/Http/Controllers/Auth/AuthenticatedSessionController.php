@@ -36,6 +36,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        // 🔐 Cloudflare Turnstile verification
+        $response = \Illuminate\Support\Facades\Http::asForm()->post(
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+            [
+                'secret' => config('services.turnstile.secret'),
+                'response' => $request->input('cf-turnstile-response'),
+                'remoteip' => $request->ip(),
+            ]
+        );
+
+        if (!($response->json()['success'] ?? false)) {
+            return back()->withErrors(['captcha' => 'Captcha verification failed. Please try again.'])->withInput();
+        }
+
         $request->authenticate();
 
         $request->session()->regenerate();

@@ -1,15 +1,33 @@
 <x-guest-layout>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    <div class="w-full max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
+    <div
+        class="w-full max-w-md mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
 
         <!-- Logo Animation Styles -->
         <style>
-            .logo-expand-container { display: flex; justify-content: center; align-items: baseline; flex-direction: row; }
-            .brand-stock, .brand-pro, .brand-nex { display: inline-flex; align-items: baseline; flex-direction: row; }
-            .logo-letter { display: inline-block; }
+            .logo-expand-container {
+                display: flex;
+                justify-content: center;
+                align-items: baseline;
+                flex-direction: row;
+            }
+
+            .brand-stock,
+            .brand-pro,
+            .brand-nex {
+                display: inline-flex;
+                align-items: baseline;
+                flex-direction: row;
+            }
+
+            .logo-letter {
+                display: inline-block;
+            }
+
             .logo-rest {
                 display: inline-block;
-                max-width: 0; 
+                max-width: 0;
                 opacity: 0;
                 overflow: hidden;
                 white-space: nowrap;
@@ -18,18 +36,38 @@
                 animation: expandWord 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 animation-delay: 0.8s;
             }
+
             @keyframes expandWord {
-                0% { max-width: 0; opacity: 0; }
-                40% { opacity: 0; }
-                100% { max-width: 150px; opacity: 1; }
+                0% {
+                    max-width: 0;
+                    opacity: 0;
+                }
+
+                40% {
+                    opacity: 0;
+                }
+
+                100% {
+                    max-width: 150px;
+                    opacity: 1;
+                }
             }
+
             .subtitle-fade {
                 opacity: 0;
                 animation: fadeIn 0.8s ease forwards 2s;
             }
+
             @keyframes fadeIn {
-                0% { opacity: 0; transform: translateY(8px); }
-                100% { opacity: 1; transform: translateY(0); }
+                0% {
+                    opacity: 0;
+                    transform: translateY(8px);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             /* Recent Login Styles */
@@ -39,21 +77,26 @@
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 border: 2px solid transparent;
             }
+
             .recent-login-card:hover {
                 border-color: #3b82f6;
                 transform: translateY(-2px);
                 box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.15);
             }
+
             .recent-login-card.selected {
                 border-color: #3b82f6;
                 background: rgba(59, 130, 246, 0.05);
             }
+
             .dark .recent-login-card:hover {
                 box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.25);
             }
+
             .dark .recent-login-card.selected {
                 background: rgba(59, 130, 246, 0.1);
             }
+
             .recent-login-remove {
                 position: absolute;
                 top: -6px;
@@ -68,28 +111,63 @@
                 transition: opacity 0.2s;
                 z-index: 10;
             }
+
             .recent-login-card:hover .recent-login-remove {
                 opacity: 1;
             }
-            .avatar-gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-            .avatar-gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-            .avatar-gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-            .avatar-gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-            .avatar-gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
+            .avatar-gradient-1 {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+
+            .avatar-gradient-2 {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            }
+
+            .avatar-gradient-3 {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            }
+
+            .avatar-gradient-4 {
+                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            }
+
+            .avatar-gradient-5 {
+                background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            }
 
             .slide-down-enter {
                 animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
+
             @keyframes slideDown {
-                0% { opacity: 0; max-height: 0; transform: translateY(-10px); }
-                100% { opacity: 1; max-height: 200px; transform: translateY(0); }
+                0% {
+                    opacity: 0;
+                    max-height: 0;
+                    transform: translateY(-10px);
+                }
+
+                100% {
+                    opacity: 1;
+                    max-height: 200px;
+                    transform: translateY(0);
+                }
             }
+
             .slide-up-enter {
                 animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
+
             @keyframes slideUp {
-                0% { opacity: 0; max-height: 0; }
-                100% { opacity: 1; max-height: 500px; }
+                0% {
+                    opacity: 0;
+                    max-height: 0;
+                }
+
+                100% {
+                    opacity: 1;
+                    max-height: 500px;
+                }
             }
         </style>
 
@@ -106,7 +184,8 @@
                     <span class="logo-letter">N</span><span class="logo-rest">ex</span>
                 </span>
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2 subtitle-fade not-italic">Inventory Management System</p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2 subtitle-fade not-italic">Inventory
+                Management System</p>
         </div>
 
         <!-- Session Status -->
@@ -125,12 +204,34 @@
             </div>
         @endif
 
-        {{-- ========== RECENT LOGINS SECTION ========== --}}
+        {{-- ========== LOGIN SECTION ========== --}}
         @if(!empty($recentLogins) && count($recentLogins) > 0)
             <div x-data="{
                 selectedAccount: null,
                 showFullForm: false,
                 recentLogins: {{ json_encode($recentLogins) }},
+                
+                init() {
+                    this.$watch('showFullForm', value => {
+                        if (value) this.renderTurnstile();
+                    });
+                    this.$watch('selectedAccount', value => {
+                        if (value) this.renderTurnstile();
+                    });
+                },
+
+                renderTurnstile() {
+                    this.$nextTick(() => {
+                        if (window.turnstile) {
+                            const elements = document.querySelectorAll('.cf-turnstile:not([data-rendered])');
+                            elements.forEach(el => {
+                                turnstile.render(el);
+                                el.setAttribute('data-rendered', 'true');
+                            });
+                        }
+                    });
+                },
+
                 selectAccount(login) {
                     this.selectedAccount = login;
                     this.showFullForm = false;
@@ -139,6 +240,7 @@
                         if (pwdInput) pwdInput.focus();
                     });
                 },
+
                 clearSelection() {
                     this.selectedAccount = null;
                     this.showFullForm = true;
@@ -147,6 +249,7 @@
                         if (emailInput) emailInput.focus();
                     });
                 },
+
                 async removeAccount(email, index, event) {
                     event.stopPropagation();
                     try {
@@ -170,7 +273,7 @@
             }" x-cloak>
 
                 {{-- Recent Logins Header --}}
-                <div x-show="!showFullForm" class="mb-4">
+                <div x-show="!showFullForm">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Recent Logins</h3>
                         <span class="text-xs text-gray-400 dark:text-gray-500">Click to quick login</span>
@@ -221,7 +324,7 @@
                     </div>
 
                     {{-- Password form for selected account --}}
-                    <div x-show="selectedAccount" x-transition class="slide-down-enter">
+                    <div x-show="selectedAccount" x-transition class="slide-down-enter mb-4">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <input type="hidden" name="email" :value="selectedAccount ? selectedAccount.email : ''">
@@ -233,6 +336,11 @@
                                 <x-password-input id="recent-password" class="block w-full"
                                                 name="password"
                                                 required autocomplete="current-password" />
+                            </div>
+
+                            <!-- Turnstile CAPTCHA -->
+                            <div class="mt-4 flex justify-center">
+                                <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="auto"></div>
                             </div>
 
                             {{-- Remember + Login --}}
@@ -268,7 +376,7 @@
                     </button>
                 </div>
 
-                {{-- Full Login Form (shown when "Use another account" is clicked) --}}
+                {{-- Full Login Form --}}
                 <div x-show="showFullForm" x-transition class="slide-up-enter">
                     {{-- Back button --}}
                     <button @click="showFullForm = false; selectedAccount = null;"
@@ -283,7 +391,7 @@
                 </div>
             </div>
         @else
-            {{-- No Recent Logins - Show Full Form Directly --}}
+            {{-- No Recent Logins --}}
             @include('auth._login_form')
         @endif
 
@@ -310,7 +418,9 @@
                 Register
             </a>
         </div>
+    </div> {{-- End of the Box --}}
 
-    </div>
+    {{-- Turnstile Script (at the bottom to ensure DOM is ready) --}}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
 </x-guest-layout>

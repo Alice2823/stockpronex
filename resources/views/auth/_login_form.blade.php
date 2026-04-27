@@ -37,8 +37,13 @@
 
     </div>
 
+    <!-- Turnstile CAPTCHA -->
+    <div class="mt-6 mb-2 flex justify-center">
+        <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="auto"></div>
+    </div>
+
     <!-- Login Button -->
-    <div class="mt-6">
+    <div class="mt-4">
         <button type="submit"
                 class="w-full bg-gray-900 dark:bg-blue-600 text-white py-3 px-4 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200 dark:shadow-none">
             LOG IN
