@@ -20,7 +20,7 @@
     </x-slot>
 
     <div class="py-12 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-500">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Filters -->
             <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg p-6 mb-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">

@@ -35,7 +35,7 @@
     </x-slot>
 
     <div class="py-12 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-500">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-6">
                 <h3 class="text-xl font-bold text-gray-700 dark:text-gray-200 uppercase tracking-tight">{{ __('Stock Wise Profit Breakdowns') }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Real-time profit tracking calculated as (Selling Price - MRP) minus any Discounts given.') }}</p>

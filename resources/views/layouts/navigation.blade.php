@@ -226,48 +226,92 @@
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    class="relative inline-flex items-center justify-center p-2.5 rounded-xl text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:outline-none transition-all duration-300 group overflow-hidden">
+                    <div class="relative w-6 h-6 flex items-center justify-center">
+                        <!-- Top Bar -->
+                        <span :class="open ? 'rotate-45 translate-y-0' : '-translate-y-2'" 
+                              class="absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-in-out"></span>
+                        <!-- Middle Bar -->
+                        <span :class="open ? 'opacity-0 -translate-x-4' : 'opacity-100'" 
+                              class="absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-in-out"></span>
+                        <!-- Bottom Bar -->
+                        <span :class="open ? '-rotate-45 translate-y-0' : 'translate-y-2'" 
+                              class="absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ease-in-out"></span>
+                    </div>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden transition-all">        <!-- User Profile Card -->
-        <div class="px-4 pt-4 pb-4 bg-gradient-to-r from-blue-600 to-indigo-700">
-            <div class="flex items-center space-x-3 mb-4">
-                <div class="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-black text-lg border border-white/30">
-                    {{ substr(Auth::user()->name, 0, 1) }}
+    <!-- Responsive Navigation Menu with Smooth Transition and Rounded Corners -->
+    <div x-show="open" 
+         x-cloak
+         x-transition:enter="transition ease-out duration-400"
+         x-transition:enter-start="opacity-0 -translate-y-12 scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         x-transition:leave="transition ease-in duration-250"
+         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+         x-transition:leave-end="opacity-0 -translate-y-8 scale-95"
+         class="sm:hidden absolute w-full left-0 z-50 overflow-hidden bg-white dark:bg-[#0b0f19] rounded-b-[45px] shadow-[0_25px_70px_-15px_rgba(0,0,0,0.5)] border-b border-gray-200/50 dark:border-gray-800/50">
+        <!-- User Profile Card -->
+        <div class="px-6 pt-8 pb-6 bg-slate-900 dark:bg-[#0b0f19] relative overflow-hidden">
+            <!-- Decorative Background Elements -->
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-24 h-24 bg-indigo-600/20 rounded-full blur-2xl"></div>
+
+            <div class="relative flex items-center space-x-4 mb-6">
+                <!-- Circular Avatar with Glow -->
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-500 rounded-full blur-md opacity-40"></div>
+                    <div class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-2xl border-2 border-white/20 relative shadow-xl">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </div>
+                    @if(Auth::user()->is_subscribed)
+                        <div class="absolute -bottom-1 -right-1 h-6 w-6 bg-yellow-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg">
+                            <span class="text-[10px]">⭐</span>
+                        </div>
+                    @endif
                 </div>
+
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-black text-white uppercase tracking-tight truncate">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-blue-200 truncate">{{ Auth::user()->email }}</p>
+                    <h2 class="text-lg font-black text-white tracking-tight leading-tight truncate uppercase">
+                        {{ Auth::user()->name }}
+                    </h2>
+                    <p class="text-sm font-medium text-slate-400 truncate tracking-wide">
+                        {{ Auth::user()->email }}
+                    </p>
                 </div>
             </div>
             
-            <!-- Upgrade Banner moved to top -->
+            <!-- Upgrade / Status Banner -->
             @if(Auth::user()->is_subscribed)
-                <div class="flex items-center justify-center w-full px-4 py-2 rounded-xl font-bold text-sm bg-white/10 backdrop-blur-sm text-white border border-white/20">
-                    <span class="mr-1.5 text-yellow-300">⭐</span> {{ __('Premium Member') }}
+                <div class="flex items-center justify-between px-4 py-3 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 backdrop-blur-md">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 mr-3">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-bold text-emerald-500 uppercase tracking-wider">{{ __('Premium Member') }}</span>
+                    </div>
                 </div>
             @else
-                <a href="{{ route('subscription.index') }}" class="nav-upgrade-btn flex items-center justify-center w-full px-4 py-2.5 rounded-xl font-bold text-sm bg-white text-indigo-600 shadow-lg hover:shadow-xl transition-all">
-                    <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    {{ __('Upgrade to Premium') }}
+                <a href="{{ route('subscription.index') }}" 
+                   class="premium-upgrade-btn relative group flex items-center justify-center w-full px-4 py-3.5 rounded-2xl font-black text-sm text-slate-900 shadow-2xl transition-all duration-300 active:scale-95 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 bg-[length:200%_100%] animate-shimmer"></div>
+                    <div class="relative flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-slate-900 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span class="uppercase tracking-widest">{{ __('Upgrade to Premium') }}</span>
+                    </div>
                 </a>
             @endif
         </div>
 
         <!-- Navigation Grid -->
-        <div class="p-4 bg-white dark:bg-gray-900">
-            <div class="grid grid-cols-3 gap-2.5">
+        <div class="p-6 bg-white dark:bg-[#0b0f19]">
+            <div class="grid grid-cols-3 gap-3">
                 <a href="{{ route('dashboard') }}" class="flex flex-col items-center p-3 rounded-2xl {{ request()->routeIs('dashboard') ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700' }} border hover:scale-[1.03] transition-all active:scale-95">
                     <div class="h-10 w-10 rounded-xl {{ request()->routeIs('dashboard') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' }} flex items-center justify-center mb-1.5"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div>
                     <span class="text-[10px] font-bold {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400' }}">{{ __('Dashboard') }}</span>
@@ -307,7 +351,7 @@
         </div>
 
         <!-- Quick Settings -->
-        <div class="px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800">
+        <div class="px-6 py-6 bg-gray-50/50 dark:bg-gray-800/20 border-t border-gray-100/50 dark:border-gray-800/30">
             <div class="flex flex-col gap-3 mb-4">
                 <!-- Dark Mode -->
                 <div x-data="{ 
@@ -390,5 +434,23 @@
         background: #1e293b;
         color: #94a3b8 !important;
         border-color: #334155;
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    .animate-shimmer {
+        animation: shimmer 3s infinite linear;
+    }
+
+    .premium-upgrade-btn {
+        box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.4);
+    }
+
+    .premium-upgrade-btn:hover {
+        box-shadow: 0 15px 30px -5px rgba(245, 158, 11, 0.6);
+        transform: translateY(-2px);
     }
 </style>
