@@ -52,58 +52,168 @@
                                 {{ __('Business Specific Details') }} ({{ $businessType ? __($businessType) : __('Default') }})
                             </h3>
 
-                            @if(in_array('imei', $requiredFields) || in_array('serial', $requiredFields))
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                @if(in_array('brand', $requiredFields))
                                     <div>
-                                        <x-label for="brand" :value="__('Brand')" />
+                                        <x-label for="brand" :value="__('Brand / Manufacturer')" />
                                         <x-input id="brand" class="block mt-1 w-full" type="text" name="business_attributes[brand]" :value="old('business_attributes.brand')" />
                                     </div>
+                                @endif
+
+                                @if(in_array('model_number', $requiredFields))
                                     <div>
-                                        <x-label for="model_number" :value="__('Model Number')" />
+                                        <x-label for="model_number" :value="__('Model Number / Name')" />
                                         <x-input id="model_number" class="block mt-1 w-full" type="text" name="business_attributes[model_number]" :value="old('business_attributes.model_number')" />
                                     </div>
+                                @endif
+
+                                @if(in_array('serial_number', $requiredFields))
+                                    <div>
+                                        <x-label for="serial_number" :value="__('Serial Number')" />
+                                        <x-input id="serial_number" class="block mt-1 w-full" type="text" name="business_attributes[serial_number]" :value="old('business_attributes.serial_number')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('imei_number', $requiredFields))
+                                    <div>
+                                        <x-label for="imei_number" :value="__('IMEI / MAC Address')" />
+                                        <x-input id="imei_number" class="block mt-1 w-full" type="text" name="business_attributes[imei_number]" :value="old('business_attributes.imei_number')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('warranty', $requiredFields))
                                     <div>
                                         <x-label for="warranty" :value="__('Warranty (Months)')" />
                                         <x-input id="warranty" class="block mt-1 w-full" type="number" name="business_attributes[warranty]" :value="old('business_attributes.warranty')" />
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                            @if(in_array('expiry', $requiredFields))
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                @if(in_array('part_number', $requiredFields))
                                     <div>
-                                        <x-label for="expiry_date" :value="__('Default Expiry Date')" />
+                                        <x-label for="part_number" :value="__('Part Number / SKU')" />
+                                        <x-input id="part_number" class="block mt-1 w-full" type="text" name="business_attributes[part_number]" :value="old('business_attributes.part_number')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('specification', $requiredFields))
+                                    <div>
+                                        <x-label for="specification" :value="__('Specifications (AH/Volt/Power)')" />
+                                        <x-input id="specification" class="block mt-1 w-full" type="text" name="business_attributes[specification]" :value="old('business_attributes.specification')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('certification', $requiredFields))
+                                    <div>
+                                        <x-label for="certification" :value="__('Certification (ISO/CE/etc)')" />
+                                        <x-input id="certification" class="block mt-1 w-full" type="text" name="business_attributes[certification]" :value="old('business_attributes.certification')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('batch_number', $requiredFields))
+                                    <div>
+                                        <x-label for="batch_number" :value="__('Batch Number')" />
+                                        <x-input id="batch_number" class="block mt-1 w-full" type="text" name="business_attributes[batch_number]" :value="old('business_attributes.batch_number')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('expiry_date', $requiredFields))
+                                    <div>
+                                        <x-label for="expiry_date" :value="__('Expiry Date')" />
                                         <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                            @if(in_array('size', $requiredFields))
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                @if(in_array('composition', $requiredFields))
+                                    <div>
+                                        <x-label for="composition" :value="__('Composition / Ingredients')" />
+                                        <x-input id="composition" class="block mt-1 w-full" type="text" name="business_attributes[composition]" :value="old('business_attributes.composition')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('volume', $requiredFields))
+                                    <div>
+                                        <x-label for="volume" :value="__('Volume / Quantity (ml/L/kg)')" />
+                                        <x-input id="volume" class="block mt-1 w-full" type="text" name="business_attributes[volume]" :value="old('business_attributes.volume')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('variety', $requiredFields))
+                                    <div>
+                                        <x-label for="variety" :value="__('Variety / Type')" />
+                                        <x-input id="variety" class="block mt-1 w-full" type="text" name="business_attributes[variety]" :value="old('business_attributes.variety')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('size', $requiredFields))
                                     <div>
                                         <x-label for="size" :value="__('Size')" />
                                         <x-input id="size" class="block mt-1 w-full" type="text" name="business_attributes[size]" :value="old('business_attributes.size')" :placeholder="__('e.g. XL, 42, 32')" />
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                            @if(in_array('color', $requiredFields))
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                @if(in_array('color', $requiredFields))
                                     <div>
                                         <x-label for="color" :value="__('Color')" />
                                         <x-input id="color" class="block mt-1 w-full" type="text" name="business_attributes[color]" :value="old('business_attributes.color')" />
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                            @if(in_array('weight', $requiredFields))
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                @if(in_array('material', $requiredFields))
                                     <div>
-                                        <x-label for="purity" :value="__('Purity')" />
+                                        <x-label for="material" :value="__('Material Type')" />
+                                        <x-input id="material" class="block mt-1 w-full" type="text" name="business_attributes[material]" :value="old('business_attributes.material')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('dimension', $requiredFields))
+                                    <div>
+                                        <x-label for="dimension" :value="__('Dimensions')" />
+                                        <x-input id="dimension" class="block mt-1 w-full" type="text" name="business_attributes[dimension]" :value="old('business_attributes.dimension')" :placeholder="__('e.g. 10x20x30')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('thickness', $requiredFields))
+                                    <div>
+                                        <x-label for="thickness" :value="__('Thickness (mm/in)')" />
+                                        <x-input id="thickness" class="block mt-1 w-full" type="text" name="business_attributes[thickness]" :value="old('business_attributes.thickness')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('grade', $requiredFields))
+                                    <div>
+                                        <x-label for="grade" :value="__('Grade / Quality')" />
+                                        <x-input id="grade" class="block mt-1 w-full" type="text" name="business_attributes[grade]" :value="old('business_attributes.grade')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('weight', $requiredFields))
+                                    <div>
+                                        <x-label for="weight" :value="__('Weight (g/kg)')" />
+                                        <x-input id="weight" class="block mt-1 w-full" type="number" step="0.001" name="business_attributes[weight]" :value="old('business_attributes.weight')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('purity', $requiredFields))
+                                    <div>
+                                        <x-label for="purity" :value="__('Purity (Karat/%)')" />
                                         <x-input id="purity" class="block mt-1 w-full" type="text" name="business_attributes[purity]" :value="old('business_attributes.purity')" />
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+
+                                @if(in_array('hallmark', $requiredFields))
+                                    <div>
+                                        <x-label for="hallmark" :value="__('Hallmark ID')" />
+                                        <x-input id="hallmark" class="block mt-1 w-full" type="text" name="business_attributes[hallmark]" :value="old('business_attributes.hallmark')" />
+                                    </div>
+                                @endif
+
+                                @if(in_array('making_charges', $requiredFields))
+                                    <div>
+                                        <x-label for="making_charges" :value="__('Making Charges')" />
+                                        <x-input id="making_charges" class="block mt-1 w-full" type="number" step="0.01" name="business_attributes[making_charges]" :value="old('business_attributes.making_charges')" />
+                                    </div>
+                                @endif
+                            </div>
 
                             @if(empty($requiredFields))
                                 <p class="text-sm text-gray-500 italic">{{ __('No additional specialized fields for your business type.') }}</p>
@@ -199,6 +309,7 @@
         const scannerContainer = document.getElementById('unit_scanner_container');
         const businessType = "{{ Auth::user()->business_type }}";
 
+        const requiredFields = @json($requiredFields);
         let html5QrCode = null;
 
         function generateUnitRows() {
@@ -268,41 +379,63 @@
         }
 
         function generateBusinessFields(index) {
-            if (businessType === 'Mobile Shop' || businessType === 'Electronics' || businessType === 'General') {
-                return `
+            let fieldsHtml = '';
+            
+            if (requiredFields.includes('imei_number')) {
+                fieldsHtml += `
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('IMEI Number') }}</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('IMEI / MAC') }}</label>
                         <input type="text" name="units[${index}][imei_number]" class="unit-imei block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="IMEI">
                     </div>
+                `;
+            }
+            
+            if (requiredFields.includes('serial_number')) {
+                fieldsHtml += `
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Serial Number') }}</label>
                         <input type="text" name="units[${index}][serial_number]" class="unit-serial block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Serial No.">
                     </div>
                 `;
-            } else if (businessType === 'Medical Store') {
-                return `
+            }
+            
+            if (requiredFields.includes('batch_number')) {
+                fieldsHtml += `
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Batch Number') }}</label>
                         <input type="text" name="units[${index}][batch_number]" class="unit-batch block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Batch No.">
                     </div>
+                `;
+            }
+            
+            if (requiredFields.includes('expiry_date')) {
+                fieldsHtml += `
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Expiry Date') }}</label>
                         <input type="date" name="units[${index}][expiry_date]" class="unit-expiry block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300">
                     </div>
                 `;
-            } else if (businessType === 'Gold / Jewellery') {
-                return `
+            }
+
+            if (requiredFields.includes('weight')) {
+                fieldsHtml += `
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Exact Weight') }}</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Weight') }}</label>
                         <input type="number" step="0.001" name="units[${index}][weight]" class="unit-weight block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="0.000">
                     </div>
+                `;
+            }
+
+            if (requiredFields.includes('hallmark')) {
+                fieldsHtml += `
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Hallmark/ID') }}</label>
                         <input type="text" name="units[${index}][hallmark]" class="unit-hallmark block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Hallmark ID">
                     </div>
                 `;
             }
-            return '<div class="col-span-2 text-xs text-gray-500 dark:text-gray-500 italic font-medium">' + "{{ __('No additional unit fields required.') }}" + '</div>';
+            
+            return fieldsHtml || '<div class="col-span-2 text-xs text-gray-500 dark:text-gray-500 italic font-medium">' + "{{ __('No additional unit fields required.') }}" + '</div>';
         }
 
         // Scanner Logic

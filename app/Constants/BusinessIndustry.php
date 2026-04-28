@@ -20,6 +20,7 @@ class BusinessIndustry
         'General Industries' => [
             'Hardware',
             'Mobile and accessories',
+            'Electronics',
             'Agriculture',
             'Automobile',
             'Battery',
@@ -30,9 +31,11 @@ class BusinessIndustry
             'Electrical works',
             'Engineering',
             'Footwear',
+            'Clothing',
             'Fruits and Vegetables',
             'Furniture',
             'General Store(Kirana)',
+            'Grocery',
             'Gift Shop',
             'Information Technology',
             'Interiors',
@@ -48,6 +51,7 @@ class BusinessIndustry
             'Paints',
             'Plywood',
             'Printing',
+            'Restaurant',
             'Safety Equipments',
             'Scrap',
             'Sports Equipments',
@@ -83,26 +87,45 @@ class BusinessIndustry
     {
         $fields = [];
 
-        // Industries requiring IMEI/Serial
+        // 1. Electronic & Tech Tracking (IMEI, Serial, Warranty, Brand, Model, Specs)
         $trackingIndustries = [
             'Mobile and accessories',
             'Electronics',
             'Electrical works',
             'Information Technology',
-            'General Store(Kirana)',
-            'Hardware',
-            'Automobile',
+            'Machinery',
+            'Medical Devices',
+            'Broadband/ cable/ internet',
             'Battery',
+            'Opticals',
+            'Automobile',
+            'Engineering',
         ];
 
         if (in_array($industry, $trackingIndustries)) {
-            $fields[] = 'imei';
-            $fields[] = 'serial';
             $fields[] = 'brand';
-            $fields[] = 'model';
+            $fields[] = 'model_number';
+            $fields[] = 'serial_number';
+            $fields[] = 'warranty';
+            
+            if (in_array($industry, ['Mobile and accessories', 'Electronics', 'Broadband/ cable/ internet'])) {
+                $fields[] = 'imei_number'; // Can be MAC address for broadband
+            }
+            
+            if (in_array($industry, ['Automobile', 'Engineering', 'Electronics', 'Hardware'])) {
+                $fields[] = 'part_number';
+            }
+
+            if (in_array($industry, ['Battery', 'Electrical works', 'Machinery', 'Engineering'])) {
+                $fields[] = 'specification'; // For AH, Voltage, Power, etc.
+            }
+
+            if (in_array($industry, ['Medical Devices', 'Safety Equipments'])) {
+                $fields[] = 'certification';
+            }
         }
 
-        // Industries requiring Expiry/Batch
+        // 2. Perishable & Healthcare (Batch, Expiry, Brand, Composition)
         $expiryIndustries = [
             'Medicine(Pharma)',
             'Medical Devices',
@@ -110,31 +133,78 @@ class BusinessIndustry
             'Dairy (Milk)',
             'Meat',
             'General Store(Kirana)',
-            'Restaurant',
-            'Agricultural',
-            'Agriculture',
             'Grocery',
+            'Restaurant',
+            'Agriculture',
+            'Liquor',
+            'Paints',
+            'Cleaning and Pest Control',
         ];
 
         if (in_array($industry, $expiryIndustries)) {
-            $fields[] = 'expiry';
-            $fields[] = 'batch';
+            $fields[] = 'brand';
+            $fields[] = 'batch_number';
+            $fields[] = 'expiry_date';
+            
+            if (in_array($industry, ['Liquor', 'Paints', 'Grocery', 'Dairy (Milk)'])) {
+                $fields[] = 'volume';
+            }
+            
+            if (in_array($industry, ['Agriculture', 'Fruits and Vegetables'])) {
+                $fields[] = 'variety';
+            }
+
+            if (in_array($industry, ['Medicine(Pharma)'])) {
+                $fields[] = 'composition';
+            }
         }
 
-        // Industries requiring Size/Color
-        $apparelIndustries = [
+        // 3. Fashion, Apparel & Furniture (Size, Color, Material, Brand)
+        $variantIndustries = [
             'Textiles',
             'Footwear',
             'Clothing',
+            'Sports Equipments',
+            'Interiors',
+            'Furniture',
+            'Gift Shop',
+            'Opticals',
         ];
 
-        if (in_array($industry, $apparelIndustries)) {
+        if (in_array($industry, $variantIndustries)) {
+            $fields[] = 'brand';
             $fields[] = 'size';
             $fields[] = 'color';
-            $fields[] = 'brand';
+            $fields[] = 'material';
         }
 
-        // Industries requiring Weight/Purity
+        // 4. Industrial, Construction & Materials (Dimension, Grade, Material, Thickness)
+        $industrialIndustries = [
+            'Hardware',
+            'Building Material and Construction',
+            'Plywood',
+            'Packaging',
+            'Printing',
+            'Scrap',
+            'Oil And Gas',
+            'Engineering',
+        ];
+
+        if (in_array($industry, $industrialIndustries)) {
+            $fields[] = 'material';
+            $fields[] = 'grade';
+            $fields[] = 'dimension';
+            
+            if (in_array($industry, ['Plywood', 'Hardware', 'Building Material and Construction'])) {
+                $fields[] = 'thickness';
+            }
+            
+            if (in_array($industry, ['Hardware', 'Engineering', 'Packaging'])) {
+                $fields[] = 'brand';
+            }
+        }
+
+        // 5. Jewellery (Weight, Purity, Hallmark)
         $jewelleryIndustries = [
             'Jewellery',
             'Gold / Jewellery',
@@ -143,9 +213,15 @@ class BusinessIndustry
         if (in_array($industry, $jewelleryIndustries)) {
             $fields[] = 'weight';
             $fields[] = 'purity';
+            $fields[] = 'hallmark';
             $fields[] = 'making_charges';
         }
 
-        return $fields;
+        // 6. Generic Product Fields (Brand) - catch all for others
+        if (empty($fields) && !in_array($industry, self::INDUSTRIES['Services'])) {
+            $fields[] = 'brand';
+        }
+
+        return array_unique($fields);
     }
 }

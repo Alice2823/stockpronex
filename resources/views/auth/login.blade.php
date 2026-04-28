@@ -149,7 +149,7 @@
 
                 100% {
                     opacity: 1;
-                    max-height: 200px;
+                    max-height: 600px;
                     transform: translateY(0);
                 }
             }
@@ -166,7 +166,7 @@
 
                 100% {
                     opacity: 1;
-                    max-height: 500px;
+                    max-height: 800px;
                 }
             }
         </style>
@@ -399,9 +399,9 @@
 
                     {{-- Use Another Account --}}
                     <button @click="clearSelection()"
-                            class="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 dark:hover:border-blue-500 dark:hover:text-blue-400 transition-all duration-200">
+                            class="w-full mt-6 flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30 text-sm font-bold text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                         </svg>
                         {{ __('Use another account') }}
                     </button>
@@ -427,8 +427,14 @@
         @endif
 
         <!-- Google Login -->
-        <div class="mt-8 text-center text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-            {{ __('Or continue with') }}
+        <!-- Google Login Divider -->
+        <div class="relative mt-10 mb-6">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                <div class="w-full border-t border-gray-100 dark:border-gray-800"></div>
+            </div>
+            <div class="relative flex justify-center text-[10px] font-black uppercase tracking-[0.2em]">
+                <span class="bg-white dark:bg-gray-900 px-4 text-gray-400 dark:text-gray-500">{{ __('Or continue with') }}</span>
+            </div>
         </div>
 
         <a href="{{ route('social.redirect', 'google') }}"
