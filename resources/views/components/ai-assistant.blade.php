@@ -4,25 +4,32 @@
     {{-- Floating Chat Button --}}
     <button 
         @click="toggleChat()"
-        class="fixed bottom-6 right-6 z-50 group"
+        class="fixed bottom-6 right-6 z-50 group animate-float"
         :class="isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'"
-        style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
+        style="transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);"
     >
         <div class="relative">
-            {{-- Pulse ring --}}
-            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 animate-ping opacity-30"></div>
+            {{-- Outer Pulse --}}
+            <div class="absolute inset-[-12px] rounded-full bg-blue-500/20 animate-pulse blur-xl group-hover:bg-indigo-500/30 transition-colors"></div>
+            
+            {{-- Pulse rings --}}
+            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 animate-ping opacity-20" style="animation-duration: 3s;"></div>
+            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 animate-ping opacity-10" style="animation-duration: 4s; animation-delay: 1s;"></div>
             
             {{-- Button --}}
-            <div class="relative h-14 w-14 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 shadow-lg shadow-blue-500/30 flex items-center justify-center text-white hover:shadow-xl hover:shadow-blue-500/40 hover:scale-110 transition-all duration-300 border border-white/20">
-                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            <div class="relative h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 shadow-[0_8px_30px_rgb(59,130,246,0.4)] flex items-center justify-center text-white hover:shadow-[0_15px_40px_rgb(59,130,246,0.6)] hover:scale-110 hover:-rotate-3 transition-all duration-500 border border-white/30 backdrop-blur-md overflow-hidden">
+                {{-- Shine effect --}}
+                <div class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[45deg] group-hover:left-[100%] transition-all duration-1000 ease-in-out"></div>
+                
+                <svg class="h-8 w-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
                 </svg>
             </div>
             
             {{-- Label --}}
-            <div class="absolute -top-8 right-0 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-lg">
-                AI Assistant ✨
-                <div class="absolute bottom-0 right-5 translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900 dark:bg-gray-700"></div>
+            <div class="absolute -top-12 right-0 whitespace-nowrap bg-gray-900 dark:bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 pointer-events-none shadow-2xl border border-white/20">
+                {{ __('Ask AI') }} ✨
+                <div class="absolute bottom-[-4px] right-6 rotate-45 w-2 h-2 bg-gray-900 dark:bg-blue-600 border-r border-b border-white/20"></div>
             </div>
         </div>
     </button>

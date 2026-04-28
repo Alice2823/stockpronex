@@ -4,6 +4,7 @@
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight">
                 {{ __('Payment Received') }}
             </h2>
+            <x-business-identity />
         </div>
     </x-slot>
 

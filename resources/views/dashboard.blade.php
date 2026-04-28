@@ -4,18 +4,7 @@
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight">
                 {{ __('Dashboard') }}
             </h2>
-            @if(Auth::user()->business_name || Auth::user()->business_type)
-                <div class="flex items-center space-x-3">
-                    @if(Auth::user()->business_name)
-                        <span class="text-sm font-bold text-gray-700 dark:text-gray-200">{{ Auth::user()->business_name }}</span>
-                    @endif
-                    @if(Auth::user()->business_type)
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                            {{ Auth::user()->business_type }}
-                        </span>
-                    @endif
-                </div>
-            @endif
+            <x-business-identity />
         </div>
     </x-slot>
 

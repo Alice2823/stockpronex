@@ -13,6 +13,16 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WhatsappController;
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\LegalController;
+
+/*
+|--------------------------------------------------------------------------
+| LEGAL ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/terms', [LegalController::class, 'terms'])->name('legal.terms');
+Route::get('/privacy', [LegalController::class, 'privacy'])->name('legal.privacy');
 
 
 /*

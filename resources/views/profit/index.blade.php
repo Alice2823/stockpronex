@@ -8,29 +8,48 @@
                 {{ __('Profit Management') }}
             </h2>
             
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-4 sm:mt-0 w-full sm:w-auto">
-                <div class="flex flex-row items-center gap-2 mr-0 sm:mr-4 w-full sm:w-auto">
-                    <a href="{{ route('dashboard.profit.export.pdf') }}" class="w-full sm:w-auto flex items-center justify-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6l-4-4H9z"/><path d="M12 2.5V6a1 1 0 001 1h3.5L12 2.5z"/></svg>
-                        PDF
+            <div class="flex flex-col sm:flex-row items-center gap-6 mt-4 sm:mt-0 w-full sm:w-auto">
+                <!-- Export Actions -->
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('dashboard.profit.export.pdf') }}" class="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/30 rounded-xl hover:bg-red-600 hover:text-white dark:hover:bg-red-600 dark:hover:text-white transition-all duration-300 shadow-sm active:scale-95 group">
+                        <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        <span class="text-[10px] font-black uppercase tracking-widest">{{ __('PDF Export') }}</span>
                     </a>
-                    <a href="{{ route('dashboard.profit.export.excel') }}" class="w-full sm:w-auto flex items-center justify-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
-                        EXCEL
+                    <a href="{{ route('dashboard.profit.export.excel') }}" class="flex items-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-900/30 rounded-xl hover:bg-green-600 hover:text-white dark:hover:bg-green-600 dark:hover:text-white transition-all duration-300 shadow-sm active:scale-95 group">
+                        <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <span class="text-[10px] font-black uppercase tracking-widest">{{ __('Excel Export') }}</span>
                     </a>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                    <div class="w-full sm:w-auto bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-bold px-4 py-2 rounded-lg border border-red-200 dark:border-red-800 shadow-sm flex items-center justify-between sm:justify-start">
-                        <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Total Discounts:') }}</span>
-                        <span class="text-lg">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallDiscount, 2) }}</span>
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <!-- Discount Card -->
+                    <div class="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-3 pr-8 shadow-sm border border-red-100 dark:border-red-900/30 group transition-all duration-300 flex items-center gap-3">
+                        <div class="absolute right-[-5%] top-[-10%] opacity-[0.03] group-hover:scale-110 transition-transform duration-500 text-red-600">
+                             <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="h-9 w-9 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-600 dark:text-red-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none">{{ __('Total Discounts') }}</p>
+                            <p class="text-base font-black text-red-600 dark:text-red-400 mt-1">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallDiscount, 2) }}</p>
+                        </div>
                     </div>
-                    <div class="w-full sm:w-auto bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 font-bold px-4 py-2 rounded-lg border border-green-200 dark:border-green-800 shadow-sm flex items-center justify-between sm:justify-start">
-                        <span class="mr-2 text-[10px] sm:text-xs uppercase tracking-wider">{{ __('Net Profit Earned:') }}</span>
-                        <span class="text-xl">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallProfit, 2) }}</span>
+
+                    <!-- Profit Card -->
+                    <div class="relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-3 pr-8 shadow-sm border border-green-100 dark:border-green-900/30 group transition-all duration-300 flex items-center gap-3">
+                        <div class="absolute right-[-5%] top-[-10%] opacity-[0.03] group-hover:scale-110 transition-transform duration-500 text-green-600">
+                             <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <div class="h-9 w-9 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600 dark:text-green-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest leading-none">{{ __('Net Profit Earned') }}</p>
+                            <p class="text-lg font-black text-green-600 dark:text-green-400 mt-1">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallProfit, 2) }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
     </x-slot>
 

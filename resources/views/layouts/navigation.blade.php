@@ -68,53 +68,6 @@
             <!-- Settings Area: Theme Toggle + Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 sm:space-x-4">
                 <!-- Animated Theme Toggle (Standalone in navbar) -->
-                <div x-data="{
-                    dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
-                    hasAccess: {{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }},
-                    toggle() {
-                        if (!this.hasAccess) {
-                            window.location.href = '{{ route('subscription.index') }}';
-                            return;
-                        }
-                        this.dark = !this.dark;
-                        if (this.dark) {
-                            document.documentElement.classList.add('dark');
-                            localStorage.theme = 'dark';
-                        } else {
-                            document.documentElement.classList.remove('dark');
-                            localStorage.theme = 'light';
-                        }
-                    }
-                }" class="relative">
-                    <button @click="toggle()" 
-                            :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
-                            :aria-label="dark ? '{{ __('Switch to light mode') }}' : '{{ __('Switch to dark mode') }}'"
-                            title="{{ __('Toggle theme') }}">
-                        
-                        @if(!Auth::user()->hasFeature('dark_mode'))
-                            <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white">
-                                <svg class="h-2 w-2 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>
-                            </div>
-                        @endif
-
-                        <div class="theme-toggle__thumb">
-                            <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                <line x1="1" y1="12" x2="3" y2="12"></line>
-                                <line x1="21" y1="12" x2="23" y2="12"></line>
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                            </svg>
-                            <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                            </svg>
-                        </div>
-                    </button>
-                </div>
 
                 <!-- Profile Card Section -->
                 <x-dropdown align="right" width="64">
@@ -174,6 +127,40 @@
                                     {{ __('Account Settings') }}
                                 </div>
                             </x-dropdown-link>
+
+                            <!-- Theme Toggle -->
+                            <div x-data="{
+                                dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                                hasAccess: {{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }},
+                                toggle() {
+                                    if (!this.hasAccess) { window.location.href = '{{ route('subscription.index') }}'; return; }
+                                    this.dark = !this.dark;
+                                    if (this.dark) { document.documentElement.classList.add('dark'); localStorage.theme = 'dark'; }
+                                    else { document.documentElement.classList.remove('dark'); localStorage.theme = 'light'; }
+                                }
+                            }">
+                                <button @click.stop="toggle()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors">
+                                    <div class="flex items-center">
+                                        <div class="p-1.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 mr-3">
+                                             <div x-show="!dark">
+                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.364 6.364l-.707-.707m12.728 0l-.707.707M6.364 18.364l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                             </div>
+                                             <div x-show="dark">
+                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                                             </div>
+                                        </div>
+                                        <span x-text="dark ? '{{ __('Dark Mode') }}' : '{{ __('Light Mode') }}'"></span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        @if(!Auth::user()->hasFeature('dark_mode'))
+                                            <svg class="h-3 w-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                        @endif
+                                        <div :class="dark ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'" class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none">
+                                            <span :class="dark ? 'translate-x-4' : 'translate-x-0'" class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
 
                             <!-- Language Switcher -->
                             <div x-data="{ open: false }">
