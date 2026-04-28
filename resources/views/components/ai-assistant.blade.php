@@ -44,10 +44,10 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-white font-bold text-sm tracking-tight">AI Stock Assistant</h3>
+                        <h3 class="text-white font-bold text-sm tracking-tight">{{ __('AI Stock Assistant') }}</h3>
                         <div class="flex items-center space-x-1.5">
                             <div class="h-2 w-2 rounded-full bg-green-400 animate-pulse"></div>
-                            <span class="text-blue-100 text-xs font-medium">Online • Powered by Gemini</span>
+                            <span class="text-blue-100 text-xs font-medium">{{ __('Online') }} • Powered by Gemini</span>
                         </div>
                     </div>
                 </div>
@@ -79,21 +79,21 @@
                             </div>
                             <div class="bg-gray-50 dark:bg-gray-800/80 rounded-2xl rounded-tl-md px-4 py-3 max-w-[80%] border border-gray-100 dark:border-gray-700/50">
                                 <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                                    Hey {{ Auth::user()->name }}! 👋 I'm your AI Stock Assistant. I can help you with:
+                                    {{ __('Hey') }} {{ Auth::user()->name }}! 👋 {{ __('I\'m your AI Stock Assistant. I can help you with:') }}
                                 </p>
                                 <ul class="mt-2 text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                                    <li>📊 Stock overview & insights</li>
-                                    <li>⚠️ Low stock alerts</li>
-                                    <li>📈 Sales & usage trends</li>
-                                    <li>💡 Business recommendations</li>
+                                    <li>📊 {{ __('Stock overview & insights') }}</li>
+                                    <li>⚠️ {{ __('Low stock alerts') }}</li>
+                                    <li>📈 {{ __('Sales & usage trends') }}</li>
+                                    <li>💡 {{ __('Business recommendations') }}</li>
                                 </ul>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Ask me anything about your inventory!</p>
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('Ask me anything about your inventory!') }}</p>
                             </div>
                         </div>
 
                         {{-- Quick suggestions --}}
                         <div class="pl-11">
-                            <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Quick Actions</p>
+                            <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Quick Actions') }}</p>
                             <div class="flex flex-wrap gap-2">
                                 <template x-for="suggestion in suggestions" :key="suggestion">
                                     <button 
@@ -159,7 +159,7 @@
                         <input 
                             x-model="inputMessage"
                             type="text"
-                            placeholder="Ask about your inventory..."
+                            placeholder="{{ __('Ask about your inventory...') }}"
                             class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all duration-200"
                             :disabled="isLoading"
                             x-ref="chatInput"
@@ -175,7 +175,7 @@
                         </svg>
                     </button>
                 </form>
-                <p class="text-center text-[10px] text-gray-400 dark:text-gray-600 mt-1.5 font-medium">Powered by Google Gemini AI</p>
+                <p class="text-center text-[10px] text-gray-400 dark:text-gray-600 mt-1.5 font-medium">{{ __('Powered by Google Gemini AI') }}</p>
             </div>
         </div>
     </div>

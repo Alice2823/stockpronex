@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\ProfitExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\ReportService;
 
 class ProfitController extends Controller
 {

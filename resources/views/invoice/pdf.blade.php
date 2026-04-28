@@ -249,9 +249,9 @@
                         <span style="color: #0f172a;">{{ $invoice->user->business_name ?? 'StockProNex' }}</span>
                     </div>
                     <div class="brand-tagline">{{ $invoice->user->address ?? 'Professional Inventory Solutions' }}</div>
-                    @if($invoice->user->tax_number)
+                    @if($invoice->user->business_email)
                         <div class="brand-tagline" style="margin-top: 3px;">
-                            {{ $invoice->user->currency === 'INR' ? 'GST Number: ' : 'Tax/VAT: ' }}{{ $invoice->user->tax_number }}
+                            Email: {{ $invoice->user->business_email }}
                         </div>
                     @endif
                     @if($invoice->user->phone)
@@ -261,7 +261,7 @@
                     @endif
                 </td>
                 <td class="invoice-label">
-                    INVOICE
+                    {{ __('INVOICE') }}
                 </td>
             </tr>
         </table>
@@ -270,33 +270,33 @@
         <table class="info-table">
             <tr>
                 <td class="bg-light">
-                    <div class="section-title">Billed To</div>
+                    <div class="section-title">{{ __('Billed To') }}</div>
                     <div class="info-text info-bold">{{ $invoice->customer_name }}</div>
                     @if($invoice->company_name)
                         <div class="info-text">{{ $invoice->company_name }}</div>
                     @endif
                     <div class="info-text" style="width: 250px;">{{ $invoice->address }}</div>
-                    <div class="info-text"><span class="text-gray">Phone:</span> {{ $invoice->phone }}</div>
+                    <div class="info-text"><span class="text-gray">{{ __('Phone:') }}</span> {{ $invoice->phone }}</div>
                 </td>
                 <td>
-                    <div class="section-title">Invoice Details</div>
+                    <div class="section-title">{{ __('Invoice Details') }}</div>
                     <table width="100%" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">Invoice ID:</td>
+                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">{{ __('Invoice ID:') }}</td>
                             <td style="border:none; padding: 0 0 5px 0; text-align: right;" class="info-bold">#{{ $invoice->invoice_number }}</td>
                         </tr>
                         <tr>
-                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">Date:</td>
+                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">{{ __('Date:') }}</td>
                             <td style="border:none; padding: 0 0 5px 0; text-align: right;" class="info-bold">{{ $invoice->created_at->setTimezone('Asia/Kolkata')->format('d M Y') }}</td>
                         </tr>
                         <tr>
-                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">Time:</td>
+                            <td style="border:none; padding: 0 0 5px 0;" class="text-gray">{{ __('Time:') }}</td>
                             <td style="border:none; padding: 0 0 5px 0; text-align: right;" class="info-bold">{{ $invoice->created_at->setTimezone('Asia/Kolkata')->format('h:i A') }}</td>
                         </tr>
                         <tr>
-                            <td style="border:none; padding: 15px 0 0 0;" class="text-gray">Status:</td>
+                            <td style="border:none; padding: 15px 0 0 0;" class="text-gray">{{ __('Status:') }}</td>
                             <td style="border:none; padding: 15px 0 0 0; text-align: right;">
-                                <span style="background-color: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase;">PAID</span>
+                                <span style="background-color: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase;">{{ __('PAID') }}</span>
                             </td>
                         </tr>
                     </table>
@@ -305,14 +305,14 @@
         </table>
 
         <!-- Items -->
-        <div class="items-title">Transaction Summary</div>
+        <div class="items-title">{{ __('Transaction Summary') }}</div>
         <table class="items-table">
             <thead>
                 <tr>
-                    <th width="40%">Item Description</th>
-                    <th width="20%" style="text-align: center;">Qty</th>
-                    <th width="20%" style="text-align: right;">Unit Price</th>
-                    <th width="20%" style="text-align: right;">Total</th>
+                    <th width="40%">{{ __('Item Description') }}</th>
+                    <th width="20%" style="text-align: center;">{{ __('Qty') }}</th>
+                    <th width="20%" style="text-align: right;">{{ __('Unit Price') }}</th>
+                    <th width="20%" style="text-align: right;">{{ __('Total') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -323,18 +323,18 @@
                                 <div class="info-bold">{{ $item['name'] }}</div>
                                 <div class="text-gray" style="font-size: 10px; margin-top: 5px;">
                                     <div style="margin-bottom: 2px;">
-                                        @if(!empty($item['brand'])) <span style="margin-right: 10px;"><strong>BRAND:</strong> {{ $item['brand'] }}</span> @endif
-                                        @if(!empty($item['model'])) <span><strong>MODEL:</strong> {{ $item['model'] }}</span> @endif
+                                        @if(!empty($item['brand'])) <span style="margin-right: 10px;"><strong>{{ __('BRAND:') }}</strong> {{ $item['brand'] }}</span> @endif
+                                        @if(!empty($item['model'])) <span><strong>{{ __('MODEL:') }}</strong> {{ $item['model'] }}</span> @endif
                                     </div>
                                     @if(!empty($item['barcode']) && $item['barcode'] !== 'N/A')
                                     <div style="margin-bottom: 2px;">
-                                        <strong>TRACKING ID:</strong> {{ $item['barcode'] }}
+                                        <strong>{{ __('TRACKING ID:') }}</strong> {{ $item['barcode'] }}
                                     </div>
                                     @endif
                                     @if(!empty($item['imei']) || !empty($item['serial']))
                                     <div style="margin-top: 3px; background-color: #f8fafc; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        @if(!empty($item['imei'])) <span style="margin-right: 15px;"><strong>Serial / IMEI:</strong> {{ $item['imei'] }}</span> @endif
-                                        @if(!empty($item['serial'])) <span><strong>Serial Number:</strong> {{ $item['serial'] }}</span> @endif
+                                        @if(!empty($item['imei'])) <span style="margin-right: 15px;"><strong>{{ __('Serial / IMEI:') }}</strong> {{ $item['imei'] }}</span> @endif
+                                        @if(!empty($item['serial'])) <span><strong>{{ __('Serial Number:') }}</strong> {{ $item['serial'] }}</span> @endif
                                     </div>
                                     @endif
                                 </div>
@@ -367,7 +367,7 @@
 
                                 @if(count($barcodes) > 0)
                                     <div style="margin-bottom: 5px;">
-                                        <strong style="color: #475569;">Tracked Items:</strong> {{ implode(', ', $barcodes) }}
+                                        <strong style="color: #475569;">{{ __('Tracked Items:') }}</strong> {{ implode(', ', $barcodes) }}
                                     </div>
                                 @endif
 
@@ -393,7 +393,7 @@
                                         @endif
                                     @endforeach
                                 @else
-                                    Verified Stock Transaction
+                                    {{ __('Verified Stock Transaction') }}
                                 @endif
                             </div>
                         </td>
@@ -408,25 +408,37 @@
         <!-- Totals -->
         <table class="totals-table">
             <tr class="total-row">
-                <td class="total-label">Subtotal</td>
+                <td class="total-label">{{ __('Subtotal') }}</td>
                 <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->subtotal ?? $invoice->amount, 2) }}</td>
             </tr>
             @if($invoice->discount_percentage > 0)
             <tr class="total-row">
-                <td class="total-label" style="color: #ef4444;">Discount ({{ number_format($invoice->discount_percentage, 1) }}%)</td>
+                <td class="total-label" style="color: #ef4444;">{{ __('Discount') }} ({{ number_format($invoice->discount_percentage, 1) }}%)</td>
                 <td class="total-value" style="color: #ef4444;">-{{ $currencySymbol }}&nbsp;{{ number_format($invoice->discount_amount, 2) }}</td>
             </tr>
             <tr class="total-row">
-                <td class="total-label">Net Amount</td>
+                <td class="total-label">{{ __('Net Amount') }}</td>
                 <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format(($invoice->subtotal ?? $invoice->amount) - $invoice->discount_amount, 2) }}</td>
             </tr>
             @endif
             <tr class="total-row">
-                <td class="total-label">Tax ({{ number_format($invoice->tax_percentage ?? 0, 1) }}%)</td>
+                <td class="total-label">{{ __('Tax') }} ({{ number_format($invoice->tax_percentage ?? 0, 1) }}%)</td>
                 <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tax_amount ?? 0, 2) }}</td>
             </tr>
+            @if($invoice->tcs_amount > 0)
+            <tr class="total-row">
+                <td class="total-label">TCS ({{ number_format($invoice->tcs_percentage, 2) }}%)</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tcs_amount, 2) }}</td>
+            </tr>
+            @endif
+            @if($invoice->tds_amount > 0)
+            <tr class="total-row">
+                <td class="total-label" style="color: #64748b;">TDS ({{ number_format($invoice->tds_percentage, 2) }}%)</td>
+                <td class="total-value" style="color: #64748b;">-{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tds_amount, 2) }}</td>
+            </tr>
+            @endif
             <tr class="grand-total-row">
-                <td class="grand-total-label">Invoice Total</td>
+                <td class="grand-total-label">{{ __('Invoice Total') }}</td>
                 <td class="grand-total-amount">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->amount, 2) }}</td>
             </tr>
         </table>
@@ -440,11 +452,11 @@
                             <div class="qr-container">
                                 <img src="data:image/svg+xml;base64,{{ $qrCodeBase64 }}" alt="Payment QR Code" style="width: 110px; height: 110px;" />
                             </div>
-                            <div class="scan-text">↑ Scan to Pay ↑</div>
+                            <div class="scan-text">↑ {{ __('Scan to Pay') }} ↑</div>
                         </td>
                         <td style="vertical-align: top; padding-left: 25px; border: none;">
-                            <div class="payment-title">Pay Online</div>
-                            <div class="payment-subtitle" style="margin-bottom: 15px;">Scan the QR code or use the payment details below</div>
+                            <div class="payment-title">{{ __('Pay Online') }}</div>
+                            <div class="payment-subtitle" style="margin-bottom: 15px;">{{ __('Scan the QR code or use the payment details below') }}</div>
                             
                             <table cellspacing="0" cellpadding="0" style="width: 100%;">
                                 <tr>
@@ -457,7 +469,7 @@
                                 </tr>
                                 <tr>
                                     <td style="border: none; padding: 4px 0;">
-                                        <span class="payment-id-label">Amount:</span>
+                                        <span class="payment-id-label">{{ __('Amount:') }}</span>
                                     </td>
                                     <td style="border: none; padding: 4px 0;">
                                         <span class="payment-id-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->amount, 2) }}</span>
@@ -465,7 +477,7 @@
                                 </tr>
                                 <tr>
                                     <td style="border: none; padding: 4px 0;">
-                                        <span class="payment-id-label">Invoice:</span>
+                                        <span class="payment-id-label">{{ __('Invoice:') }}</span>
                                     </td>
                                     <td style="border: none; padding: 4px 0;">
                                         <span class="payment-id-value">#{{ $invoice->invoice_number }}</span>
@@ -476,9 +488,9 @@
                             <div style="margin-top: 12px; padding: 8px 12px; background-color: #eff6ff; border-radius: 6px; border: 1px solid #bfdbfe;">
                                 <span style="font-size: 10px; color: #1e40af; font-weight: 600;">
                                     @if($currency === 'INR')
-                                        Open any UPI app (Google Pay, PhonePe, Paytm) and scan to pay instantly.
+                                        {{ __('Open any UPI app (Google Pay, PhonePe, Paytm) and scan to pay instantly.') }}
                                     @else
-                                        Use the {{ $paymentLabel }} details above or scan the QR code to complete payment.
+                                        {{ __('Use the payment details above or scan the QR code to complete payment.') }}
                                     @endif
                                 </span>
                             </div>
@@ -491,19 +503,19 @@
         @if($invoice->user->bank_name && $invoice->user->account_number)
             <!-- Bank Details Section -->
             <div style="margin-top: 15px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc; page-break-inside: avoid;">
-                <div class="section-title" style="color: {{ $invoice->user->invoice_color ?? '#2563eb' }}; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px;">Bank Transfer Details</div>
+                <div class="section-title" style="color: {{ $invoice->user->invoice_color ?? '#2563eb' }}; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px;">{{ __('Bank Transfer Details') }}</div>
                 <table width="100%" cellspacing="0" cellpadding="0">
                     <tr>
                         <td width="33%" style="border: none; padding: 0;">
-                            <div class="payment-id-label">Bank Name</div>
+                            <div class="payment-id-label">{{ __('Bank Name') }}</div>
                             <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->bank_name }}</div>
                         </td>
                         <td width="33%" style="border: none; padding: 0;">
-                            <div class="payment-id-label">Account Number</div>
+                            <div class="payment-id-label">{{ __('Account Number') }}</div>
                             <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->account_number }}</div>
                         </td>
                         <td width="33%" style="border: none; padding: 0;">
-                            <div class="payment-id-label">IFSC / SWIFT Code</div>
+                            <div class="payment-id-label">{{ __('IFSC / SWIFT Code') }}</div>
                             <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->ifsc_code ?? 'N/A' }}</div>
                         </td>
                     </tr>
@@ -516,11 +528,11 @@
             <tr>
                 <td width="60%" style="border: none; padding: 0; vertical-align: top;">
                     <div style="padding: 15px; border: 1px dashed #e2e8f0; border-radius: 8px; margin-right: 15px;">
-                        <div class="section-title">Important Notes</div>
+                        <div class="section-title">{{ __('Important Notes') }}</div>
                         <div class="text-gray" style="font-size: 10px;">
-                            1. This invoice is a record of stock asset movement.<br>
-                            2. Goods once issued are recorded in the auditing logs.<br>
-                            3. For discrepancies, please contact the administrator.
+                            1. {{ __('This invoice is a record of stock asset movement.') }}<br>
+                            2. {{ __('Goods once issued are recorded in the auditing logs.') }}<br>
+                            3. {{ __('For discrepancies, please contact the administrator.') }}
                         </div>
                     </div>
                 </td>
@@ -528,10 +540,10 @@
                     <div style="margin-top: 10px;">
                         <div style="height: 60px;"></div>
                         <div style="border-top: 1px solid #1e293b; padding-top: 5px; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #1e293b;">
-                            Authorized Signatory
+                            {{ __('Authorized Signatory') }}
                         </div>
                         <div style="font-size: 9px; color: #64748b; margin-top: 2px;">
-                            (Seal & Signature)
+                            {{ __('(Seal & Signature)') }}
                         </div>
                     </div>
                 </td>
@@ -544,8 +556,8 @@
             <table width="100%">
                 <tr>
                     <td>
-                        <div class="footer-thankyou">Thank you for choosing StockProNex!</div>
-                        <div class="footer-content">This is a system-generated document for inventory verification.</div>
+                        <div class="footer-thankyou">{{ __('Thank you for choosing StockProNex!') }}</div>
+                        <div class="footer-content">{{ __('This is a system-generated document for inventory verification.') }}</div>
                     </td>
                     <td style="text-align: right; vertical-align: bottom;">
                         <div class="footer-content">&copy; {{ date('Y') }} StockProNex • www.stockpronex.com</div>

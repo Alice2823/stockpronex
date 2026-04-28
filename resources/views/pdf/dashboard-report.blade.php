@@ -134,10 +134,10 @@
                 </td>
                 <td align="right" style="vertical-align: bottom;">
                     <div class="report-subtitle" style="font-weight: bold; color: #1e293b;">
-                        ANALYTICS REPORT
+                        {{ __('ANALYTICS REPORT') }}
                     </div>
                     <div class="report-date">
-                        Generated on: {{ now()->format('d M Y, h:i A') }}
+                        {{ __('Generated on:') }} {{ now()->format('d M Y, h:i A') }}
                     </div>
                 </td>
             </tr>
@@ -147,38 +147,38 @@
     <hr style="border: 1px solid #ddd; margin-top: 10px; margin-bottom: 20px;">
 
     <div class="container">
-        <div class="section-title">Key Performance Indicators</div>
+        <div class="section-title">{{ __('Key Performance Indicators') }}</div>
         <div class="card-container">
             <table class="card-table">
                 <tr>
                     <td>
-                        <div class="card-label">Total Stock Units</div>
+                        <div class="card-label">{{ __('Total Stock Units') }}</div>
                         <div class="card-value">{{ number_format($cards['total_stock']) }}</div>
                     </td>
                     <td>
-                        <div class="card-label">Units Used (Period)</div>
+                        <div class="card-label">{{ __('Units Used (Period)') }}</div>
                         <div class="card-value">{{ number_format($cards['total_used']) }}</div>
                     </td>
                     <td>
-                        <div class="card-label">Units Added (Period)</div>
+                        <div class="card-label">{{ __('Units Added (Period)') }}</div>
                         <div class="card-value">{{ number_format($cards['total_added']) }}</div>
                     </td>
                     <td style="border-bottom: 3px solid #ef4444;">
-                        <div class="card-label">Low Stock Alerts</div>
+                        <div class="card-label">{{ __('Low Stock Alerts') }}</div>
                         <div class="card-value" style="color: #ef4444;">{{ $cards['low_stock'] }}</div>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div class="section-title">Top Moving Products</div>
+        <div class="section-title">{{ __('Top Moving Products') }}</div>
         <table width="100%">
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Product Name</th>
-                    <th style="text-align: right;">Total Units Used</th>
-                    <th style="text-align: right;">% of Usage</th>
+                    <th>{{ __('Rank') }}</th>
+                    <th>{{ __('Product Name') }}</th>
+                    <th style="text-align: right;">{{ __('Total Units Used') }}</th>
+                    <th style="text-align: right;">{{ __('% of Usage') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -199,17 +199,17 @@
         </table>
 
         <div style="margin-top: 50px; background-color: #f0f9ff; padding: 25px; border-radius: 8px; border: 1px solid #bae6fd;">
-            <p style="margin: 0; color: #0369a1; font-weight: bold; font-size: 16px;">Analytics Insights</p>
+            <p style="margin: 0; color: #0369a1; font-weight: bold; font-size: 16px;">{{ __('Analytics Insights') }}</p>
             <p style="margin: 10px 0 0 0; color: #075985; font-size: 14px;">
-                This report summarizes the operational activities for the selected period. 
-                Product usage is {{ $cards['total_used'] > $cards['total_added'] ? 'higher' : 'lower' }} than stock additions in the current timeframe.
-                Regular audits are recommended for the {{ $cards['low_stock'] }} low stock items identified.
+                {{ __('This report summarizes the operational activities for the selected period.') }} 
+                {{ __('Product usage is') }} {{ $cards['total_used'] > $cards['total_added'] ? __('higher') : __('lower') }} {{ __('than stock additions in the current timeframe.') }}
+                {{ __('Regular audits are recommended for the') }} {{ $cards['low_stock'] }} {{ __('low stock items identified.') }}
             </p>
         </div>
     </div>
 
     <div class="footer">
-        <strong>StockProNex Performance Analytics</strong> • Executive Summary • &copy; {{ date('Y') }}
+        <strong>StockProNex {{ __('Performance Analytics') }}</strong> • {{ __('Executive Summary') }} • &copy; {{ date('Y') }}
     </div>
 </body>
 </html>

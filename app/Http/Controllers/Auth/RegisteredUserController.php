@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Constants\BusinessIndustry;
 
 class RegisteredUserController extends Controller
 {
@@ -16,7 +17,6 @@ class RegisteredUserController extends Controller
     {
         return view('auth.register');
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -27,13 +27,17 @@ class RegisteredUserController extends Controller
             'business_type' => ['nullable','string'],
         ]);
 
+        $taxRates = BusinessIndustry::getTaxRates($request->business_type ?? 'General Store(Kirana)');
+
         $user = User::create([
             'first_name' => trim($request->first_name),
             'last_name'  => trim($request->last_name),
             'name'       => trim($request->first_name).' '.trim($request->last_name),
             'email'      => strtolower($request->email),
             'password'   => Hash::make($request->password),
-            'business_type' => $request->business_type,
+            'business_type' => $request->business_type ?? 'General Store(Kirana)',
+            'tds_percentage' => $taxRates['tds'],
+            'tcs_percentage' => $taxRates['tcs'],
         ]);
 
         event(new Registered($user));

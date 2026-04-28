@@ -8,7 +8,7 @@
                 <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back to Usage History
+                {{ __('Back to Usage History') }}
             </a>
         </div>
     </x-slot>
@@ -31,8 +31,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Scan Barcode</h3>
-                                    <p class="text-xs font-bold text-blue-500/70 dark:text-blue-400/70 uppercase tracking-widest">Live Camera Feed</p>
+                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{{ __('Scan Barcode') }}</h3>
+                                    <p class="text-xs font-bold text-blue-500/70 dark:text-blue-400/70 uppercase tracking-widest">{{ __('Live Camera Feed') }}</p>
                                 </div>
                             </div>
 
@@ -40,7 +40,7 @@
                                 <div id="reader" style="width: 100%; min-height: 300px;"></div>
                                 <div class="absolute bottom-4 left-0 right-0 text-center">
                                     <span class="bg-black/60 text-white text-xs px-4 py-1.5 rounded-full font-bold backdrop-blur-md">
-                                        Center the barcode
+                                        {{ __('Center the barcode') }}
                                     </span>
                                 </div>
                             </div>
@@ -57,14 +57,14 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Manual Entry</h3>
-                                    <p class="text-xs font-bold text-purple-500/70 dark:text-purple-400/70 uppercase tracking-widest">Type Barcode</p>
+                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{{ __('Manual Entry') }}</h3>
+                                    <p class="text-xs font-bold text-purple-500/70 dark:text-purple-400/70 uppercase tracking-widest">{{ __('Type Barcode') }}</p>
                                 </div>
                             </div>
 
                             <div class="space-y-4 grow">
                                 <div>
-                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1">Barcode / IMEI Number</label>
+                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1">{{ __('Barcode / IMEI Number') }}</label>
                                     <div class="flex gap-2">
                                         <input type="text" id="manual_barcode_value" class="grow bg-gray-50 dark:bg-black/20 border-2 border-gray-100 dark:border-gray-800 rounded-2xl py-3 px-4 text-lg font-black focus:border-purple-500 transition-all dark:text-white" placeholder="STK-000">
                                         <button onclick="fetchBarcodeDetails(document.getElementById('manual_barcode_value').value, 'manual')" class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-2xl shadow-lg">
@@ -87,15 +87,15 @@
                                 <svg class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
-                                Items Cart
+                                {{ __('Items Cart') }}
                             </h3>
-                            <span id="cart-count" class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">0 Items</span>
+                            <span id="cart-count" class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">0 {{ __('Items') }}</span>
                         </div>
 
                         <!-- Cart Items List -->
                         <div id="cart-container" class="space-y-3 mb-8 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                             <div class="text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl">
-                                <p class="text-sm font-bold text-gray-400">Cart is empty. Scan something!</p>
+                                <p class="text-sm font-bold text-gray-400">{{ __('Cart is empty. Scan something!') }}</p>
                             </div>
                         </div>
 
@@ -103,25 +103,25 @@
                         <div class="space-y-6">
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Company Name</label>
+                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Company Name') }}</label>
                                     <input type="text" id="company_name" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Customer Name *</label>
+                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Customer Name') }} *</label>
                                     <input type="text" id="customer_name" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white">
                                 </div>
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
-                                        <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Phone Number *</label>
+                                        <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Phone Number') }} *</label>
                                         <input type="text" id="phone" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white">
                                     </div>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Shipping Address *</label>
+                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Shipping Address') }} *</label>
                                             <textarea id="address" rows="2" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-blue-500 transition-all text-sm text-gray-900 dark:text-white"></textarea>
                                         </div>
                                         <div>
-                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Discount (%)</label>
+                                            <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">{{ __('Discount (%)') }}</label>
                                             <div class="relative">
                                                 <input type="number" id="discount_input" step="0.5" min="0" max="100" class="w-full bg-gray-50 dark:bg-black/20 border border-gray-100 dark:border-gray-800 rounded-xl py-2 px-3 font-bold focus:border-red-500 transition-all text-sm text-gray-900 dark:text-white" placeholder="0.00" oninput="updateCartUI()">
                                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs">%</span>
@@ -135,16 +135,16 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <label class="relative flex items-center justify-center p-2 rounded-xl border border-gray-100 dark:border-gray-800 cursor-pointer has-[:checked]:bg-blue-600 has-[:checked]:text-white transition-all shadow-sm">
                                     <input type="radio" name="payment_method" value="cash" class="sr-only" checked>
-                                    <span class="font-black text-[10px] uppercase tracking-widest">Cash</span>
+                                    <span class="font-black text-[10px] uppercase tracking-widest">{{ __('Cash') }}</span>
                                 </label>
                                 <label class="relative flex items-center justify-center p-2 rounded-xl border border-gray-100 dark:border-gray-800 cursor-pointer has-[:checked]:bg-blue-600 has-[:checked]:text-white transition-all shadow-sm">
                                     <input type="radio" name="payment_method" value="online" class="sr-only">
-                                    <span class="font-black text-[10px] uppercase tracking-widest">Online</span>
+                                    <span class="font-black text-[10px] uppercase tracking-widest">{{ __('Online') }}</span>
                                 </label>
                             </div>
 
                             <button onclick="submitBatchUsage()" id="submit-btn" class="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all shadow-xl hover:shadow-green-500/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                                Confirm & Generate Invoice
+                                {{ __('Confirm & Generate Invoice') }}
                             </button>
                         </div>
                     </div>
@@ -158,11 +158,11 @@
                     <h2 id="status-title" class="text-3xl font-black text-gray-900 dark:text-white mb-4 tracking-tight"></h2>
                     <p id="status-message" class="text-gray-600 dark:text-gray-400 font-bold mb-8"></p>
                     <div id="status-footer" class="hidden space-y-3">
-                        <a href="{{ route('usage.index') }}" class="inline-block bg-gray-900 dark:bg-white dark:text-black text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">Go to History</a>
+                        <a href="{{ route('usage.index') }}" class="inline-block bg-gray-900 dark:bg-white dark:text-black text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">{{ __('Go to History') }}</a>
                         <div id="whatsapp-resend-container" class="hidden">
                             <button onclick="resendWhatsApp()" id="resend-whatsapp-btn" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl transition-all">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.613.613l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.353 0-4.556-.682-6.426-1.855l-.352-.215-3.65 1.224 1.224-3.65-.215-.352A9.935 9.935 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-                                Resend on WhatsApp
+                                {{ __('Resend on WhatsApp') }}
                             </button>
                         </div>
                     </div>
@@ -307,13 +307,13 @@
             const countEl = document.getElementById('cart-count');
             const submitBtn = document.getElementById('submit-btn');
             
-            countEl.innerText = `${cart.length} ${cart.length === 1 ? 'Item' : 'Items'}`;
+            countEl.innerText = `${cart.length} ${cart.length === 1 ? '{{ __("Item") }}' : '{{ __("Items") }}'}`;
             submitBtn.disabled = cart.length === 0;
 
             if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl">
-                        <p class="text-sm font-bold text-gray-400">Cart is empty. Scan something!</p>
+                        <p class="text-sm font-bold text-gray-400">{{ __('Cart is empty. Scan something!') }}</p>
                     </div>
                 `;
                 return;
@@ -354,25 +354,25 @@
             html += `
                 <div class="mt-4 pt-4 border-t border-dashed border-gray-100 dark:border-gray-800 space-y-2">
                     <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                        <span>Items Subtotal</span>
+                        <span>{{ __('Items Subtotal') }}</span>
                         <span>${currencySymbol}${subtotal.toFixed(2)}</span>
                     </div>
                     ${discountPercent > 0 ? `
                     <div class="flex justify-between items-center text-[10px] font-bold text-red-500 uppercase tracking-widest">
-                        <span>Discount (${discountPercent}%)</span>
+                        <span>{{ __('Discount') }} (${discountPercent}%)</span>
                         <span>-${currencySymbol}${discountAmount.toFixed(2)}</span>
                     </div>
                     ` : ''}
                     <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest border-t border-gray-50 dark:border-gray-800/50 pt-1">
-                        <span>Net Total</span>
+                        <span>{{ __('Net Total') }}</span>
                         <span>${currencySymbol}${discountedSubtotal.toFixed(2)}</span>
                     </div>
                     <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                        <span>Tax (${taxPercentage}%)</span>
+                        <span>{{ __('Tax') }} (${taxPercentage}%)</span>
                         <span>${currencySymbol}${taxAmount.toFixed(2)}</span>
                     </div>
                     <div class="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-800">
-                        <span class="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">Total Bill</span>
+                        <span class="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-widest">{{ __('Total Bill') }}</span>
                         <span class="text-xl font-black text-blue-600">${currencySymbol}${finalTotal.toFixed(2)}</span>
                     </div>
                 </div>
@@ -389,7 +389,7 @@
             const address = document.getElementById('address').value;
 
             if (!cName || !phone || !address) {
-                alert('Please fill in customer details (Name, Phone, Address)');
+                alert('{{ __("Please fill in customer details (Name, Phone, Address)") }}');
                 return;
             }
 
@@ -412,7 +412,7 @@
             };
 
             isProcessing = true;
-            showStatus('Processing...', 'Generating invoice and updating stock...', 'loading');
+            showStatus('{{ __("Processing...") }}', '{{ __("Generating invoice and updating stock...") }}', 'loading');
 
             fetch('/usage/barcode/multi', {
                 method: 'POST',
@@ -443,7 +443,7 @@
                     cart = [];
                     updateCartUI();
                     
-                    showStatus('Success!', data.message || 'Invoice generated successfully.', 'success');
+                    showStatus('{{ __("Success!") }}', data.message || '{{ __("Invoice generated successfully.") }}', 'success');
                     
                     // Add a download button to the success overlay
                     if (data.data && data.data.invoice_id) {

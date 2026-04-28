@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center group transition-all duration-300">
                         <span class="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic leading-none">
-                            <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro text-blue-600 dark:text-blue-500">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
+                            <span class="brand-stock dark:text-white">{{ __('Stock') }}</span><span class="brand-pro text-blue-600 dark:text-blue-500">{{ __('Pro') }}</span><span class="brand-nex dark:text-gray-400">{{ __('Nex') }}</span>
                         </span>
                     </a>
                 </div>
@@ -88,8 +88,8 @@
                 }" class="relative">
                     <button @click="toggle()" 
                             :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
-                            :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'"
-                            title="Toggle theme">
+                            :aria-label="dark ? '{{ __('Switch to light mode') }}' : '{{ __('Switch to dark mode') }}'"
+                            title="{{ __('Toggle theme') }}">
                         
                         @if(!Auth::user()->hasFeature('dark_mode'))
                             <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white">
@@ -195,7 +195,7 @@
                                         @csrf @method('PATCH')
                                         @foreach(['en' => 'English', 'hi' => 'Hindi', 'gu' => 'Gujarati', 'mr' => 'Marathi', 'ta' => 'Tamil', 'es' => 'Spanish', 'fr' => 'French'] as $code => $name)
                                             <button type="submit" name="language" value="{{ $code }}" class="w-full text-left px-10 py-1.5 text-xs font-black {{ App::getLocale() == $code ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500 dark:text-gray-500 hover:text-gray-700' }}">
-                                                {{ $name }}
+                                                {{ __($name) }}
                                             </button>
                                         @endforeach
                                     </form>
@@ -362,7 +362,7 @@
                         else { document.documentElement.classList.remove('dark'); localStorage.theme = 'light'; }
                     }
                 }" class="flex items-center justify-between p-3.5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 shadow-sm">
-                    <span class="text-sm font-bold text-gray-600 dark:text-gray-400 flex items-center" x-text="dark ? '🌙 Dark Mode' : '☀️ Light Mode'"></span>
+                    <span class="text-sm font-bold text-gray-600 dark:text-gray-400 flex items-center" x-text="dark ? '🌙 {{ __('Dark Mode') }}' : '☀️ {{ __('Light Mode') }}'"></span>
                     <button @click="if (!{{ Auth::user()->hasFeature('dark_mode') ? 'true' : 'false' }}) { window.location.href = '{{ route('subscription.index') }}'; return; } toggle()" 
                             :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'" class="relative">
                         @if(!Auth::user()->hasFeature('dark_mode'))
@@ -389,7 +389,7 @@
                             @csrf @method('PATCH')
                             <div class="grid grid-cols-2 gap-1.5">
                                 @foreach(['en' => 'English', 'hi' => 'Hindi', 'gu' => 'Gujarati', 'mr' => 'Marathi', 'ta' => 'Tamil', 'es' => 'Spanish', 'fr' => 'French'] as $code => $name)
-                                    <button type="submit" name="language" value="{{ $code }}" class="text-left px-3 py-2 rounded-xl text-sm font-bold {{ App::getLocale() == $code ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800' }} transition-colors">{{ $name }}</button>
+                                    <button type="submit" name="language" value="{{ $code }}" class="text-left px-3 py-2 rounded-xl text-sm font-bold {{ App::getLocale() == $code ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800' }} transition-colors">{{ __($name) }}</button>
                                 @endforeach
                             </div>
                         </form>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Stock Usage Report - {{ date('d M Y') }}</title>
+    <title>{{ __('Stock Usage Report') }} - {{ date('d M Y') }}</title>
     <style>
         @page {
             margin: 0px;
@@ -95,15 +95,15 @@
                         {{ auth()->user()->business_name ?? 'StockProNex' }}
                     </div>
                     <div class="report-subtitle">
-                        {{ auth()->user()->address ?? 'Inventory Management System' }}
+                        {{ auth()->user()->address ?? __('Inventory Management System') }}
                     </div>
                 </td>
                 <td align="right" style="vertical-align: bottom;">
                     <div class="report-subtitle" style="font-weight: bold; color: #1e293b;">
-                        STOCK USAGE REPORT
+                        {{ __('STOCK USAGE REPORT') }}
                     </div>
                     <div class="report-date">
-                        Generated on: {{ now()->format('d M Y, h:i A') }}
+                        {{ __('Generated on:') }} {{ now()->format('d M Y, h:i A') }}
                     </div>
                 </td>
             </tr>
@@ -116,11 +116,11 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Customer</th>
-                    <th>Notes</th>
+                    <th>{{ __('Date') }}</th>
+                    <th>{{ __('Product Name') }}</th>
+                    <th>{{ __('Quantity') }}</th>
+                    <th>{{ __('Customer') }}</th>
+                    <th>{{ __('Notes') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,7 +134,7 @@
                             <strong>{{ $usage->invoice->customer_name }}</strong><br>
                             <span class="small-text" style="color: #64748b;">Inv: {{ $usage->invoice->invoice_number }}</span>
                         @else
-                            Internal / Manual
+                            {{ __('Internal / Manual') }}
                         @endif
                     </td>
                     <td class="small-text" style="color: #64748b;">{{ $usage->notes }}</td>
@@ -145,7 +145,7 @@
     </div>
 
     <div class="footer">
-        <strong>StockProNex Inventory Management System</strong> • Professional Report • &copy; {{ date('Y') }} All Rights Reserved.
+        <strong>{{ __('StockProNex Inventory Management System') }}</strong> • {{ __('Professional Report') }} • &copy; {{ date('Y') }} {{ __('All Rights Reserved.') }}
     </div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Profit Management Report</title>
+    <title>{{ __('Profit Management Report') }}</title>
     <style>
         @page { margin: 0; }
         body { 
@@ -150,55 +150,55 @@
     <div class="header">
         <div class="header-left">
             <h1 class="business-name">STOCKPRONEX</h1>
-            <p class="tagline">Comprehensive Inventory & Profit Analytics Report</p>
+            <p class="tagline">{{ __('Comprehensive Inventory & Profit Analytics Report') }}</p>
         </div>
         <div class="header-right">
-            <p class="report-title">Analytics Report</p>
-            <p class="gen-date">Generated on: {{ $generationDate }}</p>
+            <p class="report-title">{{ __('Analytics Report') }}</p>
+            <p class="gen-date">{{ __('Generated on:') }} {{ $generationDate }}</p>
         </div>
         <div class="clearfix"></div>
     </div>
 
-    <div class="section-title">Key Profit Indicators</div>
+    <div class="section-title">{{ __('Key Profit Indicators') }}</div>
     <div class="summary-container">
         <div class="summary-item">
-            <span class="summary-label">Total Units Sold</span>
+            <span class="summary-label">{{ __('Total Units Sold') }}</span>
             <span class="summary-value">{{ number_format($stocks->sum('units_sold')) }}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">Total Discounts Given</span>
-            <span class="summary-value value-discount">₹{{ number_format($totalOverallDiscount, 2) }}</span>
+            <span class="summary-label">{{ __('Total Discounts Given') }}</span>
+            <span class="summary-value value-discount">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallDiscount, 2) }}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">Net Profit Earned</span>
-            <span class="summary-value value-net">₹{{ number_format($totalOverallProfit, 2) }}</span>
+            <span class="summary-label">{{ __('Net Profit Earned') }}</span>
+            <span class="summary-value value-net">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallProfit, 2) }}</span>
         </div>
     </div>
 
-    <div class="section-title">Stock Performance Analytics</div>
+    <div class="section-title">{{ __('Stock Performance Analytics') }}</div>
     <table>
         <thead>
             <tr>
-                <th width="30%">Product Name</th>
-                <th>MRP (Cost)</th>
-                <th>Sale Price</th>
-                <th style="text-align: center;">Sold</th>
-                <th>Gross profit</th>
-                <th>Discount</th>
-                <th>Net Profit</th>
+                <th width="30%">{{ __('Product Name') }}</th>
+                <th>{{ __('MRP (Cost)') }}</th>
+                <th>{{ __('Sale Price') }}</th>
+                <th style="text-align: center;">{{ __('Sold') }}</th>
+                <th>{{ __('Gross Profit') }}</th>
+                <th>{{ __('Discount') }}</th>
+                <th>{{ __('Net Profit') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach($stocks as $stock)
                 <tr>
                     <td class="product-name-cell">{{ $stock->name }}</td>
-                    <td>₹{{ number_format($stock->mrp ?? 0, 2) }}</td>
-                    <td>₹{{ number_format($stock->price, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->mrp ?? 0, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</td>
                     <td style="text-align: center; font-weight: 700;">{{ $stock->units_sold }}</td>
-                    <td class="bold-navy">₹{{ number_format($stock->gross_profit, 2) }}</td>
-                    <td style="color: #ef4444;">₹{{ number_format($stock->total_discount, 2) }}</td>
+                    <td class="bold-navy">{{ Auth::user()->currency_symbol }}{{ number_format($stock->gross_profit, 2) }}</td>
+                    <td style="color: #ef4444;">{{ Auth::user()->currency_symbol }}{{ number_format($stock->total_discount, 2) }}</td>
                     <td class="bold-navy" style="color: {{ $stock->calculated_profit >= 0 ? '#0369a1' : '#ef4444' }};">
-                        {{ $stock->calculated_profit >= 0 ? '+' : '-' }}₹{{ number_format(abs($stock->calculated_profit), 2) }}
+                        {{ $stock->calculated_profit >= 0 ? '+' : '-' }}{{ Auth::user()->currency_symbol }}{{ number_format(abs($stock->calculated_profit), 2) }}
                     </td>
                 </tr>
             @endforeach
@@ -206,17 +206,17 @@
     </table>
 
     <div class="insights-box">
-        <h4 class="insights-title">Profit Analytics Insights</h4>
+        <h4 class="insights-title">{{ __('Profit Analytics Insights') }}</h4>
         <p class="insights-text">
-            This financial report summarizes your realized profits after accounting for item-level discounts. 
-            All net profit values indicate the actual revenue retained after subtracting the purchase cost (MRP) 
-            and any percentage-based or flat discounts applied during sales. Regular auditing is recommended 
-            for items showing concentrated high discounts.
+            {{ __('This financial report summarizes your realized profits after accounting for item-level discounts.') }} 
+            {{ __('All net profit values indicate the actual revenue retained after subtracting the purchase cost (MRP)') }} 
+            {{ __('and any percentage-based or flat discounts applied during sales. Regular auditing is recommended') }} 
+            {{ __('for items showing concentrated high discounts.') }}
         </p>
     </div>
 
     <div class="footer">
-        StockProNex | Automated Profit Management System | Page 1 of 1
+        {{ __('StockProNex | Automated Profit Management System | Page 1 of 1') }}
     </div>
 </body>
 </html>

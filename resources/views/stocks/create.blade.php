@@ -43,55 +43,16 @@
                         <!-- Business-Specific Fields -->
                         @php
                             $businessType = Auth::user()->business_type;
+                            $requiredFields = \App\Constants\BusinessIndustry::getRequiredFields($businessType);
                         @endphp
 
                         <div id="business_fields" class="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 flex items-center uppercase tracking-wider">
                                 <svg class="w-4 h-4 mr-1 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                {{ __('Business Specific Details') }} ({{ $businessType ?? __('Default') }})
+                                {{ __('Business Specific Details') }} ({{ $businessType ? __($businessType) : __('Default') }})
                             </h3>
 
-                            @if($businessType == 'Gold / Jewellery')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="weight" :value="__('Weight (Grams)')" />
-                                        <x-input id="weight" class="block mt-1 w-full gold-calc" type="number" step="0.001" name="business_attributes[weight]" :value="old('business_attributes.weight')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="purity" :value="__('Purity')" />
-                                        <x-select id="purity" name="business_attributes[purity]" class="mt-1 block w-full">
-                                            <option value="22k">22k</option>
-                                            <option value="24k">24k</option>
-                                            <option value="18k">18k</option>
-                                        </x-select>
-                                    </div>
-                                    <div>
-                                        <x-label for="rate_per_gram" :value="__('Rate per Gram (₹)')" />
-                                        <x-input id="rate_per_gram" class="block mt-1 w-full gold-calc" type="number" step="0.01" name="business_attributes[rate_per_gram]" :value="old('business_attributes.rate_per_gram')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="making_charges" :value="__('Making Charges (₹)')" />
-                                        <x-input id="making_charges" class="block mt-1 w-full gold-calc" type="number" step="0.01" name="business_attributes[making_charges]" :value="old('business_attributes.making_charges')" />
-                                    </div>
-                                </div>
-                                <p class="text-xs text-indigo-600 mt-2 italic">* {{ __('Total Price will be auto-calculated: (Weight × Rate) + Making Charges') }}</p>
-                            @elseif($businessType == 'Grocery')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="unit" :value="__('Unit')" />
-                                        <x-select id="unit" name="business_attributes[unit]" class="mt-1 block w-full">
-                                            <option value="kg">kg</option>
-                                            <option value="litre">litre</option>
-                                            <option value="packet">packet</option>
-                                            <option value="unit">unit</option>
-                                        </x-select>
-                                    </div>
-                                    <div>
-                                        <x-label for="expiry_date" :value="__('Expiry Date')" />
-                                        <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Electronics' || $businessType == 'Mobile Shop')
+                            @if(in_array('imei', $requiredFields) || in_array('serial', $requiredFields))
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <x-label for="brand" :value="__('Brand')" />
@@ -106,162 +67,45 @@
                                         <x-input id="warranty" class="block mt-1 w-full" type="number" name="business_attributes[warranty]" :value="old('business_attributes.warranty')" />
                                     </div>
                                 </div>
-                            @elseif($businessType == 'Clothing')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @endif
+
+                            @if(in_array('expiry', $requiredFields))
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <x-label for="expiry_date" :value="__('Default Expiry Date')" />
+                                        <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if(in_array('size', $requiredFields))
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                     <div>
                                         <x-label for="size" :value="__('Size')" />
                                         <x-input id="size" class="block mt-1 w-full" type="text" name="business_attributes[size]" :value="old('business_attributes.size')" :placeholder="__('e.g. XL, 42, 32')" />
                                     </div>
-                                    <div>
-                                        <x-label for="color" :value="__('Color')" />
-                                        <x-input id="color" class="block mt-1 w-full" type="text" name="business_attributes[color]" :value="old('business_attributes.color')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="material" :value="__('Material')" />
-                                        <x-input id="material" class="block mt-1 w-full" type="text" name="business_attributes[material]" :value="old('business_attributes.material')" />
-                                    </div>
                                 </div>
-                            @elseif($businessType == 'Medical Store')
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <x-label for="batch_number" :value="__('Batch Number')" />
-                                        <x-input id="batch_number" class="block mt-1 w-full" type="text" name="business_attributes[batch_number]" :value="old('business_attributes.batch_number')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="expiry_date" :value="__('Expiry Date')" />
-                                        <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="mrp" :value="__('MRP (₹)')" />
-                                        <x-input id="mrp" class="block mt-1 w-full" type="number" step="0.01" name="business_attributes[mrp]" :value="old('business_attributes.mrp')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Hardware')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="brand" :value="__('Brand')" />
-                                        <x-input id="brand" class="block mt-1 w-full" type="text" name="business_attributes[brand]" :value="old('business_attributes.brand')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="material" :value="__('Material')" />
-                                        <x-input id="material" class="block mt-1 w-full" type="text" name="business_attributes[material]" :value="old('business_attributes.material')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="size" :value="__('Size/Dimensions')" />
-                                        <x-input id="size" class="block mt-1 w-full" type="text" name="business_attributes[size]" :value="old('business_attributes.size')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Automobile parts')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="part_number" :value="__('Part Number')" />
-                                        <x-input id="part_number" class="block mt-1 w-full" type="text" name="business_attributes[part_number]" :value="old('business_attributes.part_number')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="compatibility" :value="__('Vehicle Compatibility')" />
-                                        <x-input id="compatibility" class="block mt-1 w-full" type="text" name="business_attributes[compatibility]" :value="old('business_attributes.compatibility')" :placeholder="__('e.g. Toyota Corolla 2020')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="brand" :value="__('Brand')" />
-                                        <x-input id="brand" class="block mt-1 w-full" type="text" name="business_attributes[brand]" :value="old('business_attributes.brand')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Furniture')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="material" :value="__('Material')" />
-                                        <x-input id="material" class="block mt-1 w-full" type="text" name="business_attributes[material]" :value="old('business_attributes.material')" :placeholder="__('e.g. Teak Wood, Steel')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="dimensions" :value="__('Dimensions')" />
-                                        <x-input id="dimensions" class="block mt-1 w-full" type="text" name="business_attributes[dimensions]" :value="old('business_attributes.dimensions')" :placeholder="__('e.g. 6x4 ft')" />
-                                    </div>
+                            @endif
+
+                            @if(in_array('color', $requiredFields))
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                     <div>
                                         <x-label for="color" :value="__('Color')" />
                                         <x-input id="color" class="block mt-1 w-full" type="text" name="business_attributes[color]" :value="old('business_attributes.color')" />
                                     </div>
                                 </div>
-                            @elseif($businessType == 'Cosmetic')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @endif
+
+                            @if(in_array('weight', $requiredFields))
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                     <div>
-                                        <x-label for="brand" :value="__('Brand')" />
-                                        <x-input id="brand" class="block mt-1 w-full" type="text" name="business_attributes[brand]" :value="old('business_attributes.brand')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="expiry_date" :value="__('Expiry Date')" />
-                                        <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="volume" :value="__('Volume/Weight')" />
-                                        <x-input id="volume" class="block mt-1 w-full" type="text" name="business_attributes[volume]" :value="old('business_attributes.volume')" :placeholder="__('e.g. 100ml, 50g')" />
+                                        <x-label for="purity" :value="__('Purity')" />
+                                        <x-input id="purity" class="block mt-1 w-full" type="text" name="business_attributes[purity]" :value="old('business_attributes.purity')" />
                                     </div>
                                 </div>
-                            @elseif($businessType == 'Book Store')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="isbn" :value="__('ISBN Number')" />
-                                        <x-input id="isbn" class="block mt-1 w-full" type="text" name="business_attributes[isbn]" :value="old('business_attributes.isbn')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="author" :value="__('Author')" />
-                                        <x-input id="author" class="block mt-1 w-full" type="text" name="business_attributes[author]" :value="old('business_attributes.author')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="publisher" :value="__('Publisher')" />
-                                        <x-input id="publisher" class="block mt-1 w-full" type="text" name="business_attributes[publisher]" :value="old('business_attributes.publisher')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Restaurant')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="category" :value="__('Category')" />
-                                        <x-select id="category" name="business_attributes[category]" class="mt-1 block w-full">
-                                            <option value="Veg">Veg</option>
-                                            <option value="Non-Veg">Non-Veg</option>
-                                            <option value="Beverage">Beverage</option>
-                                            <option value="Other">Other</option>
-                                        </x-select>
-                                    </div>
-                                    <div>
-                                        <x-label for="expiry_date" :value="__('Expiry Date/Best Before')" />
-                                        <x-input id="expiry_date" class="block mt-1 w-full" type="date" name="business_attributes[expiry_date]" :value="old('business_attributes.expiry_date')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="batch" :value="__('Batch Number')" />
-                                        <x-input id="batch" class="block mt-1 w-full" type="text" name="business_attributes[batch]" :value="old('business_attributes.batch')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Agricultural')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="variety" :value="__('Variety/Grade')" />
-                                        <x-input id="variety" class="block mt-1 w-full" type="text" name="business_attributes[variety]" :value="old('business_attributes.variety')" :placeholder="__('e.g. Grade A, Basmati')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="harvest_date" :value="__('Harvest Date')" />
-                                        <x-input id="harvest_date" class="block mt-1 w-full" type="date" name="business_attributes[harvest_date]" :value="old('business_attributes.harvest_date')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="origin" :value="__('Origin')" />
-                                        <x-input id="origin" class="block mt-1 w-full" type="text" name="business_attributes[origin]" :value="old('business_attributes.origin')" />
-                                    </div>
-                                </div>
-                            @elseif($businessType == 'Wholesale')
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-label for="pack_size" :value="__('Pack Size')" />
-                                        <x-input id="pack_size" class="block mt-1 w-full" type="text" name="business_attributes[pack_size]" :value="old('business_attributes.pack_size')" :placeholder="__('e.g. Case of 24, Bulk 50kg')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="min_order" :value="__('Min Order Qty')" />
-                                        <x-input id="min_order" class="block mt-1 w-full" type="number" name="business_attributes[min_order]" :value="old('business_attributes.min_order')" />
-                                    </div>
-                                    <div>
-                                        <x-label for="manufacturer" :value="__('Manufacturer')" />
-                                        <x-input id="manufacturer" class="block mt-1 w-full" type="text" name="business_attributes[manufacturer]" :value="old('business_attributes.manufacturer')" />
-                                    </div>
-                                </div>
-                            @else
+                            @endif
+
+                            @if(empty($requiredFields))
                                 <p class="text-sm text-gray-500 italic">{{ __('No additional specialized fields for your business type.') }}</p>
                             @endif
                         </div>
@@ -411,7 +255,7 @@
             const isEnabled = enableTrackingItem.checked;
             
             if (!isEnabled || qty <= 0) {
-                alert('Please enter quantity and enable tracking first.');
+                alert('{{ __("Please enter quantity and enable tracking first.") }}');
                 return;
             }
             
@@ -424,43 +268,36 @@
         }
 
         function generateBusinessFields(index) {
-            if (businessType === 'Mobile Shop') {
+            if (businessType === 'Mobile Shop' || businessType === 'Electronics' || businessType === 'General') {
                 return `
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">IMEI Number</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('IMEI Number') }}</label>
                         <input type="text" name="units[${index}][imei_number]" class="unit-imei block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="IMEI">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Serial Number</label>
-                        <input type="text" name="units[${index}][serial_number]" class="unit-serial block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Serial No.">
-                    </div>
-                `;
-            } else if (businessType === 'Electronics') {
-                return `
-                    <div class="col-span-2">
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Serial Number</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Serial Number') }}</label>
                         <input type="text" name="units[${index}][serial_number]" class="unit-serial block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Serial No.">
                     </div>
                 `;
             } else if (businessType === 'Medical Store') {
                 return `
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Batch Number</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Batch Number') }}</label>
                         <input type="text" name="units[${index}][batch_number]" class="unit-batch block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Batch No.">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Expiry Date</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Expiry Date') }}</label>
                         <input type="date" name="units[${index}][expiry_date]" class="unit-expiry block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300">
                     </div>
                 `;
             } else if (businessType === 'Gold / Jewellery') {
                 return `
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Exact Weight</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Exact Weight') }}</label>
                         <input type="number" step="0.001" name="units[${index}][weight]" class="unit-weight block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="0.000">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Hallmark/ID</label>
+                        <label class="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">{{ __('Hallmark/ID') }}</label>
                         <input type="text" name="units[${index}][hallmark]" class="unit-hallmark block w-full text-xs bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/20 transition-all duration-300" placeholder="Hallmark ID">
                     </div>
                 `;
@@ -472,7 +309,7 @@
         async function startScanner() {
             const qty = parseInt(quantityInput.value) || 0;
             if (qty <= 0) {
-                alert('Please enter quantity first.');
+                alert('{{ __("Please enter quantity first.") }}');
                 return;
             }
 
@@ -492,7 +329,7 @@
                 });
             } catch (err) {
                 console.error(err);
-                alert("Camera access failed.");
+                alert('{{ __("Camera access failed.") }}');
                 scannerContainer.classList.add('hidden');
             }
         }

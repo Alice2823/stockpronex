@@ -224,8 +224,7 @@
                     <span class="logo-letter">N</span><span class="logo-rest">ex</span>
                 </span>
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2 subtitle-fade not-italic">Inventory
-                Management System</p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2 subtitle-fade not-italic">{{ __('Inventory Management System') }}</p>
         </div>
 
         <!-- Session Status -->
@@ -307,8 +306,8 @@
                 {{-- Recent Logins Header --}}
                 <div x-show="!showFullForm">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Recent Logins</h3>
-                        <span class="text-xs text-gray-400 dark:text-gray-500">Click to quick login</span>
+                        <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Recent Logins') }}</h3>
+                        <span class="text-xs text-gray-400 dark:text-gray-500">{{ __('Click to quick login') }}</span>
                     </div>
 
                     {{-- Account Cards --}}
@@ -321,7 +320,7 @@
                                 {{-- Remove Button --}}
                                 <button class="recent-login-remove bg-red-500 hover:bg-red-600 text-white"
                                         @click="removeAccount(login.email, index, $event)"
-                                        title="Remove">
+                                        title="{{ __('Remove') }}">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
@@ -363,7 +362,7 @@
 
                             <div class="relative">
                                 <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">
-                                    Password
+                                    {{ __('Password') }}
                                 </label>
                                 <x-password-input id="recent-password" class="block w-full"
                                                 name="password"
@@ -382,18 +381,18 @@
                                            name="remember"
                                            class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:checked:bg-blue-600 transition-colors">
                                     <span class="ml-2 text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
-                                        Remember me
+                                        {{ __('Remember me') }}
                                     </span>
                                 </label>
                                 <a href="{{ route('password.request') }}"
                                    class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-                                    Forgot?
+                                    {{ __('Forgot?') }}
                                 </a>
                             </div>
 
                             <button type="submit"
                                     class="mt-4 w-full bg-gray-900 dark:bg-blue-600 text-white py-3 px-4 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200 dark:shadow-none">
-                                LOG IN
+                                {{ __('Log In') }}
                             </button>
                         </form>
                     </div>
@@ -404,7 +403,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Use another account
+                        {{ __('Use another account') }}
                     </button>
                 </div>
 
@@ -416,7 +415,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
-                        Back to recent logins
+                        {{ __('Back to recent logins') }}
                     </button>
 
                     @include('auth._login_form')
@@ -429,7 +428,7 @@
 
         <!-- Google Login -->
         <div class="mt-8 text-center text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-            Or continue with
+            {{ __('Or continue with') }}
         </div>
 
         <a href="{{ route('social.redirect', 'google') }}"
@@ -440,14 +439,14 @@
                 <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                 <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            Sign in with Google
+            {{ __('Sign in with Google') }}
         </a>
 
         <!-- Register -->
         <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            Don't have account?
+            {{ __("Don't have account?") }}
             <a href="{{ route('register') }}" class="text-blue-600 dark:text-blue-400 font-bold hover:underline">
-                Register
+                {{ __('Register') }}
             </a>
         </div>
     </div> {{-- End of the Box --}}

@@ -238,7 +238,17 @@ class StockUsageController extends Controller
         $discountAmount = ($subtotal * $discountPercentage) / 100;
         $netSubtotal = $subtotal - $discountAmount;
         $taxAmount = ($netSubtotal * $taxPercentage) / 100;
-        $totalAmount = $netSubtotal + $taxAmount;
+        
+        // --- TDS & TCS Calculations ---
+        $user = Auth::user();
+        $tdsPercentage = $user->tds_enabled ? (float)$user->tds_percentage : 0;
+        $tcsPercentage = $user->tcs_enabled ? (float)$user->tcs_percentage : 0;
+        
+        $tdsAmount = ($netSubtotal * $tdsPercentage) / 100;
+        $tcsAmount = (($netSubtotal + $taxAmount) * $tcsPercentage) / 100;
+        
+        $totalAmount = $netSubtotal + $taxAmount + $tcsAmount - $tdsAmount;
+        // ------------------------------
 
         $invoiceNumber = $this->generateInvoiceNumber();
 
@@ -279,6 +289,10 @@ class StockUsageController extends Controller
             'total_amount' => $totalAmount,
             'tax_percentage' => $taxPercentage,
             'tax_amount' => $taxAmount,
+            'tds_percentage' => $tdsPercentage,
+            'tds_amount' => $tdsAmount,
+            'tcs_percentage' => $tcsPercentage,
+            'tcs_amount' => $tcsAmount,
             'invoice_number' => $invoiceNumber,
             'payment_method' => $request->payment_method ?? 'cash',
             'items' => $invoiceItems, 

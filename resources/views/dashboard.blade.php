@@ -182,7 +182,7 @@
                                                                  @foreach($stock->business_attributes as $key => $value)
                                                                     @if($value)
                                                                         <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-black bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
-                                                                            {{ str_replace('_', ' ', $key) }}: {{ $value }}
+                                                                            {{ __(str_replace('_', ' ', $key)) }}: {{ $value }}
                                                                         </span>
                                                                     @endif
                                                                 @endforeach
@@ -266,7 +266,7 @@
                                             @foreach($stock->business_attributes as $key => $value)
                                                 @if($value)
                                                     <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-black bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
-                                                        {{ str_replace('_', ' ', $key) }}: {{ $value }}
+                                                        {{ __(str_replace('_', ' ', $key)) }}: {{ $value }}
                                                     </span>
                                                 @endif
                                             @endforeach

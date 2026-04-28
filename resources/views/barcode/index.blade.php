@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-extrabold text-2xl text-gray-900 dark:text-white leading-tight">
-                Barcode Management: <span class="text-blue-600 dark:text-blue-500">{{ $stock->name }}</span>
+                {{ __('Barcode Management:') }} <span class="text-blue-600 dark:text-blue-500">{{ $stock->name }}</span>
             </h2>
         </div>
     </x-slot>
@@ -14,7 +14,7 @@
                     <svg class="h-4 w-4 mr-2.5 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back to Dashboard
+                    {{ __('Back to Dashboard') }}
                 </a>
             </div>
             
@@ -39,18 +39,18 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Generate Barcodes</h3>
-                            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">Create unique tracking codes</p>
+                             <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">{{ __('Generate Barcodes') }}</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">{{ __('Create unique tracking codes') }}</p>
                         </div>
                     </div>
                     
                     <div class="space-y-4 flex-grow flex flex-col">
                         <div class="flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-800">
-                            <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">Current Stock:</span>
+                            <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">{{ __('Current Stock:') }}</span>
                             <span class="text-2xl font-black text-gray-900 dark:text-white">{{ number_format($stock->quantity) }}</span>
                         </div>
                         <div class="flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-800">
-                            <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">Generated:</span>
+                            <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">{{ __('Generated:') }}</span>
                             <span class="text-2xl font-black text-gray-900 dark:text-white">{{ $barcodes->count() }}</span>
                         </div>
                         
@@ -61,7 +61,7 @@
                                 <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
-                                Generate Barcodes
+                                {{ __('Generate Barcodes') }}
                             </button>
                         </form>
                     </div>
@@ -76,14 +76,14 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Scan Barcode</h3>
-                            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">Instant inventory usage</p>
+                            <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">{{ __('Scan Barcode') }}</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-widest">{{ __('Instant inventory usage') }}</p>
                         </div>
                     </div>
                     
                     <div class="flex flex-col flex-grow justify-between">
                         <p class="text-gray-500 dark:text-gray-400 mb-8 mt-2 font-medium leading-relaxed">
-                            Ready to use items specifically? Point your camera at the printed barcode to automatically update stock levels and record usage history in one second.
+                            {{ __('Ready to use items specifically? Point your camera at the printed barcode to automatically update stock levels and record usage history in one second.') }}
                         </p>
                         
                         <a href="{{ route('usage.barcode') }}" 
@@ -92,7 +92,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            Open Scanner
+                            {{ __('Open Scanner') }}
                         </a>
                     </div>
                 </div>
@@ -101,13 +101,13 @@
             <!-- Barcode Display Area -->
             <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-2xl sm:rounded-3xl border border-gray-100 dark:border-gray-800">
                 <div class="px-8 py-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50/30 dark:bg-gray-800/20">
-                    <h3 class="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">Generated Barcodes</h3>
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white uppercase tracking-tight">{{ __('Generated Barcodes') }}</h3>
                     @if($barcodes->count() > 0)
                         <button onclick="window.print()" class="inline-flex items-center text-sm font-bold text-blue-600 dark:text-blue-500 hover:text-blue-800 dark:hover:text-blue-400 transition-colors uppercase tracking-widest">
                             <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                             </svg>
-                            Print Labels
+                            {{ __('Print Labels') }}
                         </button>
                     @endif
                 </div>
@@ -121,7 +121,7 @@
                                     <!-- Status Badge -->
                                     <div class="absolute top-4 right-4">
                                         <span class="px-3 py-1 rounded-full text-[9px] uppercase font-black tracking-widest {{ $barcode->status == 'used' ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' }}">
-                                            {{ $barcode->status }}
+                                            {{ __($barcode->status) }}
                                         </span>
                                     </div>
 
@@ -136,7 +136,7 @@
 
                                         <div class="flex items-center space-x-2 mb-4 w-full">
                                             <div class="flex-grow h-px bg-gray-100 dark:bg-gray-800"></div>
-                                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">POWER SCAN</span>
+                                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">{{ __('POWER SCAN') }}</span>
                                             <div class="flex-grow h-px bg-gray-100 dark:bg-gray-800"></div>
                                         </div>
 
@@ -161,7 +161,7 @@
                                             @endif
                                         </div>
                                     @endif
-                                    <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 mt-4 uppercase tracking-widest">Created {{ \Carbon\Carbon::parse($barcode->created_at)->format('d M Y') }}</div>
+                                    <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 mt-4 uppercase tracking-widest">{{ __('Created') }} {{ \Carbon\Carbon::parse($barcode->created_at)->format('d M Y') }}</div>
                                 </div>
                             @endforeach
                         </div>
@@ -172,8 +172,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
                             </div>
-                            <h4 class="text-lg font-bold text-gray-700">No barcodes generated yet</h4>
-                            <p class="text-gray-500 mb-6">Click the button above to create unique tracking codes for this stock item.</p>
+                            <h4 class="text-lg font-bold text-gray-700">{{ __('No barcodes generated yet') }}</h4>
+                            <p class="text-gray-500 mb-6">{{ __('Click the button above to create unique tracking codes for this stock item.') }}</p>
                         </div>
                     @endif
                 </div>

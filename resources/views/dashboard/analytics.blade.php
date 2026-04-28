@@ -92,7 +92,7 @@
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Used') }}</p>
                             <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_total_used">-</p>
-                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">{{ __('In Selected Period') }}</p>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Stock Added') }}</p>
                             <p class="text-xl sm:text-2xl font-black text-gray-800 dark:text-white" id="card_total_added">-</p>
-                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">In Selected Period</p>
+                            <p class="hidden sm:block text-xs text-gray-400 dark:text-gray-500">{{ __('In Selected Period') }}</p>
                         </div>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
 
             <!-- Footer Area -->
             <div class="mt-8 pb-6 text-center text-[11px] font-black tracking-widest text-gray-500 dark:text-gray-400 uppercase">
-                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">STOCK</span><span class="text-blue-600 dark:text-blue-500">PRONEX</span>. SYSTEM MANAGED SECURELY.
+                &copy; {{ date('Y') }} <span class="text-gray-900 dark:text-white">STOCK</span><span class="text-blue-600 dark:text-blue-500">PRONEX</span>. {{ __('SYSTEM MANAGED SECURELY.') }}
             </div>
         </div>
     </div>

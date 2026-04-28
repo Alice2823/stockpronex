@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Stock Inventory Report - {{ date('d M Y') }}</title>
+    <title>{{ __('Stock Inventory Report') }} - {{ date('d M Y') }}</title>
     <style>
         @page {
             margin: 0px;
@@ -129,10 +129,10 @@
                 </td>
                 <td align="right" style="vertical-align: bottom;">
                     <div class="report-subtitle" style="font-weight: bold; color: #1e293b;">
-                        STOCK IN (INVENTORY) REPORT
+                        {{ __('STOCK IN (INVENTORY) REPORT') }}
                     </div>
                     <div class="report-date">
-                        Generated on: {{ now()->format('d M Y, h:i A') }}
+                        {{ __('Generated on:') }} {{ now()->format('d M Y, h:i A') }}
                     </div>
                 </td>
             </tr>
@@ -146,19 +146,19 @@
             <table class="summary-table">
                 <tr>
                     <td>
-                        <div class="summary-label">Total Items</div>
+                        <div class="summary-label">{{ __('Total Items') }}</div>
                         <div class="summary-value">{{ $stocks->count() }}</div>
                     </td>
                     <td>
-                        <div class="summary-label">Total Units</div>
+                        <div class="summary-label">{{ __('Total Units') }}</div>
                         <div class="summary-value">{{ number_format($stocks->sum('quantity')) }}</div>
                     </td>
                     <td>
-                        <div class="summary-label">Total Valuation</div>
-                        <div class="summary-value">₹{{ number_format($stocks->sum(function($s){ return $s->price * $s->quantity; }), 2) }}</div>
+                        <div class="summary-label">{{ __('Total Valuation') }}</div>
+                        <div class="summary-value">{{ Auth::user()->currency_symbol }}{{ number_format($stocks->sum(function($s){ return $s->price * $s->quantity; }), 2) }}</div>
                     </td>
                     <td>
-                        <div class="summary-label">Low Stock</div>
+                        <div class="summary-label">{{ __('Low Stock') }}</div>
                         <div class="summary-value" style="color: #ef4444;">{{ $stocks->where('quantity', '<', 10)->count() }}</div>
                     </td>
                 </tr>
@@ -168,13 +168,13 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Qty</th>
-                    <th>MRP</th>
-                    <th>Selling Price</th>
-                    <th>Total Value</th>
-                    <th>Status</th>
+                    <th>{{ __('ID') }}</th>
+                    <th>{{ __('Product Name') }}</th>
+                    <th>{{ __('Qty') }}</th>
+                    <th>{{ __('MRP') }}</th>
+                    <th>{{ __('Selling Price') }}</th>
+                    <th>{{ __('Total Value') }}</th>
+                    <th>{{ __('Status') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -185,16 +185,16 @@
                     <td class="{{ $stock->quantity < 10 ? 'low-stock' : '' }}" style="font-weight: bold;">
                         {{ number_format($stock->quantity) }}
                     </td>
-                    <td>₹{{ number_format($stock->mrp ?? 0, 2) }}</td>
-                    <td>₹{{ number_format($stock->price, 2) }}</td>
-                    <td style="font-weight: bold;">₹{{ number_format($stock->price * $stock->quantity, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->mrp ?? 0, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</td>
+                    <td style="font-weight: bold;">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</td>
                     <td>
                         @if($stock->quantity < 5)
-                            <span style="color: #ef4444; font-weight: bold;">CRITICAL</span>
+                            <span style="color: #ef4444; font-weight: bold;">{{ __('CRITICAL') }}</span>
                         @elseif($stock->quantity < 10)
-                            <span style="color: #f59e0b; font-weight: bold;">LOW</span>
+                            <span style="color: #f59e0b; font-weight: bold;">{{ __('LOW') }}</span>
                         @else
-                            <span style="color: #10b981; font-weight: bold;">HEALTHY</span>
+                            <span style="color: #10b981; font-weight: bold;">{{ __('HEALTHY') }}</span>
                         @endif
                     </td>
                 </tr>
@@ -204,7 +204,7 @@
     </div>
 
     <div class="footer">
-        <strong>StockProNex Inventory Management System</strong> • Professional Inventory Audit • &copy; {{ date('Y') }}
+        <strong>{{ __('StockProNex Inventory Management System') }}</strong> • {{ __('Professional Inventory Audit') }} • &copy; {{ date('Y') }}
     </div>
 </body>
 </html>

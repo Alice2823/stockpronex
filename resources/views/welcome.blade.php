@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>StockProNex - Manage Your Stock Efficiently</title>
+    <title>{{ __('StockProNex') }} - {{ __('Manage Your Stock Efficiently') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -232,8 +232,8 @@
                     }" class="relative">
                         <button @click="toggle()" 
                                 :class="dark ? 'theme-toggle theme-toggle--dark' : 'theme-toggle theme-toggle--light'"
-                                :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'"
-                                title="Toggle theme">
+                                :aria-label="dark ? '{{ __('Switch to light mode') }}' : '{{ __('Switch to dark mode') }}'"
+                                title="{{ __('Toggle theme') }}">
                             
                             <template x-if="!hasAccess">
                                 <div class="absolute -top-1 -right-1 z-10 bg-yellow-400 rounded-full p-0.5 shadow-sm border border-white">
@@ -265,12 +265,12 @@
                         @if (Route::has('login'))
                             @auth
                                 <a href="{{ url('/dashboard') }}"
-                                    class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Dashboard</a>
+                                    class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">{{ __('Dashboard') }}</a>
                             @else
-                                <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Log in</a>
+                                <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">{{ __('Log in') }}</a>
                                 @if (Route::has('register'))
                                     <a href="{{ route('register') }}"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-lg shadow-blue-500/20">Get Started</a>
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-lg shadow-blue-500/20">{{ __('Get Started') }}</a>
                                 @endif
                             @endauth
                         @endif
@@ -301,16 +301,16 @@
              @click.away="mobileMenuOpen = false">
             <div class="px-4 pt-2 pb-6 space-y-2">
                 @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">Log in</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="block px-4 py-3 rounded-xl text-base font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 text-center transition-all">Get Started</a>
-                        @endif
-                    @endauth
+                        @auth
+                            <a href="{{ url('/dashboard') }}"
+                                class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">{{ __('Dashboard') }}</a>
+                        @else
+                            <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-all">{{ __('Log in') }}</a>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}"
+                                    class="block px-4 py-3 rounded-xl text-base font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 text-center transition-all">{{ __('Get Started') }}</a>
+                            @endif
+                        @endauth
                 @endif
             </div>
         </div>
@@ -331,37 +331,37 @@
                 <div>
                     <span class="logo-expand-container text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter italic leading-none inline-flex">
                         <span class="text-gray-900 dark:text-white logo-word">
-                            <span class="logo-letter">S</span><span class="logo-rest">tock</span>
+                            <span class="logo-letter">{{ __('S') }}</span><span class="logo-rest">{{ __('tock') }}</span>
                         </span>
                         <span class="text-blue-600 logo-word">
-                            <span class="logo-letter">P</span><span class="logo-rest">ro</span>
+                            <span class="logo-letter">{{ __('P') }}</span><span class="logo-rest">{{ __('ro') }}</span>
                         </span>
                         <span class="text-gray-700 dark:text-gray-400 logo-word">
-                            <span class="logo-letter">N</span><span class="logo-rest">ex</span>
+                            <span class="logo-letter">{{ __('N') }}</span><span class="logo-rest">{{ __('ex') }}</span>
                         </span>
                     </span>
                 </div>
 
                 <!-- Tagline -->
                 <h1 class="subtitle-fade text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight font-extrabold text-gray-900 dark:text-white leading-tight">
-                    <span class="block">Manage your inventory</span>
-                    <span class="block text-blue-600 mt-1">like a Pro</span>
+                    <span class="block">{{ __('Manage your inventory') }}</span>
+                    <span class="block text-blue-600 mt-1">{{ __('like a Pro') }}</span>
                 </h1>
 
                 <!-- Description -->
                 <p class="subtitle-fade max-w-2xl text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed" style="animation-delay: 2.2s;">
-                    <span class="font-bold text-gray-900 dark:text-white">Stock</span><span class="font-bold text-blue-600">Pro</span><span class="font-bold text-gray-700 dark:text-gray-400">Nex</span> provides the simplest way to track your stock, value, and assets. Secure, fast, and easy to use.
+                    <span class="font-bold text-gray-900 dark:text-white">{{ __('Stock') }}</span><span class="font-bold text-blue-600">{{ __('Pro') }}</span><span class="font-bold text-gray-700 dark:text-gray-400">{{ __('Nex') }}</span> {{ __('provides the simplest way to track your stock, value, and assets. Secure, fast, and easy to use.') }}
                 </p>
 
                 <!-- CTA Buttons -->
                 <div class="subtitle-fade flex flex-col sm:flex-row items-center justify-center gap-4 pt-2" style="animation-delay: 2.4s;">
                     <a href="{{ route('register') }}"
                         class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 shadow-lg transition-all">
-                        Start Free Trial
+                        {{ __('Start Free Trial') }}
                     </a>
                     <a href="{{ route('login') }}"
                         class="w-full sm:w-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 md:py-4 md:text-lg md:px-10 shadow-lg transition-all">
-                        Log In
+                        {{ __('Log In') }}
                     </a>
                 </div>
             </div>
@@ -372,9 +372,9 @@
     <section class="py-24 bg-white dark:bg-gray-950 transition-colors duration-500 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-20">
-                <h2 class="text-blue-600 dark:text-blue-400 font-bold tracking-widest uppercase text-sm mb-4">Precision & Intelligence</h2>
+                <h2 class="text-blue-600 dark:text-blue-400 font-bold tracking-widest uppercase text-sm mb-4">{{ __('Precision & Intelligence') }}</h2>
                 <h3 class="text-4xl sm:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
-                    Everything you need <br> <span class="text-blue-600">to scale your business</span>
+                    {{ __('Everything you need') }} <br> <span class="text-blue-600">{{ __('to scale your business') }}</span>
                 </h3>
             </div>
 
@@ -390,13 +390,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600/60 mb-1">StockPro Engine</p>
-                                    <p class="text-sm font-black text-blue-600 uppercase tracking-widest leading-none">Cognitive Series 1.5</p>
+                                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600/60 mb-1">{{ __('StockPro Engine') }}</p>
+                                    <p class="text-sm font-black text-blue-600 uppercase tracking-widest leading-none">{{ __('Cognitive Series 1.5') }}</p>
                                 </div>
                             </div>
-                            <h4 class="text-5xl sm:text-7xl font-black text-gray-900 dark:text-white mb-8 group-hover:text-blue-600 transition-colors leading-[0.9] tracking-tighter">Smart AI <br>Predictor</h4>
+                            <h4 class="text-5xl sm:text-7xl font-black text-gray-900 dark:text-white mb-8 group-hover:text-blue-600 transition-colors leading-[0.9] tracking-tighter">{{ __('Smart AI') }} <br>{{ __('Predictor') }}</h4>
                             <p class="text-gray-500 dark:text-gray-400 text-xl leading-relaxed mb-12 max-w-xl">
-                                Powered by Gemini 1.5 Pro. It doesn't just manage stock—it predicts your future sales patterns to ensure you never miss a sale.
+                                {{ __("Powered by Gemini 1.5 Pro. It doesn't just manage stock—it predicts your future sales patterns to ensure you never miss a sale.") }}
                             </p>
                             <div class="flex flex-wrap items-center gap-8">
                                 <div class="flex items-center space-x-5">
@@ -406,9 +406,9 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Restock Efficiency</p>
+                                        <p class="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">{{ __('Restock Efficiency') }}</p>
                                         <p class="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight">
-                                            +84.2% <span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded-md">Growth</span>
+                                            +84.2% <span class="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-0.5 rounded-md">{{ __('Growth') }}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -423,8 +423,8 @@
                                     <div class="relative flex items-center space-x-4">
                                         <div class="h-4 w-4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse"></div>
                                         <div>
-                                            <p class="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-0.5">Neural Core Active</p>
-                                            <p class="text-sm text-white font-black">AI Predictive Analysis</p>
+                                            <p class="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-0.5">{{ __('Neural Core Active') }}</p>
+                                            <p class="text-sm text-white font-black">{{ __('AI Predictive Analysis') }}</p>
                                         </div>
                                     </div>
                                     <div class="relative flex space-x-1 items-end h-8">
@@ -442,7 +442,7 @@
                 <div class="bento-card group flex flex-col min-h-[420px]">
                     <div class="p-6 md:p-10 flex-1">
                         <div class="flex items-center justify-between mb-8">
-                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">Precision<br>Scanning</h4>
+                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">{{ __('Precision') }}<br>{{ __('Scanning') }}</h4>
                             <div class="h-14 w-14 flex items-center justify-center rounded-2xl glass-icon text-blue-600">
                                 <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
@@ -450,7 +450,7 @@
                             </div>
                         </div>
                         <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-10">
-                            Professional barcode tracking using your phone's built-in camera.
+                            {{ __('Professional barcode tracking using your phone\'s built-in camera.') }}
                         </p>
                         <div class="relative mt-auto overflow-hidden rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-inner group-hover:border-blue-500/30 transition-all duration-500">
                             <img src="{{ asset('images/barcode-feature-v2.png') }}" alt="Scanning" class="w-full h-auto transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-1000">
@@ -462,7 +462,7 @@
                 <div class="bento-card group flex flex-col min-h-[420px]">
                     <div class="p-6 md:p-10 flex-1">
                         <div class="flex items-center justify-between mb-8">
-                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">Financial<br>Growth</h4>
+                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">{{ __('Financial') }}<br>{{ __('Growth') }}</h4>
                             <div class="h-14 w-14 flex items-center justify-center rounded-2xl glass-icon text-blue-600">
                                 <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
@@ -470,7 +470,7 @@
                             </div>
                         </div>
                         <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-10">
-                            Real-time profit analytics and expense monitoring dashboards.
+                            {{ __('Real-time profit analytics and expense monitoring dashboards.') }}
                         </p>
                         <div class="relative mt-auto overflow-hidden rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-inner group-hover:border-blue-500/30 transition-all duration-500">
                             <img src="{{ asset('images/profit-feature.png') }}" alt="Growth" class="w-full h-auto transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-1000">
@@ -482,7 +482,7 @@
                 <div class="bento-card group flex flex-col min-h-[420px]">
                     <div class="p-6 md:p-10 flex-1">
                         <div class="flex items-center justify-between mb-8">
-                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">Automated<br>Delivery</h4>
+                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-[0.9] tracking-tighter">{{ __('Automated') }}<br>{{ __('Delivery') }}</h4>
                             <div class="h-14 w-14 flex items-center justify-center rounded-2xl glass-icon text-green-500 group-hover:bg-green-500/20 transition-all duration-300">
                                 <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.481 8.415-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
@@ -490,7 +490,7 @@
                             </div>
                         </div>
                         <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-10">
-                            Instant WhatsApp notifications for every invoice generated.
+                            {{ __('Instant WhatsApp notifications for every invoice generated.') }}
                         </p>
                         <div class="relative mt-auto overflow-hidden rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-inner group-hover:border-green-500/30 transition-all duration-500">
                             <img src="{{ asset('images/whatsapp-feature.png') }}" alt="WhatsApp" class="w-full h-auto transform group-hover:scale-110 transition-all duration-1000">
@@ -507,9 +507,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
                             </div>
-                            <span class="px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">Secured</span>
+                            <span class="px-4 py-1.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-widest border border-blue-500/20">{{ __('Secured') }}</span>
                         </div>
-                        <h4 class="text-2xl font-black text-gray-900 dark:text-white mt-8 tracking-tighter">Enterprise<br>Security</h4>
+                        <h4 class="text-2xl font-black text-gray-900 dark:text-white mt-8 tracking-tighter">{{ __('Enterprise') }}<br>{{ __('Security') }}</h4>
                     </div>
                 </div>
 
@@ -520,11 +520,11 @@
                             <div class="flex gap-4 mb-6">
                                 <span class="px-4 py-2 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl text-xs font-black flex items-center gap-3 shadow-xl group-hover:border-blue-500/50 transition-all">
                                    <svg viewBox="0 0 24 24" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                                   Google Global Sync
+                                   {{ __('Google Global Sync') }}
                                 </span>
                             </div>
-                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-tight tracking-tighter mb-4">Instant Cloud <br>Access</h4>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">One-click login for total synchronization.</p>
+                            <h4 class="text-3xl font-black text-gray-900 dark:text-white leading-tight tracking-tighter mb-4">{{ __('Instant Cloud') }} <br>{{ __('Access') }}</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('One-click login for total synchronization.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -536,7 +536,7 @@
     <footer class="bg-gray-800 dark:bg-gray-950 transition-colors duration-500">
         <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
             <p class="mt-8 text-center text-base text-gray-400">
-                &copy; 2026 <span class="brand-stock text-white">Stock</span><span class="brand-pro">Pro</span><span class="brand-nex text-gray-400">Nex</span>. All rights reserved.
+                &copy; 2026 <span class="brand-stock text-white">{{ __('Stock') }}</span><span class="brand-pro">{{ __('Pro') }}</span><span class="brand-nex text-gray-400">{{ __('Nex') }}</span>. {{ __('All rights reserved.') }}
             </p>
         </div>
     </footer>

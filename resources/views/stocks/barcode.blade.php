@@ -14,7 +14,7 @@
                     <svg class="h-4 w-4 mr-2.5 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back to Dashboard
+                    {{ __('Back to Dashboard') }}
                 </a>
             </div>
             
@@ -32,8 +32,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Scan Barcode</h3>
-                                    <p class="text-xs font-bold text-blue-500/70 dark:text-blue-400/70 uppercase tracking-widest">Live Camera Feed</p>
+                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{{ __('Scan Barcode') }}</h3>
+                                    <p class="text-xs font-bold text-blue-500/70 dark:text-blue-400/70 uppercase tracking-widest">{{ __('Live Camera Feed') }}</p>
                                 </div>
                             </div>
 
@@ -41,7 +41,7 @@
                                 <div id="reader" style="width: 100%; min-height: 300px;"></div>
                                 <div class="absolute bottom-4 left-0 right-0 text-center">
                                     <span class="bg-black/60 text-white text-xs px-4 py-1.5 rounded-full font-bold backdrop-blur-md">
-                                        Center the barcode
+                                        {{ __('Center the barcode') }}
                                     </span>
                                 </div>
                             </div>
@@ -58,16 +58,16 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Manual Entry</h3>
-                                    <p class="text-xs font-bold text-purple-500/70 dark:text-purple-400/70 uppercase tracking-widest">Type Barcode</p>
+                                    <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{{ __('Manual Entry') }}</h3>
+                                    <p class="text-xs font-bold text-purple-500/70 dark:text-purple-400/70 uppercase tracking-widest">{{ __('Type Barcode') }}</p>
                                 </div>
                             </div>
 
                             <div class="space-y-4 grow">
                                 <div>
-                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1">Barcode / IMEI Number</label>
+                                    <label class="block text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1">{{ __('Barcode / IMEI Number') }}</label>
                                     <div class="flex gap-2">
-                                        <input type="text" id="manual_barcode_value" class="grow bg-gray-50 dark:bg-black/20 border-2 border-gray-100 dark:border-gray-800 rounded-2xl py-3 px-4 text-lg font-black focus:border-purple-500 transition-all dark:text-white" placeholder="STK-000">
+                                        <input type="text" id="manual_barcode_value" class="grow bg-gray-50 dark:bg-black/20 border-2 border-gray-100 dark:border-gray-800 rounded-2xl py-3 px-4 text-lg font-black focus:border-purple-500 transition-all dark:text-white" placeholder="{{ __('STK-000') }}">
                                         <button onclick="fetchBarcodeDetails(document.getElementById('manual_barcode_value').value, 'manual')" class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-2xl shadow-lg">
                                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                         </button>
@@ -75,9 +75,9 @@
                                 </div>
                                 
                                 <div class="mt-6 p-4 bg-gray-50 dark:bg-black/10 rounded-2xl border-2 border-dashed border-gray-100 dark:border-gray-800">
-                                    <p class="text-[10px] text-gray-400 font-black uppercase mb-2 tracking-widest">New product?</p>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase mb-2 tracking-widest">{{ __('New product?') }}</p>
                                     <a href="{{ route('stocks.create') }}" class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center transition-colors">
-                                        Go to Manual Stock Creation
+                                        {{ __('Go to Manual Stock Creation') }}
                                         <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                                     </a>
                                 </div>
@@ -94,20 +94,20 @@
                                 <svg class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
-                                Batch Replenish
+                                {{ __('Batch Replenish') }}
                             </h3>
-                            <span id="cart-count" class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">0 Items</span>
+                            <span id="cart-count" class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">0 {{ __('Items') }}</span>
                         </div>
 
                         <!-- Cart Items -->
                         <div id="cart-container" class="space-y-4 mb-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                             <div class="text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl">
-                                <p class="text-sm font-bold text-gray-400">Scan items to add to batch.</p>
+                                <p class="text-sm font-bold text-gray-400">{{ __('Scan items to add to batch.') }}</p>
                             </div>
                         </div>
 
                         <button onclick="submitBatchAdd()" id="submit-btn" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all shadow-xl hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            Add to Inventory
+                            {{ __('Add to Inventory') }}
                         </button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                     <h2 id="status-title" class="text-3xl font-black text-gray-900 dark:text-white mb-4 tracking-tight"></h2>
                     <p id="status-message" class="text-gray-600 dark:text-gray-400 font-bold mb-8"></p>
                     <div id="status-footer" class="hidden">
-                        <button onclick="location.reload()" class="inline-block bg-gray-900 dark:bg-white dark:text-black text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">Scan More</button>
+                        <button onclick="location.reload()" class="inline-block bg-gray-900 dark:bg-white dark:text-black text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">{{ __('Scan More') }}</button>
                     </div>
                 </div>
             </div>
@@ -177,11 +177,11 @@
                     addToCart(data.data, barcode);
                     if (type === 'manual') document.getElementById('manual_barcode_value').value = '';
                 } else {
-                    showStatus('Not Found', data.message, 'error');
+                    showStatus("{{ __('Not Found') }}", data.message, 'error');
                 }
             })
             .catch(err => {
-                showStatus('Error', 'Verification failed.', 'error');
+                showStatus("{{ __('Error') }}", "{{ __('Verification failed.') }}", 'error');
             });
         }
 
@@ -206,11 +206,11 @@
             const countEl = document.getElementById('cart-count');
             const submitBtn = document.getElementById('submit-btn');
             
-            countEl.innerText = `${cart.length} Items`;
+            countEl.innerText = `${cart.length} {{ __('Items') }}`;
             submitBtn.disabled = cart.length === 0;
 
             if (cart.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl"><p class="text-sm font-bold text-gray-400">Scan items to add to batch.</p></div>`;
+                container.innerHTML = `<div class="text-center py-12 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-3xl"><p class="text-sm font-bold text-gray-400">{{ __('Scan items to add to batch.') }}</p></div>`;
                 return;
             }
 
@@ -221,7 +221,7 @@
                         <div class="flex justify-between items-start mb-2">
                             <div class="pr-2 min-w-0">
                                 <h4 class="font-black text-[12px] text-gray-900 dark:text-white truncate uppercase">${item.name}</h4>
-                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">In Stock: ${item.current_qty}</p>
+                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">{{ __('In Stock:') }} ${item.current_qty}</p>
                             </div>
                             <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 transition-colors p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
                         </div>
@@ -250,7 +250,7 @@
         function submitBatchAdd() {
             if (cart.length === 0 || isProcessing) return;
             isProcessing = true;
-            showStatus('Processing...', 'Adding items to your inventory...', 'loading');
+            showStatus("{{ __('Processing...') }}", "{{ __('Adding items to your inventory...') }}", 'loading');
 
             fetch("{{ route('stocks.barcode.store') }}", {
                 method: "POST",
@@ -264,15 +264,15 @@
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    showStatus('Stock Updated!', 'Batch replenishment complete.', 'success');
+                    showStatus("{{ __('Stock Updated!') }}", "{{ __('Batch replenishment complete.') }}", 'success');
                     setTimeout(() => window.location.href = "{{ route('dashboard') }}", 2000);
                 } else {
-                    showStatus('Failed', data.message, 'error');
+                    showStatus("{{ __('Failed') }}", data.message, 'error');
                     isProcessing = false;
                 }
             })
             .catch(err => {
-                showStatus('Error', 'Connection failed.', 'error');
+                showStatus("{{ __('Error') }}", "{{ __('Connection failed.') }}", 'error');
                 isProcessing = false;
             });
         }

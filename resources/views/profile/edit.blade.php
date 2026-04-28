@@ -10,20 +10,20 @@
             
             <!-- Profile Information -->
             <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-blue-500 transition-colors">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            {{ __('Profile Information') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {{ __("Update your account's profile information and email address.") }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Profile Information') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Update your account's profile information and email address.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -114,28 +114,22 @@
             <!-- Business Details -->
             <div x-data="{ 
                 open: false,
-                currency: '{{ $user->currency ?? 'USD' }}',
-                get taxLabel() {
-                    return this.currency === 'INR' ? '{{ __('GST Number') }}' : '{{ __('Tax Number / VAT') }}';
-                },
-                get taxPlaceholder() {
-                    return this.currency === 'INR' ? 'e.g. 27AAAAA0000A1Z5' : '{{ __("Enter your tax or VAT number") }}';
-                }
+                currency: '{{ $user->currency ?? 'USD' }}'
             }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-purple-500 transition-colors">
-                            <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-2xl text-purple-600 dark:text-purple-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
-                            {{ __('Business Details') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {{ __("Manage your business-specific information and preferences.") }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Business Details') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Manage your business-specific information and preferences.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -147,60 +141,133 @@
                             <input type="hidden" name="first_name" value="{{ explode(' ', $user->name)[0] }}">
                             <input type="hidden" name="last_name" value="{{ explode(' ', $user->name)[1] ?? '' }}">
 
-                            <div>
-                                <x-label for="business_name" :value="__('Business Name')" />
-                                <x-input id="business_name" name="business_name" type="text" class="mt-1 block w-full" :value="old('business_name', $user->business_name)" />
-                                <x-input-error class="mt-2" :messages="$errors->get('business_name')" />
-                            </div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="business_name" :value="__('Business Name')" />
+                                    <x-input id="business_name" name="business_name" type="text" class="mt-1 block w-full" :value="old('business_name', $user->business_name)" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_name')" />
+                                </div>
 
-                            <div>
-                                <x-label for="business_type" :value="__('Business Type')" />
-                                <select id="business_type" name="business_type" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
-                                    <option value="General Inventory" {{ $user->business_type == 'General Inventory' ? 'selected' : '' }}>{{ __('General Inventory (Default)') }}</option>
-                                    <option value="Gold / Jewellery" {{ $user->business_type == 'Gold / Jewellery' ? 'selected' : '' }}>{{ __('Gold & Jewellery Business') }}</option>
-                                    <option value="Electronics" {{ $user->business_type == 'Electronics' ? 'selected' : '' }}>{{ __('Electronics Store') }}</option>
-                                    <option value="Grocery" {{ $user->business_type == 'Grocery' ? 'selected' : '' }}>{{ __('Grocery / Supermarket') }}</option>
-                                    <option value="Clothing" {{ $user->business_type == 'Clothing' ? 'selected' : '' }}>{{ __('Clothing / Fashion Store') }}</option>
-                                    <option value="Medical Store" {{ $user->business_type == 'Medical Store' ? 'selected' : '' }}>{{ __('Medical / Pharmacy Store') }}</option>
-                                    <option value="Hardware" {{ $user->business_type == 'Hardware' ? 'selected' : '' }}>{{ __('Hardware / Construction Materials') }}</option>
-                                    <option value="Mobile Shop" {{ $user->business_type == 'Mobile Shop' ? 'selected' : '' }}>{{ __('Mobile Phone Shop') }}</option>
-                                    <option value="Automobile parts" {{ $user->business_type == 'Automobile parts' ? 'selected' : '' }}>{{ __('Automobile Parts Store') }}</option>
-                                    <option value="Furniture" {{ $user->business_type == 'Furniture' ? 'selected' : '' }}>{{ __('Furniture Store') }}</option>
-                                    <option value="Cosmetic" {{ $user->business_type == 'Cosmetic' ? 'selected' : '' }}>{{ __('Cosmetic & Beauty Store') }}</option>
-                                    <option value="Book Store" {{ $user->business_type == 'Book Store' ? 'selected' : '' }}>{{ __('Book Store / Stationery') }}</option>
-                                    <option value="Restaurant" {{ $user->business_type == 'Restaurant' ? 'selected' : '' }}>{{ __('Restaurant / Food Inventory') }}</option>
-                                    <option value="Agricultural" {{ $user->business_type == 'Agricultural' ? 'selected' : '' }}>{{ __('Agricultural Products') }}</option>
-                                    <option value="Wholesale" {{ $user->business_type == 'Wholesale' ? 'selected' : '' }}>{{ __('Wholesale Distributor') }}</option>
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('business_type')" />
-                            </div>
+                                <div>
+                                    <x-label for="business_type" :value="__('Business Type')" />
+                                    <select id="business_type" name="business_type" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
+                                        <optgroup label="{{ __('Services') }}">
+                                            @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['Services'] as $industry)
+                                                <option value="{{ $industry }}" {{ $user->business_type == $industry ? 'selected' : '' }}>{{ __($industry) }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                        <optgroup label="{{ __('All Industries') }}">
+                                            @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['General Industries'] as $industry)
+                                                <option value="{{ $industry }}" {{ $user->business_type == $industry ? 'selected' : '' }}>{{ __($industry) }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_type')" />
+                                    <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">{{ __('Selecting a type will automatically adjust your tax rates and forms') }}</p>
+                                </div>
+                             </div>
 
-                            <div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="business_phone" :value="__('Business Phone Number')" />
+                                    <x-input id="business_phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="{{ __('e.g. +91 98765 43210') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                                </div>
+
+                                <div>
+                                    <x-label for="business_email" :value="__('Business Email')" />
+                                    <x-input id="business_email" name="business_email" type="email" class="mt-1 block w-full" :value="old('business_email', $user->business_email)" placeholder="{{ __('e.g. contact@business.com') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_email')" />
+                                </div>
+                             </div>
+
+                             <div>
                                 <x-label for="address" :value="__('Business Address')" />
                                 <x-textarea id="address" name="address" class="mt-1 block w-full">{{ old('address', $user->address) }}</x-textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('address')" />
-                            </div>
-
-                            <div>
-                                <x-label for="currency" :value="__('Currency')" />
-                                <select id="currency" name="currency" @change="currency = $event.target.value" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
-                                    <option value="USD" {{ $user->currency == 'USD' ? 'selected' : '' }}>USD ($)</option>
-                                    <option value="INR" {{ $user->currency == 'INR' ? 'selected' : '' }}>INR (₹)</option>
-                                    <option value="GBP" {{ $user->currency == 'GBP' ? 'selected' : '' }}>GBP (£)</option>
-                                    <option value="EUR" {{ $user->currency == 'EUR' ? 'selected' : '' }}>EUR (€)</option>
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('currency')" />
-                            </div>
+                             </div>
 
                              <div>
-                                 <label for="tax_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300" x-text="taxLabel"></label>
-                                 <x-input id="tax_number" name="tax_number" type="text" class="mt-1 block w-full" :value="old('tax_number', $user->tax_number)" x-bind:placeholder="taxPlaceholder" />
-                                 <x-input-error class="mt-2" :messages="$errors->get('tax_number')" />
+                                <x-label for="currency" :value="__('Currency')" />
+                                <select id="currency" name="currency" @change="currency = $event.target.value" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
+                                    <option value="USD" {{ $user->currency == 'USD' ? 'selected' : '' }}>{{ __('USD ($)') }}</option>
+                                    <option value="INR" {{ $user->currency == 'INR' ? 'selected' : '' }}>{{ __('INR (₹)') }}</option>
+                                    <option value="GBP" {{ $user->currency == 'GBP' ? 'selected' : '' }}>{{ __('GBP (£)') }}</option>
+                                    <option value="EUR" {{ $user->currency == 'EUR' ? 'selected' : '' }}>{{ __('EUR (€)') }}</option>
+                                </select>
+                                <x-input-error class="mt-2" :messages="$errors->get('currency')" />
                              </div>
 
                             <div class="flex items-center gap-4 pt-4">
                                 <button type="submit" class="bg-gray-900 dark:bg-purple-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-purple-700 transform active:scale-95 transition-all">
                                     {{ __('Save Business Details') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GST Settings -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('GST Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Manage your GST number and tax compliance toggles.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+
+                            <div>
+                                <x-label for="gst_number" :value="__('GST Number')" />
+                                <x-input id="gst_number" name="tax_number" type="text" class="mt-1 block w-full" :value="old('tax_number', $user->tax_number)" placeholder="{{ __('e.g. 27AAAAA0000A1Z5') }}" />
+                                <x-input-error class="mt-2" :messages="$errors->get('tax_number')" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                    <div>
+                                        <span class="text-sm font-bold text-gray-900 dark:text-white">{{ __('TDS') }}</span>
+                                        <p class="text-xs text-gray-500">{{ __('Tax Deducted at Source') }}</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="hidden" name="tds_enabled" value="0">
+                                        <input type="checkbox" name="tds_enabled" value="1" class="sr-only peer" {{ $user->tds_enabled ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                    <div>
+                                        <span class="text-sm font-bold text-gray-900 dark:text-white">{{ __('TCS') }}</span>
+                                        <p class="text-xs text-gray-500">{{ __('Tax Collected at Source') }}</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="hidden" name="tcs_enabled" value="0">
+                                        <input type="checkbox" name="tcs_enabled" value="1" class="sr-only peer" {{ $user->tcs_enabled ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-95 transition-all">
+                                    {{ __('Save GST Settings') }}
                                 </button>
                             </div>
                         </form>
@@ -240,20 +307,20 @@
                     return hints[this.currency] || '{{ __("Your payment ID will be shown on invoices for customer payments.") }}';
                 }
             }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-green-500 transition-colors">
-                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-2xl text-green-600 dark:text-green-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
-                            {{ __('Online Payment Settings') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {{ __("Set up your payment ID for QR code generation on invoices.") }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Online Payment Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Set up your payment ID for QR code generation on invoices.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -327,20 +394,20 @@
 
             <!-- Invoice Settings -->
             <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-blue-500 transition-colors">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            {{ __('Invoice Settings') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {{ __("Customize your invoice appearance and payment details.") }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Invoice Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Customize your invoice appearance and payment details.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -385,10 +452,6 @@
                                     <x-input id="phone_inv" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="{{ __('Your Business Phone') }}" />
                                 </div>
 
-                                <div>
-                                    <x-label for="tax_number_inv" :value="__('Tax Details (GST/VAT)')" />
-                                    <x-input id="tax_number_inv" name="tax_number" type="text" class="mt-1 block w-full" :value="old('tax_number', $user->tax_number)" placeholder="{{ __('e.g. GSTIN 27AAAAA0000A1Z5') }}" />
-                                </div>
                             </div>
 
                             <hr class="border-gray-100 dark:border-gray-800">
@@ -459,8 +522,8 @@
                             </svg>
                         </div>
                         <div class="text-left">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">CA Report Sharing</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Automatically share monthly reports with your CA</p>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('CA Report Sharing') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Automatically share monthly reports with your CA') }}</p>
                         </div>
                     </div>
                     <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -481,14 +544,14 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="text-sm font-bold text-indigo-900 dark:text-indigo-100">Enable Automatic Sharing</span>
-                                    <p class="text-xs text-indigo-600 dark:text-indigo-400">Reports sent on 1st of every month</p>
+                                    <span class="text-sm font-bold text-indigo-900 dark:text-indigo-100">{{ __('Enable Automatic Sharing') }}</span>
+                                    <p class="text-xs text-indigo-600 dark:text-indigo-400">{{ __('Reports sent on 1st of every month') }}</p>
                                 </div>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="hidden" name="ca_sharing_enabled" value="0">
                                 <input type="checkbox" name="ca_sharing_enabled" value="1" class="sr-only peer" {{ $user->ca_sharing_enabled ? 'checked' : '' }}>
-                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
+                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
                             </label>
                         </div>
 
@@ -530,7 +593,7 @@
                                 </p>
                             @endif
                             <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-[0.98]">
-                                Save CA Settings
+                                {{ __('Save CA Settings') }}
                             </button>
                         </div>
                     </form>
@@ -539,20 +602,20 @@
 
             <!-- Security -->
             <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-red-500 transition-colors">
-                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl text-red-600 dark:text-red-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            {{ __('Security') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Security') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Ensure your account is using a long, random password to stay secure.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -602,20 +665,20 @@
 
             <!-- Support -->
             <div x-data="{ open: false }" class="bg-blue-50 dark:bg-blue-900/10 shadow-2xl rounded-3xl border border-blue-100 dark:border-blue-900/20 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-blue-900 dark:text-blue-500 flex items-center gap-2 group-hover:text-blue-600 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-blue-100/50 dark:hover:bg-blue-900/20 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
-                            {{ __('Support') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-blue-600 dark:text-blue-400/60">
-                            {{ __('Need help? Contact our support team directly.') }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-blue-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">{{ __('Support') }}</h3>
+                            <p class="text-sm text-blue-600 dark:text-blue-500/80 mt-1">{{ __('Need help? Contact our support team directly.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
@@ -641,20 +704,20 @@
 
             <!-- Delete Account -->
             <div x-data="{ open: false }" class="bg-red-50 dark:bg-red-900/10 shadow-2xl rounded-3xl border border-red-100 dark:border-red-900/20 transition-all duration-300 overflow-hidden">
-                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
-                    <header>
-                        <h2 class="text-xl font-black text-red-900 dark:text-red-500 flex items-center gap-2 group-hover:text-red-600 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-red-100/50 dark:hover:bg-red-900/20 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-2xl shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
-                            {{ __('Account Delete') }}
-                        </h2>
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400/60">
-                            {{ __('Permanently delete your account and all associated data.') }}
-                        </p>
-                    </header>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-red-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-red-900 dark:text-red-500">{{ __('Account Delete') }}</h3>
+                            <p class="text-sm text-red-600 dark:text-red-500/80 mt-1">{{ __('Permanently delete your account and all associated data.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-red-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 

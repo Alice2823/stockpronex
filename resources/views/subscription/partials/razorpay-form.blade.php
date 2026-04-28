@@ -7,7 +7,7 @@
         {{-- In local dev, just submit the form directly for a mock upgrade --}}
         <button type="submit" 
                 class="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase tracking-widest transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/25">
-            Get {{ ucfirst($plan) }} {{ ucfirst($cycle) }} (Dev Mode)
+            {{ __('Get') }} {{ __(ucfirst($plan)) }} {{ __(ucfirst($cycle)) }} ({{ __('Dev Mode') }})
         </button>
     @else
         {{-- In production, use the Razorpay manual checkout --}}
@@ -18,7 +18,7 @@
         <button type="button" 
                 id="rzp-button-{{ $plan }}-{{ $cycle }}"
                 class="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase tracking-widest transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/25">
-            Upgrade to {{ ucfirst($plan) }} {{ ucfirst($cycle) }}
+            {{ __('Upgrade to') }} {{ __(ucfirst($plan)) }} {{ __(ucfirst($cycle)) }}
         </button>
 
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

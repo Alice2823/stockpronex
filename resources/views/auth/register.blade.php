@@ -29,8 +29,8 @@
     </style>
 
     <div class="flex flex-col items-center mb-8 border-b border-gray-100 dark:border-gray-800 pb-4">
-        <h2 class="text-3xl font-black text-gray-900 dark:text-white">Create Account</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Join the StockProNex community</p>
+        <h2 class="text-3xl font-black text-gray-900 dark:text-white">{{ __('Create Account') }}</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">{{ __('Join the StockProNex community') }}</p>
     </div>
 
     <div id="errorBox" class="mb-4 text-red-600 font-bold hidden"></div>
@@ -41,37 +41,37 @@
         @csrf
 
         <div>
-            <x-label value="First Name"/>
+            <x-label :value="__('First Name')"/>
             <x-input id="first_name" class="block mt-1 w-full"/>
         </div>
 
         <div class="mt-4">
-            <x-label value="Last Name"/>
+            <x-label :value="__('Last Name')"/>
             <x-input id="last_name" class="block mt-1 w-full"/>
         </div>
 
         <div class="mt-4">
-            <x-label value="Email"/>
+            <x-label :value="__('Email')"/>
             <div class="flex gap-2">
                 <x-input id="email" class="block mt-1 w-full"/>
                 <button type="button" onclick="sendOtp()"
                     class="bg-blue-500 text-white px-4 rounded">
-                    Send OTP
+                    {{ __('Send OTP') }}
                 </button>
             </div>
         </div>
 
         <div class="mt-4">
-            <x-label value="OTP"/>
+            <x-label :value="__('OTP')"/>
             <x-input id="otp" class="block mt-1 w-full"/>
         </div>
 
         <div class="mt-4 relative" id="business_dropdown_container">
-            <x-label value="Business Type (Module)"/>
+            <x-label :value="__('Business Type (Module)')"/>
             
             <!-- Custom Dropdown Trigger -->
             <div id="dropdown_trigger" class="mt-1 w-full flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer shadow-sm select-none hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300">
-                <span id="selected_text" class="text-gray-700 dark:text-gray-300 font-medium">General Inventory (Default)</span>
+                <span id="selected_text" class="text-gray-700 dark:text-gray-300 font-medium">{{ __('General Inventory (Default)') }}</span>
                 <svg class="h-5 w-5 text-gray-400 transition-transform duration-300" id="dropdown_arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                 </svg>
@@ -80,47 +80,41 @@
             <!-- Custom Dropdown Menu -->
             <div id="dropdown_menu" class="dropdown-menu absolute z-50 mt-2 w-full bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-100 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto">
                 <div class="p-1">
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-900/30" data-value="General Inventory">General Inventory (Default)</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Gold / Jewellery">Gold & Jewellery Business</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Electronics">Electronics Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Grocery">Grocery / Supermarket</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Clothing">Clothing / Fashion Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Medical Store">Medical / Pharmacy Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Hardware">Hardware / Construction Materials</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Mobile Shop">Mobile Phone Shop</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Automobile parts">Automobile Parts Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Furniture">Furniture Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Cosmetic">Cosmetic & Beauty Store</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Book Store">Book Store / Stationery</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Restaurant">Restaurant / Food Inventory</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Agricultural">Agricultural Products</div>
-                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="Wholesale">Wholesale Distributor</div>
+                    <div class="px-4 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50/50 dark:bg-gray-900/50">{{ __('Services') }}</div>
+                    @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['Services'] as $industry)
+                        <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300" data-value="{{ $industry }}">{{ __($industry) }}</div>
+                    @endforeach
+
+                    <div class="px-4 py-2 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50/50 dark:bg-gray-900/50 mt-2">{{ __('All Industries') }}</div>
+                    @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['General Industries'] as $industry)
+                        <div class="dropdown-item px-4 py-2 text-sm cursor-pointer rounded-lg text-gray-700 dark:text-gray-300 {{ $industry == 'General Store(Kirana)' ? 'text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-900/30' : '' }}" data-value="{{ $industry }}">{{ __($industry) }}</div>
+                    @endforeach
                 </div>
             </div>
 
-            <input type="hidden" id="business_type" value="General Inventory">
-            <p class="text-xs text-gray-500 mt-2 italic">This will customize your dashboard and product fields.</p>
+            <input type="hidden" id="business_type" value="General Store(Kirana)">
+            <p class="text-xs text-gray-500 mt-2 italic">{{ __('This will customize your dashboard and product fields.') }}</p>
         </div>
 
         <div class="mt-4">
-            <x-label value="Password"/>
+            <x-label :value="__('Password')"/>
             <x-password-input id="password" class="block mt-1 w-full"/>
         </div>
 
         <div class="mt-4">
-            <x-label value="Confirm Password"/>
+            <x-label :value="__('Confirm Password')"/>
             <x-password-input id="password_confirmation" class="block mt-1 w-full"/>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
 
             <a href="{{ route('login') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
-                Already registered?
+                {{ __('Already registered?') }}
             </a>
 
             <button type="button" onclick="registerUser()"
                 class="w-full sm:w-auto bg-gray-900 dark:bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-[0.98] transition-all duration-200 shadow-lg shadow-gray-200 dark:shadow-none">
-                Verify OTP & Register
+                {{ __('Verify OTP & Register') }}
             </button>
 
         </div>
@@ -165,14 +159,14 @@ function sendOtp(){
     .then(data => {
 
         if(data.success){
-            showSuccess("OTP sent successfully");
+            showSuccess("{{ __('OTP sent successfully') }}");
         }else{
             showError(data.message);
         }
 
     })
     .catch(err => {
-        showError("OTP send failed");
+        showError("{{ __('OTP send failed') }}");
         console.log(err);
     });
 }
@@ -208,7 +202,7 @@ function registerUser(){
 
     })
     .catch(err => {
-        showError("Registration failed");
+        showError("{{ __('Registration failed') }}");
         console.log(err);
     });
 }

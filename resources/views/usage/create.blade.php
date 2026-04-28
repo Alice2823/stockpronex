@@ -27,7 +27,7 @@
                         <div>
                             <x-label for="stock_id" :value="__('Select Stock Item')" />
                             <x-select id="stock_id" name="stock_id" class="mt-1 block w-full" required>
-                                <option value="">-- Choose an item --</option>
+                                <option value="">-- {{ __('Choose an item') }} --</option>
                                 @foreach($stocks as $stock)
                                     <option value="{{ $stock->id }}">
                                         {{ $stock->name }} (Available: {{ $stock->quantity }})
@@ -66,28 +66,15 @@
                             <div class="business-field-section mb-6 p-6 bg-gray-50/50 dark:bg-gray-800/30 rounded-2xl border border-gray-100 dark:border-gray-800 transition-all duration-300">
                                 <h3 class="text-xs font-black text-blue-600 dark:text-blue-400 mb-4 flex items-center uppercase tracking-widest">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Item #<span class="item-index">1</span> Details ({{ $businessType ?? 'General Inventory' }})
+                                    {{ __('Item') }} #<span class="item-index">1</span> {{ __('Details') }} ({{ $businessType ? __($businessType) : __('General Inventory') }})
                                 </h3>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    @if($businessType == 'Gold / Jewellery')
-                                        <div>
-                                            <x-label value="{{ __('Weight (Grams) *') }}" />
-                                            <x-input class="block mt-1 w-full" type="number" step="0.001" name="business_attributes[__INDEX__][weight]" required />
-                                        </div>
-                                        <div>
-                                            <x-label value="{{ __('Purity *') }}" />
-                                            <x-input class="block mt-1 w-full" type="text" name="business_attributes[__INDEX__][purity]" required />
-                                        </div>
-                                        <div>
-                                            <x-label value="{{ __('Making Charges (₹) *') }}" />
-                                            <x-input class="block mt-1 w-full" type="number" step="0.01" name="business_attributes[__INDEX__][making_charges]" required />
-                                        </div>
-                                        <div>
-                                            <x-label value="{{ __('Hallmark Number') }}" />
-                                            <x-input class="block mt-1 w-full" type="text" name="business_attributes[__INDEX__][hallmark]" />
-                                        </div>
-                                    @elseif($businessType == 'Mobile Shop')
+                                    @php
+                                        $requiredFields = \App\Constants\BusinessIndustry::getRequiredFields($businessType);
+                                    @endphp
+
+                                    @if(in_array('imei', $requiredFields) || in_array('serial', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Brand') }}" />
                                             <x-input class="block mt-1 w-full brand-input" type="text" name="business_attributes[__INDEX__][brand]" />
@@ -96,47 +83,69 @@
                                             <x-label value="{{ __('Model') }}" />
                                             <x-input class="block mt-1 w-full model-input" type="text" name="business_attributes[__INDEX__][model]" />
                                         </div>
+                                        @if(in_array('imei', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('IMEI Number *') }}" />
                                             <x-input class="block mt-1 w-full imei-input" type="text" name="business_attributes[__INDEX__][imei]" required />
                                         </div>
+                                        @endif
+                                        @if(in_array('serial', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Serial Number') }}" />
                                             <x-input class="block mt-1 w-full serial-input" type="text" name="business_attributes[__INDEX__][serial_number]" />
                                         </div>
-                                    @elseif($businessType == 'Electronics')
-                                        <div>
-                                            <x-label value="{{ __('Brand') }}" />
-                                            <x-input class="block mt-1 w-full brand-input" type="text" name="business_attributes[__INDEX__][brand]" />
-                                        </div>
-                                        <div>
-                                            <x-label value="{{ __('Serial Number *') }}" />
-                                            <x-input class="block mt-1 w-full serial-input" type="text" name="business_attributes[__INDEX__][serial_number]" required />
-                                        </div>
-                                        <div>
-                                            <x-label value="{{ __('Warranty Period') }}" />
-                                            <x-input class="block mt-1 w-full warranty-input" type="text" name="business_attributes[__INDEX__][warranty]" />
-                                        </div>
-                                    @elseif($businessType == 'Medical Store' || $businessType == 'Grocery')
+                                        @endif
+                                    @endif
+
+                                    @if(in_array('expiry', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Expiry Date *') }}" />
                                             <x-input class="block mt-1 w-full expiry-input" type="date" name="business_attributes[__INDEX__][expiry_date]" required />
                                         </div>
+                                    @endif
+
+                                    @if(in_array('batch', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Batch Number') }}" />
                                             <x-input class="block mt-1 w-full batch-input" type="text" name="business_attributes[__INDEX__][batch_number]" />
                                         </div>
-                                    @elseif($businessType == 'Clothing')
+                                    @endif
+
+                                    @if(in_array('weight', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Weight (Grams) *') }}" />
+                                            <x-input class="block mt-1 w-full" type="number" step="0.001" name="business_attributes[__INDEX__][weight]" required />
+                                        </div>
+                                    @endif
+                                    @if(in_array('size', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Size *') }}" />
                                             <x-input class="block mt-1 w-full size-input" type="text" name="business_attributes[__INDEX__][size]" required />
                                         </div>
+                                    @endif
+
+                                    @if(in_array('color', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Color *') }}" />
                                             <x-input class="block mt-1 w-full color-input" type="text" name="business_attributes[__INDEX__][color]" required />
                                         </div>
-                                    @else
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">No additional specialized fields required.</p>
+                                    @endif
+
+                                    @if(in_array('purity', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Purity *') }}" />
+                                            <x-input class="block mt-1 w-full" type="text" name="business_attributes[__INDEX__][purity]" required />
+                                        </div>
+                                    @endif
+                                    @if(in_array('making_charges', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Making Charges (₹) *') }}" />
+                                            <x-input class="block mt-1 w-full" type="number" step="0.01" name="business_attributes[__INDEX__][making_charges]" required />
+                                        </div>
+                                    @endif
+
+                                    @if(empty($requiredFields))
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ __('No additional specialized fields required.') }}</p>
                                     @endif
                                 </div>
                             </div>
@@ -175,7 +184,7 @@
 
                         <div class="flex flex-col sm:flex-row items-center justify-end mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 gap-4">
                             <a href="{{ route('usage.index') }}"
-                                class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors sm:mr-auto">Cancel Order</a>
+                                class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors sm:mr-auto">{{ __('Cancel Order') }}</a>
                             
                             <button type="button" onclick="submitForm(event, 'cash')" id="btn-cash"
                                 class="w-full sm:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 transform active:scale-95 transition-all">

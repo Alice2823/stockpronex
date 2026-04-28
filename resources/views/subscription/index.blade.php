@@ -11,7 +11,7 @@
             @if(config('app.developer_mode'))
                 <div class="mb-8 p-4 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl text-center">
                     <p class="text-green-800 dark:text-green-400 font-bold">
-                        🚀 <span class="uppercase tracking-widest">Developer Mode Active:</span> All features are currently unlocked for testing.
+                        🚀 <span class="uppercase tracking-widest">{{ __('Developer Mode Active:') }}</span> {{ __('All features are currently unlocked for testing.') }}
                     </p>
                 </div>
             @endif
@@ -95,13 +95,13 @@
                             <span class="text-4xl font-black text-gray-900 dark:text-white">
                                ₹{{ \App\Constants\Plan::PRICES['standard']['monthly'] }}
                              </span>
-                            <span class="text-gray-500">/mo</span>
+                            <span class="text-gray-500">{{ __('/mo') }}</span>
                         </div>
                         <div x-show="billingCycle === 'yearly'">
                             <span class="text-4xl font-black text-gray-900 dark:text-white">
                                ₹{{ \App\Constants\Plan::PRICES['standard']['yearly'] }}
                             </span>
-                            <span class="text-gray-500">/yr</span>
+                            <span class="text-gray-500">{{ __('/yr') }}</span>
                         </div>
                         <p class="text-gray-500 mt-2">{{ __('Advanced features for growing businesses') }}</p>
                     </div>
@@ -121,7 +121,7 @@
                         </li>
                         <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
                             <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            Advanced Analytics
+                            {{ __('Advanced Analytics') }}
                         </li>
                         <li class="flex items-center text-gray-400 line-through decoration-gray-500/50">
                             <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -145,13 +145,13 @@
                             <span class="text-4xl font-black text-gray-900 dark:text-white">
                                 ₹{{ \App\Constants\Plan::PRICES['pro']['monthly'] }}
                             </span>
-                            <span class="text-gray-500">/mo</span>
+                            <span class="text-gray-500">{{ __('/mo') }}</span>
                         </div>
                         <div x-show="billingCycle === 'yearly'">
                             <span class="text-4xl font-black text-gray-900 dark:text-white">
                                 ₹{{ \App\Constants\Plan::PRICES['pro']['yearly'] }}
                             </span>
-                            <span class="text-gray-500">/yr</span>
+                            <span class="text-gray-500">{{ __('/yr') }}</span>
                         </div>
                         <p class="text-gray-500 mt-2">{{ __('Everything you need for full control') }}</p>
                     </div>

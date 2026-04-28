@@ -5,9 +5,9 @@
         <!-- Logo -->
         <div class="text-center mb-10">
             <h2 class="text-4xl font-black tracking-tight mt-4">
-                <span class="brand-stock dark:text-white">Stock</span><span class="brand-pro text-blue-600 dark:text-blue-500">Pro</span><span class="brand-nex dark:text-gray-400">Nex</span>
+                <span class="brand-stock dark:text-white">{{ __('Stock') }}</span><span class="brand-pro text-blue-600 dark:text-blue-500">{{ __('Pro') }}</span><span class="brand-nex dark:text-gray-400">{{ __('Nex') }}</span>
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">Confirm Your Identity</p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">{{ __('Confirm Your Identity') }}</p>
         </div>
 
         <div class="mb-6 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
