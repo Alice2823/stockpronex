@@ -171,6 +171,46 @@
             }
         </style>
 
+        <!-- Turnstile: load early with explicit render + onload callback for instant availability -->
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileReady" async></script>
+        <script>
+            window._turnstileReady = false;
+            window._pendingTurnstileContainer = null;
+
+            window.onTurnstileReady = function() {
+                window._turnstileReady = true;
+                // Render pending container if Alpine requested before API was ready
+                if (window._pendingTurnstileContainer) {
+                    var id = window._pendingTurnstileContainer;
+                    window._pendingTurnstileContainer = null;
+                    window.renderTurnstileWidget(id);
+                    return;
+                }
+                // Auto-render for direct load (no recent logins scenario)
+                var fullEl = document.getElementById('turnstile-full');
+                if (fullEl && !fullEl.hasChildNodes()) {
+                    window.renderTurnstileWidget('turnstile-full');
+                }
+            };
+
+            window.renderTurnstileWidget = function(containerId) {
+                var el = document.getElementById(containerId);
+                if (!el) return;
+                el.innerHTML = '';
+                if (window._turnstileReady && typeof turnstile !== 'undefined') {
+                    turnstile.render(el, {
+                        sitekey: '{{ config("services.turnstile.site_key") }}',
+                        theme: 'auto',
+                        retry: 'auto',
+                        'retry-interval': 2000
+                    });
+                } else {
+                    // API not ready yet — queue it for onload callback
+                    window._pendingTurnstileContainer = containerId;
+                }
+            };
+        </script>
+
         <!-- Logo -->
         <div class="text-center mb-8 text-4xl font-black tracking-tight mt-4 italic">
             <h2 class="logo-expand-container">
@@ -215,20 +255,11 @@
                 _fullWidgetId: null,
 
                 init() {
-                    // Widgets rendered on demand via renderTurnstile()
+                    // Widgets rendered on demand via global renderTurnstileWidget()
                 },
 
                 renderTurnstile(containerId) {
-                    if (typeof turnstile === 'undefined') return;
-                    const el = document.getElementById(containerId);
-                    if (!el) return;
-                    // Reset the container
-                    el.innerHTML = '';
-                    turnstile.render(el, {
-                        sitekey: '{{ config('services.turnstile.site_key') }}',
-                        theme: 'auto',
-                        callback: function(token) {},
-                    });
+                    window.renderTurnstileWidget(containerId);
                 },
 
                 selectAccount(login) {
@@ -421,6 +452,5 @@
         </div>
     </div> {{-- End of the Box --}}
 
-    <!-- Turnstile explicit render mode (prevents duplicate widget conflicts) -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <!-- Turnstile API is loaded in <head> area above for faster availability -->
 </x-guest-layout>
