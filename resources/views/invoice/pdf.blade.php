@@ -20,15 +20,15 @@
         /* Layout */
         .page-accent {
             height: 8px;
-            background-color: #2563eb;
+            background-color: {{ $invoice->user->invoice_color ?? '#2563eb' }};
             width: 100%;
         }
         .container {
-            padding: 40px 50px;
+            padding: 20px 40px;
         }
         
         /* Colors */
-        .text-blue { color: #2563eb; }
+        .text-blue { color: {{ $invoice->user->invoice_color ?? '#2563eb' }}; }
         .text-gray { color: #64748b; }
         .bg-light { background-color: #f8fafc; }
         
@@ -36,10 +36,10 @@
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         .brand-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: -1px;
         }
@@ -51,7 +51,7 @@
             margin-top: 2px;
         }
         .invoice-label {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 900;
             color: #e2e8f0;
             text-align: right;
@@ -62,7 +62,7 @@
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .info-table td {
             vertical-align: top;
@@ -89,12 +89,12 @@
 
         /* Items Table */
         .items-title {
-            margin-top: 40px;
-            margin-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
             font-size: 14px;
             font-weight: 700;
             color: #334155;
-            border-left: 4px solid #2563eb;
+            border-left: 4px solid {{ $invoice->user->invoice_color ?? '#2563eb' }};
             padding-left: 10px;
         }
         .items-table {
@@ -112,7 +112,7 @@
             border-bottom: 2px solid #e2e8f0;
         }
         .items-table td {
-            padding: 15px;
+            padding: 10px 15px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: top;
         }
@@ -120,7 +120,7 @@
         /* Totals */
         .totals-table {
             width: 300px;
-            margin-top: 30px;
+            margin-top: 15px;
             margin-left: auto;
             border-collapse: collapse;
         }
@@ -149,16 +149,17 @@
         .grand-total-amount {
             font-size: 18px;
             font-weight: 800;
-            color: #2563eb;
+            color: {{ $invoice->user->invoice_color ?? '#2563eb' }};
         }
 
         /* QR Code Payment Section */
         .payment-section {
-            margin-top: 40px;
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             background-color: #f8fafc;
+            page-break-inside: avoid;
         }
         .payment-header {
             text-align: center;
@@ -181,8 +182,8 @@
             padding: 10px 0;
         }
         .qr-container img {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
         }
         .payment-id-display {
             text-align: center;
@@ -208,7 +209,7 @@
         }
         .scan-text {
             font-size: 10px;
-            color: #2563eb;
+            color: {{ $invoice->user->invoice_color ?? '#2563eb' }};
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -437,7 +438,7 @@
                     <tr>
                         <td width="180" style="text-align: center; vertical-align: top; border: none; padding: 0;">
                             <div class="qr-container">
-                                <img src="data:image/svg+xml;base64,{{ $qrCodeBase64 }}" alt="Payment QR Code" style="width: 140px; height: 140px;" />
+                                <img src="data:image/svg+xml;base64,{{ $qrCodeBase64 }}" alt="Payment QR Code" style="width: 110px; height: 110px;" />
                             </div>
                             <div class="scan-text">↑ Scan to Pay ↑</div>
                         </td>
@@ -487,15 +488,55 @@
             </div>
         @endif
 
-        <!-- Notes / Terms -->
-        <div style="margin-top: 30px; padding: 20px; border: 1px dashed #e2e8f0; border-radius: 8px;">
-            <div class="section-title">Important Notes</div>
-            <div class="text-gray" style="font-size: 11px;">
-                1. This invoice is a record of stock asset movement and usage.<br>
-                2. Goods once issued are recorded in the system auditing logs.<br>
-                3. For any discrepancies, please contact the inventory administrator.
+        @if($invoice->user->bank_name && $invoice->user->account_number)
+            <!-- Bank Details Section -->
+            <div style="margin-top: 15px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc; page-break-inside: avoid;">
+                <div class="section-title" style="color: {{ $invoice->user->invoice_color ?? '#2563eb' }}; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px;">Bank Transfer Details</div>
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="33%" style="border: none; padding: 0;">
+                            <div class="payment-id-label">Bank Name</div>
+                            <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->bank_name }}</div>
+                        </td>
+                        <td width="33%" style="border: none; padding: 0;">
+                            <div class="payment-id-label">Account Number</div>
+                            <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->account_number }}</div>
+                        </td>
+                        <td width="33%" style="border: none; padding: 0;">
+                            <div class="payment-id-label">IFSC / SWIFT Code</div>
+                            <div class="info-bold" style="font-size: 13px;">{{ $invoice->user->ifsc_code ?? 'N/A' }}</div>
+                        </td>
+                    </tr>
+                </table>
             </div>
-        </div>
+        @endif
+
+        <!-- Bottom Section: Notes and Signature -->
+        <table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 15px; page-break-inside: avoid;">
+            <tr>
+                <td width="60%" style="border: none; padding: 0; vertical-align: top;">
+                    <div style="padding: 15px; border: 1px dashed #e2e8f0; border-radius: 8px; margin-right: 15px;">
+                        <div class="section-title">Important Notes</div>
+                        <div class="text-gray" style="font-size: 10px;">
+                            1. This invoice is a record of stock asset movement.<br>
+                            2. Goods once issued are recorded in the auditing logs.<br>
+                            3. For discrepancies, please contact the administrator.
+                        </div>
+                    </div>
+                </td>
+                <td width="40%" style="border: none; padding: 0; vertical-align: bottom; text-align: center;">
+                    <div style="margin-top: 10px;">
+                        <div style="height: 60px;"></div>
+                        <div style="border-top: 1px solid #1e293b; padding-top: 5px; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #1e293b;">
+                            Authorized Signatory
+                        </div>
+                        <div style="font-size: 9px; color: #64748b; margin-top: 2px;">
+                            (Seal & Signature)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="footer">

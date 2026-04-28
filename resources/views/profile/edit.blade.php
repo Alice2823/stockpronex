@@ -325,6 +325,218 @@
                 </div>
             </div>
 
+            <!-- Invoice Settings -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">
+                    <header>
+                        <h2 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 group-hover:text-blue-500 transition-colors">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            {{ __('Invoice Settings') }}
+                        </h2>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {{ __("Customize your invoice appearance and payment details.") }}
+                        </p>
+                    </header>
+                    <svg class="w-6 h-6 transform transition-transform duration-300 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+                            <input type="hidden" name="first_name" value="{{ explode(' ', $user->name)[0] }}">
+                            <input type="hidden" name="last_name" value="{{ explode(' ', $user->name)[1] ?? '' }}">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Visual Customization') }}</h3>
+                                
+                                <div>
+                                    <x-label for="invoice_color" :value="__('Invoice Accent Color')" />
+                                    <div class="flex items-center gap-4 mt-1">
+                                        <input id="invoice_color" name="invoice_color" type="color" class="h-10 w-20 rounded border border-gray-300 dark:border-gray-700 bg-transparent p-1" value="{{ old('invoice_color', $user->invoice_color ?? '#2563eb') }}" />
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ __('This color will be used for headers, totals, and buttons in your PDF invoice.') }}</span>
+                                    </div>
+                                    <x-input-error class="mt-2" :messages="$errors->get('invoice_color')" />
+                                </div>
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Business Info (Shown on Invoice)') }}</h3>
+                                
+                                <div>
+                                    <x-label for="business_name_inv" :value="__('Company Name')" />
+                                    <x-input id="business_name_inv" name="business_name" type="text" class="mt-1 block w-full" :value="old('business_name', $user->business_name)" placeholder="{{ __('Your Business Name') }}" />
+                                </div>
+
+                                <div>
+                                    <x-label for="address_inv" :value="__('Address')" />
+                                    <x-textarea id="address_inv" name="address" class="mt-1 block w-full" placeholder="{{ __('Your Business Address') }}">{{ old('address', $user->address) }}</x-textarea>
+                                </div>
+
+                                <div>
+                                    <x-label for="phone_inv" :value="__('Phone Number')" />
+                                    <x-input id="phone_inv" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="{{ __('Your Business Phone') }}" />
+                                </div>
+
+                                <div>
+                                    <x-label for="tax_number_inv" :value="__('Tax Details (GST/VAT)')" />
+                                    <x-input id="tax_number_inv" name="tax_number" type="text" class="mt-1 block w-full" :value="old('tax_number', $user->tax_number)" placeholder="{{ __('e.g. GSTIN 27AAAAA0000A1Z5') }}" />
+                                </div>
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Bank Account Details') }}</h3>
+                                
+                                <div>
+                                    <x-label for="bank_name" :value="__('Bank Name')" />
+                                    <x-input id="bank_name" name="bank_name" type="text" class="mt-1 block w-full" :value="old('bank_name', $user->bank_name)" placeholder="{{ __('e.g. State Bank of India') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('bank_name')" />
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <x-label for="account_number" :value="__('Account Number')" />
+                                        <x-input id="account_number" name="account_number" type="text" class="mt-1 block w-full" :value="old('account_number', $user->account_number)" placeholder="{{ __('e.g. 1234567890') }}" />
+                                        <x-input-error class="mt-2" :messages="$errors->get('account_number')" />
+                                    </div>
+                                    <div>
+                                        <x-label for="ifsc_code" :value="__('IFSC / SWIFT Code')" />
+                                        <x-input id="ifsc_code" name="ifsc_code" type="text" class="mt-1 block w-full" :value="old('ifsc_code', $user->ifsc_code)" placeholder="{{ __('e.g. SBIN0001234') }}" />
+                                        <x-input-error class="mt-2" :messages="$errors->get('ifsc_code')" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('UPI Details') }}</h3>
+                                
+                                <div>
+                                    <x-label for="upi_id" :value="__('UPI ID')" />
+                                    <x-input id="upi_id" name="upi_id" type="text" class="mt-1 block w-full" :value="old('upi_id', $user->upi_id)" placeholder="{{ __('e.g. yourname@okaxis') }}" />
+                                    <p class="mt-1 text-[10px] text-gray-500">{{ __('This will be used for QR code generation if provided. Otherwise, the default payment ID will be used.') }}</p>
+                                    <x-input-error class="mt-2" :messages="$errors->get('upi_id')" />
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-95 transition-all">
+                                    {{ __('Save Invoice Settings') }}
+                                </button>
+
+                                @if (session('status') === 'profile-updated')
+                                    <p
+                                        x-data="{ show: true }"
+                                        x-show="show"
+                                        x-transition
+                                        x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-green-600 dark:text-green-400 font-bold"
+                                    >{{ __('Saved.') }}</p>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CA Report Sharing -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">CA Report Sharing</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Automatically share monthly reports with your CA</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="px-8 pb-8 space-y-8">
+                    <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                        @csrf
+                        @method('patch')
+
+                        <div class="flex items-center justify-between p-4 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-900/30">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-bold text-indigo-900 dark:text-indigo-100">Enable Automatic Sharing</span>
+                                    <p class="text-xs text-indigo-600 dark:text-indigo-400">Reports sent on 1st of every month</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="hidden" name="ca_sharing_enabled" value="0">
+                                <input type="checkbox" name="ca_sharing_enabled" value="1" class="sr-only peer" {{ $user->ca_sharing_enabled ? 'checked' : '' }}>
+                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <x-label for="ca_name" :value="__('Chartered Accountant Name')" class="ml-1 text-sm font-semibold" />
+                                <x-input id="ca_name" name="ca_name" type="text" class="w-full h-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_name', $user->ca_name)" placeholder="e.g., CA Rahul Sharma" />
+                            </div>
+
+                            <div class="space-y-2">
+                                <x-label for="ca_whatsapp" :value="__('CA WhatsApp Number')" class="ml-1 text-sm font-semibold" />
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                                        </svg>
+                                    </div>
+                                    <x-input id="ca_whatsapp" name="ca_whatsapp" type="text" class="w-full h-12 pl-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_whatsapp', $user->ca_whatsapp)" placeholder="91XXXXXXXXXX" />
+                                </div>
+                            </div>
+
+                            <div class="col-span-full space-y-2">
+                                <x-label for="ca_email" :value="__('CA Email Address')" class="ml-1 text-sm font-semibold" />
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <x-input id="ca_email" name="ca_email" type="email" class="w-full h-12 pl-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_email', $user->ca_email)" placeholder="ca.name@example.com" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end space-x-4 pt-4">
+                            @if (session('status') === 'profile-updated')
+                                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-green-600 dark:text-green-400 font-medium">
+                                    {{ __('Settings Saved Successfully') }}
+                                </p>
+                            @endif
+                            <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-[0.98]">
+                                Save CA Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Security -->
             <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
                 <button @click="open = !open" class="w-full text-left p-8 focus:outline-none flex justify-between items-center group">

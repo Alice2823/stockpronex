@@ -34,9 +34,9 @@ class InvoiceController extends Controller
             abort(404, 'Invoice not found.');
         }
 
-        // Generate QR code if user has a payment_id
+        // Generate QR code if user has a payment_id or upi_id
         $qrCodeBase64 = null;
-        $paymentId = $invoice->user->payment_id ?? null;
+        $paymentId = $invoice->user->upi_id ?: ($invoice->user->payment_id ?? null);
         $currency = $invoice->user->currency ?? 'USD';
 
         // Currency symbol map

@@ -307,6 +307,67 @@ class WhatsappService
     }
 
     /**
+     * Send a PDF document to any WhatsApp number (Used for CA reports)
+     */
+    public function sendDocument(string $phone, string $pdfContent, string $filename, string $caption): array
+    {
+        $phoneNumberId = config('services.whatsapp.phone_number_id');
+        $accessToken = config('services.whatsapp.access_token');
+
+        if (!$phoneNumberId || !$accessToken) {
+            return ['success' => false, 'message' => 'WhatsApp API credentials not configured.'];
+        }
+
+        $formattedPhone = self::formatWhatsappNumber($phone);
+        if (!$formattedPhone) {
+            return ['success' => false, 'message' => 'Invalid phone number.'];
+        }
+
+        $apiBase = "https://graph.facebook.com/v22.0/{$phoneNumberId}";
+
+        try {
+            // 1. Upload to Media API
+            $mediaResponse = Http::withToken($accessToken)
+                ->timeout(60)
+                ->attach('file', $pdfContent, $filename, ['Content-Type' => 'application/pdf'])
+                ->post("{$apiBase}/media", [
+                    'messaging_product' => 'whatsapp',
+                    'type' => 'application/pdf',
+                ]);
+
+            if ($mediaResponse->status() !== 200 || !isset($mediaResponse->json()['id'])) {
+                return ['success' => false, 'message' => 'Media upload failed: ' . $mediaResponse->body()];
+            }
+
+            $mediaId = $mediaResponse->json()['id'];
+
+            // 2. Send Document Message
+            $docPayload = [
+                'messaging_product' => 'whatsapp',
+                'to' => $formattedPhone,
+                'type' => 'document',
+                'document' => [
+                    'id' => $mediaId,
+                    'filename' => $filename,
+                    'caption' => $caption
+                ],
+            ];
+
+            $docResponse = Http::withToken($accessToken)->timeout(30)->post("{$apiBase}/messages", $docPayload);
+
+            if ($docResponse->status() === 200) {
+                return ['success' => true, 'message' => 'Report sent to WhatsApp.'];
+            }
+
+            return ['success' => false, 'message' => 'Document send failed: ' . $docResponse->body()];
+
+        } catch (\Exception $e) {
+            Log::error('WhatsApp: CA Report send exception', ['error' => $e->getMessage()]);
+            return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
+        }
+    }
+
+    /**
      * Format phone to WhatsApp format: country code + number, no +, no spaces
      */
     public static function formatWhatsappNumber(?string $phone): ?string

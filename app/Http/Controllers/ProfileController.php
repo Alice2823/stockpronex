@@ -35,6 +35,15 @@ class ProfileController extends Controller
             'tax_number' => ['nullable', 'string', 'max:255'],
             'tax_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'payment_id' => ['nullable', 'string', 'max:255'],
+            'invoice_color' => ['nullable', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'bank_name' => ['nullable', 'string', 'max:255'],
+            'account_number' => ['nullable', 'string', 'max:255'],
+            'ifsc_code' => ['nullable', 'string', 'max:255'],
+            'upi_id' => ['nullable', 'string', 'max:255'],
+            'ca_sharing_enabled' => ['sometimes', 'boolean'],
+            'ca_name' => ['nullable', 'string', 'max:255'],
+            'ca_whatsapp' => ['nullable', 'string', 'max:20'],
+            'ca_email' => ['nullable', 'email', 'max:255'],
         ]);
 
         $user = $request->user();
@@ -55,6 +64,16 @@ class ProfileController extends Controller
         if ($request->has('tax_number')) $user->tax_number = $request->tax_number;
         if ($request->has('tax_percentage')) $user->tax_percentage = $request->tax_percentage;
         if ($request->has('payment_id')) $user->payment_id = $request->payment_id;
+        if ($request->has('invoice_color')) $user->invoice_color = $request->invoice_color;
+        if ($request->has('bank_name')) $user->bank_name = $request->bank_name;
+        if ($request->has('account_number')) $user->account_number = $request->account_number;
+        if ($request->has('ifsc_code')) $user->ifsc_code = $request->ifsc_code;
+        if ($request->has('upi_id')) $user->upi_id = $request->upi_id;
+
+        $user->ca_sharing_enabled = $request->boolean('ca_sharing_enabled');
+        if ($request->has('ca_name')) $user->ca_name = $request->ca_name;
+        if ($request->has('ca_whatsapp')) $user->ca_whatsapp = $request->ca_whatsapp;
+        if ($request->has('ca_email')) $user->ca_email = $request->ca_email;
 
         $user->save();
 

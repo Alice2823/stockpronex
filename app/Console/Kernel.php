@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Automatically share reports with CAs on the 1st of every month at midnight
+        $schedule->command('reports:share-with-ca')->monthlyOn(1, '00:00');
     }
 
     /**
