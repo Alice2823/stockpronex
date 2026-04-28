@@ -37,10 +37,37 @@
 
     </div>
 
-    <!-- Turnstile CAPTCHA -->
+    <!-- Turnstile CAPTCHA (explicit render) -->
     <div class="mt-6 mb-2 flex justify-center">
-        <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="auto"></div>
+        <div id="turnstile-full"></div>
     </div>
+    <script>
+        // Render Turnstile when API is loaded (handles direct page load without recent logins)
+        (function() {
+            function renderFull() {
+                var el = document.getElementById('turnstile-full');
+                if (el && typeof turnstile !== 'undefined' && !el.hasChildNodes()) {
+                    turnstile.render(el, {
+                        sitekey: '{{ config('services.turnstile.site_key') }}',
+                        theme: 'auto'
+                    });
+                }
+            }
+            // Try immediately, or wait for Turnstile to load
+            if (typeof turnstile !== 'undefined') {
+                renderFull();
+            } else {
+                var checkInterval = setInterval(function() {
+                    if (typeof turnstile !== 'undefined') {
+                        clearInterval(checkInterval);
+                        renderFull();
+                    }
+                }, 200);
+                // Stop checking after 10 seconds
+                setTimeout(function() { clearInterval(checkInterval); }, 10000);
+            }
+        })();
+    </script>
 
     <!-- Login Button -->
     <div class="mt-4">

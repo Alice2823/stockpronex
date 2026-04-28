@@ -211,15 +211,31 @@
                 selectedAccount: null,
                 showFullForm: false,
                 recentLogins: {{ json_encode($recentLogins) }},
-                
+                _recentWidgetId: null,
+                _fullWidgetId: null,
+
                 init() {
-                    // Turnstile auto-renders natively.
+                    // Widgets rendered on demand via renderTurnstile()
+                },
+
+                renderTurnstile(containerId) {
+                    if (typeof turnstile === 'undefined') return;
+                    const el = document.getElementById(containerId);
+                    if (!el) return;
+                    // Reset the container
+                    el.innerHTML = '';
+                    turnstile.render(el, {
+                        sitekey: '{{ config('services.turnstile.site_key') }}',
+                        theme: 'auto',
+                        callback: function(token) {},
+                    });
                 },
 
                 selectAccount(login) {
                     this.selectedAccount = login;
                     this.showFullForm = false;
                     this.$nextTick(() => {
+                        this.renderTurnstile('turnstile-recent');
                         const pwdInput = document.getElementById('recent-password');
                         if (pwdInput) pwdInput.focus();
                     });
@@ -229,6 +245,7 @@
                     this.selectedAccount = null;
                     this.showFullForm = true;
                     this.$nextTick(() => {
+                        this.renderTurnstile('turnstile-full');
                         const emailInput = document.getElementById('email');
                         if (emailInput) emailInput.focus();
                     });
@@ -322,9 +339,9 @@
                                                 required autocomplete="current-password" />
                             </div>
 
-                            <!-- Turnstile CAPTCHA -->
+                            <!-- Turnstile CAPTCHA (explicit render) -->
                             <div class="mt-4 flex justify-center">
-                                <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="auto"></div>
+                                <div id="turnstile-recent"></div>
                             </div>
 
                             {{-- Remember + Login --}}
@@ -404,6 +421,6 @@
         </div>
     </div> {{-- End of the Box --}}
 
-    <!-- Turnstile API implicitly renders elements with .cf-turnstile -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <!-- Turnstile explicit render mode (prevents duplicate widget conflicts) -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </x-guest-layout>
