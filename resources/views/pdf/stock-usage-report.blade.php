@@ -128,7 +128,7 @@
                 <tr>
                     <td class="small-text">{{ $usage->created_at->format('d M Y') }}</td>
                     <td><strong>{{ $usage->stock->name }}</strong></td>
-                    <td style="font-weight: bold;">{{ number_format($usage->quantity) }}</td>
+                    <td style="font-weight: bold;">{{ formatIndianNumber($usage->quantity) }}</td>
                     <td>
                         @if($usage->invoice)
                             <strong>{{ $usage->invoice->customer_name }}</strong><br>

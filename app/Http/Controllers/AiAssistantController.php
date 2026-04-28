@@ -146,11 +146,11 @@ class AiAssistantController extends Controller
         // Summary stats
         $prompt .= "INVENTORY SUMMARY:\n";
         $prompt .= "- Total Products: {$context['total_items']}\n";
-        $prompt .= "- Total Units in Stock: " . number_format($context['total_units']) . "\n";
-        $prompt .= "- Total Inventory Value: {$currency}" . number_format($context['total_value'], 2) . "\n";
+        $prompt .= "- Total Units in Stock: " . formatIndianNumber($context['total_units']) . "\n";
+        $prompt .= "- Total Inventory Value: {$currency}" . formatIndianNumber($context['total_value'], 2) . "\n";
         $prompt .= "- Low Stock Items (< 10 units): {$context['low_stock']->count()}\n";
         $prompt .= "- Out of Stock Items: {$context['out_of_stock']->count()}\n";
-        $prompt .= "- Revenue (Last 30 Days): {$currency}" . number_format($context['total_revenue'], 2) . "\n";
+        $prompt .= "- Revenue (Last 30 Days): {$currency}" . formatIndianNumber($context['total_revenue'], 2) . "\n";
         $prompt .= "- Slow-Moving Items (No sales in 30 days): {$context['slow_moving']->count()}\n\n";
 
         // Stock details
@@ -159,7 +159,7 @@ class AiAssistantController extends Controller
             foreach ($context['stocks'] as $stock) {
                 $value = $stock->price * $stock->quantity;
                 $status = $stock->quantity <= 0 ? '❌ OUT OF STOCK' : ($stock->quantity < 10 ? '⚠️ LOW' : '✅ OK');
-                $prompt .= "- {$stock->name}: {$stock->quantity} units | MRP: {$currency}" . number_format($stock->mrp, 2) . " | Price: {$currency}" . number_format($stock->price, 2) . " | Value: {$currency}" . number_format($value, 2) . " | Status: {$status}\n";
+                $prompt .= "- {$stock->name}: {$stock->quantity} units | MRP: {$currency}" . formatIndianNumber($stock->mrp, 2) . " | Price: {$currency}" . formatIndianNumber($stock->price, 2) . " | Value: {$currency}" . formatIndianNumber($value, 2) . " | Status: {$status}\n";
             }
             $prompt .= "\n";
         }

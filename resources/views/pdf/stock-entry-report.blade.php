@@ -151,11 +151,11 @@
                     </td>
                     <td>
                         <div class="summary-label">{{ __('Total Units') }}</div>
-                        <div class="summary-value">{{ number_format($stocks->sum('quantity')) }}</div>
+                        <div class="summary-value">{{ formatIndianNumber($stocks->sum('quantity')) }}</div>
                     </td>
                     <td>
                         <div class="summary-label">{{ __('Total Valuation') }}</div>
-                        <div class="summary-value">{{ Auth::user()->currency_symbol }}{{ number_format($stocks->sum(function($s){ return $s->price * $s->quantity; }), 2) }}</div>
+                        <div class="summary-value">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stocks->sum(function($s){ return $s->price * $s->quantity; }), 2) }}</div>
                     </td>
                     <td>
                         <div class="summary-label">{{ __('Low Stock') }}</div>
@@ -183,11 +183,11 @@
                     <td style="color: #64748b;">#{{ $stock->id }}</td>
                     <td><strong>{{ $stock->name }}</strong></td>
                     <td class="{{ $stock->quantity < 10 ? 'low-stock' : '' }}" style="font-weight: bold;">
-                        {{ number_format($stock->quantity) }}
+                        {{ formatIndianNumber($stock->quantity) }}
                     </td>
-                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->mrp ?? 0, 2) }}</td>
-                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</td>
-                    <td style="font-weight: bold;">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->mrp ?? 0, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price, 2) }}</td>
+                    <td style="font-weight: bold;">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price * $stock->quantity, 2) }}</td>
                     <td>
                         @if($stock->quantity < 5)
                             <span style="color: #ef4444; font-weight: bold;">{{ __('CRITICAL') }}</span>

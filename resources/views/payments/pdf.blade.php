@@ -79,17 +79,17 @@
                 <tr>
                     <td class="badge-online" style="border-right: 1px solid #e5e7eb;">{{ __('ONLINE') }}</td>
                     <td style="text-align: center; border-right: 1px solid #e5e7eb;">{{ $summary['onlineCount'] }}</td>
-                    <td class="text-right">{{ number_format($summary['onlineTotal'], 2) }}</td>
+                    <td class="text-right">{{ formatIndianNumber($summary['onlineTotal'], 2) }}</td>
                 </tr>
                 <tr>
                     <td class="badge-cash" style="border-right: 1px solid #e5e7eb;">{{ __('CASH') }}</td>
                     <td style="text-align: center; border-right: 1px solid #e5e7eb;">{{ $summary['cashCount'] }}</td>
-                    <td class="text-right">{{ number_format($summary['cashTotal'], 2) }}</td>
+                    <td class="text-right">{{ formatIndianNumber($summary['cashTotal'], 2) }}</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold; border-right: 1px solid #e5e7eb;">{{ __('TOTAL') }}</td>
                     <td style="text-align: center; font-weight: bold; border-right: 1px solid #e5e7eb;">{{ $summary['onlineCount'] + $summary['cashCount'] }}</td>
-                    <td class="text-right" style="font-weight: bold;">{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 2) }}</td>
+                    <td class="text-right" style="font-weight: bold;">{{ formatIndianNumber($summary['onlineTotal'] + $summary['cashTotal'], 2) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -126,7 +126,7 @@
                             <span class="badge-cash">{{ __('CASH') }}</span>
                         @endif
                     </td>
-                    <td class="text-right">{{ number_format($invoice->amount, 2) }}</td>
+                    <td class="text-right">{{ formatIndianNumber($invoice->amount, 2) }}</td>
                 </tr>
             @empty
                 <tr>
@@ -138,7 +138,7 @@
         <tfoot>
             <tr>
                 <td colspan="7" class="text-right" style="font-weight: bold; padding-top: 15px;">{{ __('Total Amount:') }}</td>
-                <td class="text-right" style="font-weight: bold; padding-top: 15px;">{{ number_format($totalAmount, 2) }}</td>
+                <td class="text-right" style="font-weight: bold; padding-top: 15px;">{{ formatIndianNumber($totalAmount, 2) }}</td>
             </tr>
         </tfoot>
         @endif

@@ -26,7 +26,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Total Revenue') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['onlineTotal'] + $summary['cashTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ formatIndianNumber($summary['onlineTotal'] + $summary['cashTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-xl">
@@ -44,7 +44,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Online Payments') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['onlineTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ formatIndianNumber($summary['onlineTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-green-100 dark:bg-green-900/40 rounded-xl">
@@ -62,7 +62,7 @@
                         <div>
                             <div class="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Cash Payments') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1 leading-tight">
-                                {{ Auth::user()->currency_symbol }}{{ number_format($summary['cashTotal'], 0) }}
+                                {{ Auth::user()->currency_symbol }}{{ formatIndianNumber($summary['cashTotal'], 0) }}
                             </div>
                         </div>
                         <div class="p-3 bg-gray-100 dark:bg-gray-800 rounded-xl">
@@ -184,7 +184,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm font-black text-gray-900 dark:text-white">
                                                     {{ Auth::user()->currency_symbol }}
-                                                    {{ number_format($invoice->amount, 2) }}
+                                                    {{ formatIndianNumber($invoice->amount, 2) }}
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
@@ -235,7 +235,7 @@
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <div class="text-sm font-black text-gray-900 dark:text-white">{{ Auth::user()->currency_symbol }}{{ number_format($invoice->amount, 2) }}</div>
+                                            <div class="text-sm font-black text-gray-900 dark:text-white">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($invoice->amount, 2) }}</div>
                                             <div class="mt-1">
                                                 @if($invoice->payment_method === 'online')
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800 uppercase tracking-widest">

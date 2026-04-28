@@ -53,7 +53,7 @@
                         </div>
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Total Units') }}</p>
-                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white">{{ number_format($stocks->sum('quantity')) }}
+                            <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white">{{ formatIndianNumber($stocks->sum('quantity')) }}
                             </p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-tight">{{ __('Portfolio Value') }}</p>
                             <p class="text-xl sm:text-3xl font-black text-gray-800 dark:text-white leading-tight">
-                                {{ Auth::user()->currency_symbol }}{{ number_format($stocks->sum(function ($stock) {
+                                {{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stocks->sum(function ($stock) {
     return $stock->price * $stock->quantity; }), 0) }}
                             </p>
                         </div>
@@ -193,7 +193,7 @@
                                             </td>
                                              <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-900 dark:text-white font-bold">
-                                                    {{ number_format($stock->quantity) }}
+                                                    {{ formatIndianNumber($stock->quantity) }}
                                                 </div>
                                                 <div
                                                     class="text-[10px] font-black uppercase tracking-widest {{ $stock->quantity < 5 ? 'text-red-500' : 'text-green-500' }}">
@@ -201,11 +201,11 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-300">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</div>
+                                                <div class="text-sm text-gray-900 dark:text-gray-300">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price, 2) }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm font-black text-gray-800 dark:text-white">
-                                                    {{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</div>
+                                                    {{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price * $stock->quantity, 2) }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
@@ -253,7 +253,7 @@
                                             </div>
                                         </div>
                                         <div class="text-right">
-                                            <div class="text-lg text-gray-900 dark:text-white font-black leading-none">{{ number_format($stock->quantity) }}</div>
+                                            <div class="text-lg text-gray-900 dark:text-white font-black leading-none">{{ formatIndianNumber($stock->quantity) }}</div>
                                             <div class="text-[10px] font-black uppercase tracking-widest mt-1 {{ $stock->quantity < 5 ? 'text-red-500' : 'text-green-500' }}">
                                                 {{ $stock->quantity < 5 ? __('Low Stock') : __('In Stock') }}
                                             </div>
@@ -277,11 +277,11 @@
                                     <div class="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 mt-1">
                                         <div>
                                             <div class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Price/Unit') }}</div>
-                                            <div class="text-sm font-black text-gray-900 dark:text-white">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</div>
+                                            <div class="text-sm font-black text-gray-900 dark:text-white">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price, 2) }}</div>
                                         </div>
                                         <div>
                                             <div class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Total Value') }}</div>
-                                            <div class="text-sm font-black text-blue-600 dark:text-blue-400">{{ Auth::user()->currency_symbol }}{{ number_format($stock->price * $stock->quantity, 2) }}</div>
+                                            <div class="text-sm font-black text-blue-600 dark:text-blue-400">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price * $stock->quantity, 2) }}</div>
                                         </div>
                                     </div>
 

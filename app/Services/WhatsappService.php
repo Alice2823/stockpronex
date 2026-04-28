@@ -106,7 +106,7 @@ class WhatsappService
         // ─────────────────────────────────────────
         try {
             $currencySymbol = $currencySymbol ?? '₹';
-            $totalAmount = number_format($invoice->total_amount ?? $invoice->amount, 2);
+            $totalAmount = formatIndianNumber($invoice->total_amount ?? $invoice->amount, 2);
 
             $templateName = config('services.whatsapp.template_name', 'hello_world');
             $templateLang = $templateName === 'hello_world' ? 'en_US' : 'en';
@@ -245,7 +245,7 @@ class WhatsappService
             try {
                 $businessName = $invoice->user->business_name ?? 'StockProNex';
                 $symbol = $currencySymbol ?? '₹';
-                $amount = number_format($invoice->total_amount ?? $invoice->amount, 2);
+                $amount = formatIndianNumber($invoice->total_amount ?? $invoice->amount, 2);
 
                 $textBody = "Hello {$invoice->customer_name},\n\n"
                     . "Thank you for your purchase from *{$businessName}*!\n\n"

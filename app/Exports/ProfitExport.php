@@ -40,12 +40,12 @@ class ProfitExport implements FromCollection, WithHeadings, WithMapping, ShouldA
     {
         return [
             $stock->name,
-            '₹' . number_format($stock->mrp ?? 0, 2),
-            '₹' . number_format($stock->price, 2),
+            '₹' . formatIndianNumber($stock->mrp ?? 0, 2),
+            '₹' . formatIndianNumber($stock->price, 2),
             $stock->units_sold,
-            '₹' . number_format($stock->gross_profit, 2),
-            '₹' . number_format($stock->total_discount, 2),
-            '₹' . number_format($stock->calculated_profit, 2),
+            '₹' . formatIndianNumber($stock->gross_profit, 2),
+            '₹' . formatIndianNumber($stock->total_discount, 2),
+            '₹' . formatIndianNumber($stock->calculated_profit, 2),
         ];
     }
 

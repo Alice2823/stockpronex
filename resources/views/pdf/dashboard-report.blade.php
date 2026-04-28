@@ -153,15 +153,15 @@
                 <tr>
                     <td>
                         <div class="card-label">{{ __('Total Stock Units') }}</div>
-                        <div class="card-value">{{ number_format($cards['total_stock']) }}</div>
+                        <div class="card-value">{{ formatIndianNumber($cards['total_stock']) }}</div>
                     </td>
                     <td>
                         <div class="card-label">{{ __('Units Used (Period)') }}</div>
-                        <div class="card-value">{{ number_format($cards['total_used']) }}</div>
+                        <div class="card-value">{{ formatIndianNumber($cards['total_used']) }}</div>
                     </td>
                     <td>
                         <div class="card-label">{{ __('Units Added (Period)') }}</div>
-                        <div class="card-value">{{ number_format($cards['total_added']) }}</div>
+                        <div class="card-value">{{ formatIndianNumber($cards['total_added']) }}</div>
                     </td>
                     <td style="border-bottom: 3px solid #ef4444;">
                         <div class="card-label">{{ __('Low Stock Alerts') }}</div>
@@ -189,7 +189,7 @@
                 <tr>
                     <td style="color: #64748b;">#{{ $index + 1 }}</td>
                     <td><strong>{{ $product['name'] }}</strong></td>
-                    <td style="text-align: right; font-weight: bold;">{{ number_format($product['total']) }}</td>
+                    <td style="text-align: right; font-weight: bold;">{{ formatIndianNumber($product['total']) }}</td>
                     <td style="text-align: right; color: #64748b;">
                         {{ $totalUsage > 0 ? round(($product['total'] / $totalUsage) * 100, 1) : 0 }}%
                     </td>

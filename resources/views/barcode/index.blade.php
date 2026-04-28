@@ -47,7 +47,7 @@
                     <div class="space-y-4 flex-grow flex flex-col">
                         <div class="flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-800">
                             <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">{{ __('Current Stock:') }}</span>
-                            <span class="text-2xl font-black text-gray-900 dark:text-white">{{ number_format($stock->quantity) }}</span>
+                            <span class="text-2xl font-black text-gray-900 dark:text-white">{{ formatIndianNumber($stock->quantity) }}</span>
                         </div>
                         <div class="flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-800">
                             <span class="text-gray-500 dark:text-gray-400 font-bold text-sm uppercase">{{ __('Generated:') }}</span>

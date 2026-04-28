@@ -340,8 +340,8 @@
                                 </div>
                             </td>
                             <td style="text-align: center;" class="info-bold">1</td>
-                            <td style="text-align: right;" class="text-gray">{{ $currencySymbol }}&nbsp;{{ number_format($item['unit_price'], 2) }}</td>
-                            <td style="text-align: right;" class="info-bold">{{ $currencySymbol }}&nbsp;{{ number_format($item['unit_price'], 2) }}</td>
+                            <td style="text-align: right;" class="text-gray">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($item['unit_price'], 2) }}</td>
+                            <td style="text-align: right;" class="info-bold">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($item['unit_price'], 2) }}</td>
                         </tr>
                     @endforeach
                 @else
@@ -398,8 +398,8 @@
                             </div>
                         </td>
                         <td style="text-align: center;" class="info-bold">{{ $qty ?? 1 }}</td>
-                        <td style="text-align: right;" class="text-gray">{{ $currencySymbol }}&nbsp;{{ number_format($unitPrice ?? 0, 2) }}</td>
-                        <td style="text-align: right;" class="info-bold">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->subtotal ?? $invoice->amount, 2) }}</td>
+                        <td style="text-align: right;" class="text-gray">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($unitPrice ?? 0, 2) }}</td>
+                        <td style="text-align: right;" class="info-bold">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->subtotal ?? $invoice->amount, 2) }}</td>
                     </tr>
                 @endif
             </tbody>
@@ -409,37 +409,37 @@
         <table class="totals-table">
             <tr class="total-row">
                 <td class="total-label">{{ __('Subtotal') }}</td>
-                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->subtotal ?? $invoice->amount, 2) }}</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->subtotal ?? $invoice->amount, 2) }}</td>
             </tr>
             @if($invoice->discount_percentage > 0)
             <tr class="total-row">
-                <td class="total-label" style="color: #ef4444;">{{ __('Discount') }} ({{ number_format($invoice->discount_percentage, 1) }}%)</td>
-                <td class="total-value" style="color: #ef4444;">-{{ $currencySymbol }}&nbsp;{{ number_format($invoice->discount_amount, 2) }}</td>
+                <td class="total-label" style="color: #ef4444;">{{ __('Discount') }} ({{ formatIndianNumber($invoice->discount_percentage, 1) }}%)</td>
+                <td class="total-value" style="color: #ef4444;">-{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->discount_amount, 2) }}</td>
             </tr>
             <tr class="total-row">
                 <td class="total-label">{{ __('Net Amount') }}</td>
-                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format(($invoice->subtotal ?? $invoice->amount) - $invoice->discount_amount, 2) }}</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber(($invoice->subtotal ?? $invoice->amount) - $invoice->discount_amount, 2) }}</td>
             </tr>
             @endif
             <tr class="total-row">
-                <td class="total-label">{{ __('Tax') }} ({{ number_format($invoice->tax_percentage ?? 0, 1) }}%)</td>
-                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tax_amount ?? 0, 2) }}</td>
+                <td class="total-label">{{ __('Tax') }} ({{ formatIndianNumber($invoice->tax_percentage ?? 0, 1) }}%)</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->tax_amount ?? 0, 2) }}</td>
             </tr>
             @if($invoice->tcs_amount > 0)
             <tr class="total-row">
-                <td class="total-label">TCS ({{ number_format($invoice->tcs_percentage, 2) }}%)</td>
-                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tcs_amount, 2) }}</td>
+                <td class="total-label">TCS ({{ formatIndianNumber($invoice->tcs_percentage, 2) }}%)</td>
+                <td class="total-value">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->tcs_amount, 2) }}</td>
             </tr>
             @endif
             @if($invoice->tds_amount > 0)
             <tr class="total-row">
-                <td class="total-label" style="color: #64748b;">TDS ({{ number_format($invoice->tds_percentage, 2) }}%)</td>
-                <td class="total-value" style="color: #64748b;">-{{ $currencySymbol }}&nbsp;{{ number_format($invoice->tds_amount, 2) }}</td>
+                <td class="total-label" style="color: #64748b;">TDS ({{ formatIndianNumber($invoice->tds_percentage, 2) }}%)</td>
+                <td class="total-value" style="color: #64748b;">-{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->tds_amount, 2) }}</td>
             </tr>
             @endif
             <tr class="grand-total-row">
                 <td class="grand-total-label">{{ __('Invoice Total') }}</td>
-                <td class="grand-total-amount">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->amount, 2) }}</td>
+                <td class="grand-total-amount">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->amount, 2) }}</td>
             </tr>
         </table>
 
@@ -472,7 +472,7 @@
                                         <span class="payment-id-label">{{ __('Amount:') }}</span>
                                     </td>
                                     <td style="border: none; padding: 4px 0;">
-                                        <span class="payment-id-value">{{ $currencySymbol }}&nbsp;{{ number_format($invoice->amount, 2) }}</span>
+                                        <span class="payment-id-value">{{ $currencySymbol }}&nbsp;{{ formatIndianNumber($invoice->amount, 2) }}</span>
                                     </td>
                                 </tr>
                                 <tr>

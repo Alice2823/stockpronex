@@ -116,7 +116,7 @@
                                             <td class="px-6 py-4 align-top whitespace-nowrap">
                                                 <span
                                                     class="px-2.5 py-1 inline-flex text-xs font-black rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 shadow-sm">
-                                                    -{{ number_format($usage->quantity) }}
+                                                    -{{ formatIndianNumber($usage->quantity) }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 align-top whitespace-nowrap">
@@ -156,7 +156,7 @@
                                             <div class="text-xs font-bold text-gray-500 mt-0.5">{{ $usage->created_at->setTimezone('Asia/Kolkata')->format('M d, Y h:i A') }}</div>
                                         </div>
                                         <span class="px-2.5 py-1 inline-flex text-sm font-black rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 shadow-sm">
-                                            -{{ number_format($usage->quantity) }}
+                                            -{{ formatIndianNumber($usage->quantity) }}
                                         </span>
                                     </div>
 

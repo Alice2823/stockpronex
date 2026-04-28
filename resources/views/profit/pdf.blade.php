@@ -163,15 +163,15 @@
     <div class="summary-container">
         <div class="summary-item">
             <span class="summary-label">{{ __('Total Units Sold') }}</span>
-            <span class="summary-value">{{ number_format($stocks->sum('units_sold')) }}</span>
+            <span class="summary-value">{{ formatIndianNumber($stocks->sum('units_sold')) }}</span>
         </div>
         <div class="summary-item">
             <span class="summary-label">{{ __('Total Discounts Given') }}</span>
-            <span class="summary-value value-discount">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallDiscount, 2) }}</span>
+            <span class="summary-value value-discount">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallDiscount, 2) }}</span>
         </div>
         <div class="summary-item">
             <span class="summary-label">{{ __('Net Profit Earned') }}</span>
-            <span class="summary-value value-net">{{ Auth::user()->currency_symbol }}{{ number_format($totalOverallProfit, 2) }}</span>
+            <span class="summary-value value-net">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($totalOverallProfit, 2) }}</span>
         </div>
     </div>
 
@@ -192,13 +192,13 @@
             @foreach($stocks as $stock)
                 <tr>
                     <td class="product-name-cell">{{ $stock->name }}</td>
-                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->mrp ?? 0, 2) }}</td>
-                    <td>{{ Auth::user()->currency_symbol }}{{ number_format($stock->price, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->mrp ?? 0, 2) }}</td>
+                    <td>{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->price, 2) }}</td>
                     <td style="text-align: center; font-weight: 700;">{{ $stock->units_sold }}</td>
-                    <td class="bold-navy">{{ Auth::user()->currency_symbol }}{{ number_format($stock->gross_profit, 2) }}</td>
-                    <td style="color: #ef4444;">{{ Auth::user()->currency_symbol }}{{ number_format($stock->total_discount, 2) }}</td>
+                    <td class="bold-navy">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->gross_profit, 2) }}</td>
+                    <td style="color: #ef4444;">{{ Auth::user()->currency_symbol }}{{ formatIndianNumber($stock->total_discount, 2) }}</td>
                     <td class="bold-navy" style="color: {{ $stock->calculated_profit >= 0 ? '#0369a1' : '#ef4444' }};">
-                        {{ $stock->calculated_profit >= 0 ? '+' : '-' }}{{ Auth::user()->currency_symbol }}{{ number_format(abs($stock->calculated_profit), 2) }}
+                        {{ $stock->calculated_profit >= 0 ? '+' : '-' }}{{ Auth::user()->currency_symbol }}{{ formatIndianNumber(abs($stock->calculated_profit), 2) }}
                     </td>
                 </tr>
             @endforeach
