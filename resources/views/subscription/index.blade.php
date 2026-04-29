@@ -271,6 +271,12 @@
                 };
 
                 const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function (response){
+                    alert("Payment Failed: " + response.error.description);
+                    console.error("Payment Failed Error Object:", response.error);
+                });
+
                 rzp.open();
 
             } catch (error) {

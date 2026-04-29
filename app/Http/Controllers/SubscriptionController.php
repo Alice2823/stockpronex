@@ -27,6 +27,10 @@ class SubscriptionController extends Controller
         $prices = \App\Constants\Plan::PRICES;
         $amount = $prices[$request->plan][$request->cycle] * 100; // to paise
 
+        if ($amount < 100) {
+            return response()->json(['error' => 'Amount must be at least 100 paise.'], 400);
+        }
+
         try {
             $api = new Api(config('app.razorpay_key'), config('app.razorpay_secret'));
             
@@ -41,9 +45,11 @@ class SubscriptionController extends Controller
                 ]
             ]);
 
+            \Illuminate\Support\Facades\Log::info('Razorpay Key Prefix: ' . substr(config('app.razorpay_key'), 0, 10));
+
             return response()->json([
                 'order_id' => $order['id'],
-                'amount' => $amount,
+                'amount' => (int) $amount,
                 'currency' => 'INR',
                 'razorpay_key' => config('app.razorpay_key')
             ]);

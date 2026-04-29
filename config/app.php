@@ -42,8 +42,8 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
 
     'developer_mode' => env('DEVELOPER_MODE', false),
-    'razorpay_key' => env('RAZORPAY_KEY'),
-    'razorpay_secret' => env('RAZORPAY_SECRET'),
+    'razorpay_key' => env('RAZORPAY_KEY_ID'),
+    'razorpay_secret' => env('RAZORPAY_KEY_SECRET'),
 
     /*
     |--------------------------------------------------------------------------
