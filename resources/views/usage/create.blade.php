@@ -69,42 +69,68 @@
                                     {{ __('Item') }} #<span class="item-index">1</span> {{ __('Details') }} ({{ $businessType ? __($businessType) : __('General Inventory') }})
                                 </h3>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     @php
                                         $requiredFields = \App\Constants\BusinessIndustry::getRequiredFields($businessType);
                                     @endphp
 
-                                    @if(in_array('imei', $requiredFields) || in_array('serial', $requiredFields))
+                                    @if(in_array('brand', $requiredFields))
                                         <div>
-                                            <x-label value="{{ __('Brand') }}" />
+                                            <x-label value="{{ __('Brand / Manufacturer') }}" />
                                             <x-input class="block mt-1 w-full brand-input" type="text" name="business_attributes[__INDEX__][brand]" />
                                         </div>
+                                    @endif
+
+                                    @if(in_array('model_number', $requiredFields))
                                         <div>
-                                            <x-label value="{{ __('Model') }}" />
-                                            <x-input class="block mt-1 w-full model-input" type="text" name="business_attributes[__INDEX__][model]" />
+                                            <x-label value="{{ __('Model Number / Name') }}" />
+                                            <x-input class="block mt-1 w-full model-input" type="text" name="business_attributes[__INDEX__][model_number]" />
                                         </div>
-                                        @if(in_array('imei', $requiredFields))
+                                    @endif
+
+                                    @if(in_array('imei_number', $requiredFields))
                                         <div>
-                                            <x-label value="{{ __('IMEI Number *') }}" />
-                                            <x-input class="block mt-1 w-full imei-input" type="text" name="business_attributes[__INDEX__][imei]" required />
+                                            <x-label value="{{ __('IMEI / MAC Address *') }}" />
+                                            <x-input class="block mt-1 w-full imei-input" type="text" name="business_attributes[__INDEX__][imei_number]" required />
                                         </div>
-                                        @endif
-                                        @if(in_array('serial', $requiredFields))
+                                    @endif
+
+                                    @if(in_array('serial_number', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Serial Number') }}" />
                                             <x-input class="block mt-1 w-full serial-input" type="text" name="business_attributes[__INDEX__][serial_number]" />
                                         </div>
-                                        @endif
                                     @endif
 
-                                    @if(in_array('expiry', $requiredFields))
+                                    @if(in_array('warranty', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Warranty (Months)') }}" />
+                                            <x-input class="block mt-1 w-full warranty-input" type="number" name="business_attributes[__INDEX__][warranty]" />
+                                        </div>
+                                    @endif
+
+                                    @if(in_array('part_number', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Part Number / SKU') }}" />
+                                            <x-input class="block mt-1 w-full part-input" type="text" name="business_attributes[__INDEX__][part_number]" />
+                                        </div>
+                                    @endif
+
+                                    @if(in_array('specification', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Specifications') }}" />
+                                            <x-input class="block mt-1 w-full spec-input" type="text" name="business_attributes[__INDEX__][specification]" />
+                                        </div>
+                                    @endif
+
+                                    @if(in_array('expiry_date', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Expiry Date *') }}" />
                                             <x-input class="block mt-1 w-full expiry-input" type="date" name="business_attributes[__INDEX__][expiry_date]" required />
                                         </div>
                                     @endif
 
-                                    @if(in_array('batch', $requiredFields))
+                                    @if(in_array('batch_number', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Batch Number') }}" />
                                             <x-input class="block mt-1 w-full batch-input" type="text" name="business_attributes[__INDEX__][batch_number]" />
@@ -113,10 +139,11 @@
 
                                     @if(in_array('weight', $requiredFields))
                                         <div>
-                                            <x-label value="{{ __('Weight (Grams) *') }}" />
-                                            <x-input class="block mt-1 w-full" type="number" step="0.001" name="business_attributes[__INDEX__][weight]" required />
+                                            <x-label value="{{ __('Weight (g/kg) *') }}" />
+                                            <x-input class="block mt-1 w-full weight-input" type="number" step="0.001" name="business_attributes[__INDEX__][weight]" required />
                                         </div>
                                     @endif
+
                                     @if(in_array('size', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Size *') }}" />
@@ -131,21 +158,38 @@
                                         </div>
                                     @endif
 
+                                    @if(in_array('material', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Material *') }}" />
+                                            <x-input class="block mt-1 w-full material-input" type="text" name="business_attributes[__INDEX__][material]" required />
+                                        </div>
+                                    @endif
+
                                     @if(in_array('purity', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Purity *') }}" />
-                                            <x-input class="block mt-1 w-full" type="text" name="business_attributes[__INDEX__][purity]" required />
+                                            <x-input class="block mt-1 w-full purity-input" type="text" name="business_attributes[__INDEX__][purity]" required />
                                         </div>
                                     @endif
+
+                                    @if(in_array('hallmark', $requiredFields))
+                                        <div>
+                                            <x-label value="{{ __('Hallmark ID') }}" />
+                                            <x-input class="block mt-1 w-full hallmark-input" type="text" name="business_attributes[__INDEX__][hallmark]" />
+                                        </div>
+                                    @endif
+
                                     @if(in_array('making_charges', $requiredFields))
                                         <div>
                                             <x-label value="{{ __('Making Charges (₹) *') }}" />
-                                            <x-input class="block mt-1 w-full" type="number" step="0.01" name="business_attributes[__INDEX__][making_charges]" required />
+                                            <x-input class="block mt-1 w-full making-input" type="number" step="0.01" name="business_attributes[__INDEX__][making_charges]" required />
                                         </div>
                                     @endif
 
                                     @if(empty($requiredFields))
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ __('No additional specialized fields required.') }}</p>
+                                        <div class="col-span-full">
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ __('No additional specialized fields required.') }}</p>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -262,27 +306,42 @@
                     if (section.querySelector('.imei-input')) section.querySelector('.imei-input').value = unit.imei_number || '';
                     if (section.querySelector('.serial-input')) section.querySelector('.serial-input').value = unit.serial_number || '';
                     if (section.querySelector('.expiry-input')) {
-                        // Handle date format for <input type="date">
                         const expiryDate = unit.expiry_date ? unit.expiry_date.split('T')[0] : '';
                         section.querySelector('.expiry-input').value = expiryDate;
                     }
                     if (section.querySelector('.batch-input')) section.querySelector('.batch-input').value = unit.batch_number || '';
+                    if (section.querySelector('.weight-input')) section.querySelector('.weight-input').value = unit.weight || '';
+                    if (section.querySelector('.hallmark-input')) section.querySelector('.hallmark-input').value = unit.hallmark || '';
                 }
 
                 // 2. Secondary: Auto-fill common/static stock attributes if available
                 if (currentStockDetails && currentStockDetails.business_attributes) {
                     const attrs = currentStockDetails.business_attributes;
                     
-                    // Mobile / Electronics Brand & Model (only if not already filled by unit tracking)
-                    if (section.querySelector('.brand-input')) section.querySelector('.brand-input').value = attrs.brand || '';
-                    if (section.querySelector('.model-input')) section.querySelector('.model-input').value = attrs.model || attrs.model_number || '';
+                    // Helper to fill if field exists and is empty
+                    const fillIfEmpty = (selector, value) => {
+                        const el = section.querySelector(selector);
+                        if (el && !el.value) el.value = value || '';
+                    };
+
+                    fillIfEmpty('.brand-input', attrs.brand);
+                    fillIfEmpty('.model-input', attrs.model_number || attrs.model);
+                    fillIfEmpty('.warranty-input', attrs.warranty);
+                    fillIfEmpty('.part-input', attrs.part_number);
+                    fillIfEmpty('.spec-input', attrs.specification);
+                    fillIfEmpty('.size-input', attrs.size);
+                    fillIfEmpty('.color-input', attrs.color);
+                    fillIfEmpty('.material-input', attrs.material);
+                    fillIfEmpty('.purity-input', attrs.purity);
+                    fillIfEmpty('.making-input', attrs.making_charges);
                     
-                    // Electronics Warranty
-                    if (section.querySelector('.warranty-input')) section.querySelector('.warranty-input').value = attrs.warranty || '';
-                    
-                    // Clothing
-                    if (section.querySelector('.size-input')) section.querySelector('.size-input').value = attrs.size || '';
-                    if (section.querySelector('.color-input')) section.querySelector('.color-input').value = attrs.color || '';
+                    // Fallback for tracking fields if no unit found
+                    if (!unit) {
+                        fillIfEmpty('.imei-input', attrs.imei_number);
+                        fillIfEmpty('.serial-input', attrs.serial_number);
+                        fillIfEmpty('.expiry-input', attrs.expiry_date ? attrs.expiry_date.split('T')[0] : '');
+                        fillIfEmpty('.batch-input', attrs.batch_number);
+                    }
                 }
 
                 container.appendChild(section);

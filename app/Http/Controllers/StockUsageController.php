@@ -111,15 +111,14 @@ class StockUsageController extends Controller
             $rules['business_attributes.*.weight'] = 'required';
             $rules['business_attributes.*.purity'] = 'required';
             $rules['business_attributes.*.making_charges'] = 'required';
-        } elseif ($businessType == 'Mobile Shop') {
-            $rules['business_attributes.*.imei'] = 'required';
-        } elseif ($businessType == 'Electronics') {
-            $rules['business_attributes.*.serial_number'] = 'required';
-        } elseif ($businessType == 'Medical Store' || $businessType == 'Grocery') {
-            $rules['business_attributes.*.expiry_date'] = 'required';
-        } elseif ($businessType == 'Clothing') {
-            $rules['business_attributes.*.size'] = 'required';
-            $rules['business_attributes.*.color'] = 'required';
+        } elseif ($businessType == 'Mobile and accessories' || $businessType == 'Electronics') {
+            $rules['business_attributes.*.imei_number'] = 'nullable';
+            $rules['business_attributes.*.serial_number'] = 'nullable';
+        } elseif (in_array($businessType, ['Medicine(Pharma)', 'Medical Store', 'Grocery'])) {
+            $rules['business_attributes.*.expiry_date'] = 'nullable';
+        } elseif ($businessType == 'Clothing' || $businessType == 'Textiles') {
+            $rules['business_attributes.*.size'] = 'nullable';
+            $rules['business_attributes.*.color'] = 'nullable';
         }
 
         $request->validate($rules);
@@ -263,13 +262,13 @@ class StockUsageController extends Controller
                 'stock_id' => $stock->id, // Added for profit tracking consistency
                 'name' => $stock->name,
                 'brand' => $attrs['brand'] ?? $stock->business_attributes['brand'] ?? null,
-                'model' => $attrs['model'] ?? $stock->business_attributes['model'] ?? null,
-                'imei' => $attrs['imei'] ?? null,
+                'model' => $attrs['model_number'] ?? $stock->business_attributes['model_number'] ?? null,
+                'imei' => $attrs['imei_number'] ?? null,
                 'serial' => $attrs['serial_number'] ?? null,
                 'barcode' => $rawTrackingData[$i] ?? 'N/A',
                 'unit_price' => $stock->price,
-                'mrp' => $stock->mrp ?? 0, // Store MRP at time of sale
-                'discount_amount' => $perItemDiscount, // Store discount at time of sale
+                'mrp' => $stock->mrp ?? 0,
+                'discount_amount' => $perItemDiscount,
             ];
         }
 
