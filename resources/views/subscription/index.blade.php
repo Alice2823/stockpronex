@@ -127,13 +127,11 @@
                             <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             {{ __('Profit Management') }}
                         </li>
-                    </ul>
-
-                    <div x-show="billingCycle === 'monthly'">
-                        @include('subscription.partials.razorpay-form', ['plan' => 'standard', 'cycle' => 'monthly', 'amount' => 199 * 100, 'orderId' => $orders['standard']['monthly'] ?? null])
+                                        <div x-show="billingCycle === 'monthly'">
+                        @include('subscription.partials.razorpay-form', ['plan' => 'standard', 'cycle' => 'monthly'])
                     </div>
                     <div x-show="billingCycle === 'yearly'">
-                        @include('subscription.partials.razorpay-form', ['plan' => 'standard', 'cycle' => 'yearly', 'amount' => 999 * 100, 'orderId' => $orders['standard']['yearly'] ?? null])
+                        @include('subscription.partials.razorpay-form', ['plan' => 'standard', 'cycle' => 'yearly'])
                     </div>
                 </div>
 
@@ -184,16 +182,106 @@
                     </ul>
 
                     <div x-show="billingCycle === 'monthly'">
-                        @include('subscription.partials.razorpay-form', ['plan' => 'pro', 'cycle' => 'monthly', 'amount' => 199 * 100, 'orderId' => $orders['pro']['monthly'] ?? null])
+                        @include('subscription.partials.razorpay-form', ['plan' => 'pro', 'cycle' => 'monthly'])
                     </div>
                     <div x-show="billingCycle === 'yearly'">
-                        @include('subscription.partials.razorpay-form', ['plan' => 'pro', 'cycle' => 'yearly', 'amount' => 999 * 100, 'orderId' => $orders['pro']['yearly'] ?? null])
+                        @include('subscription.partials.razorpay-form', ['plan' => 'pro', 'cycle' => 'yearly'])
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        window.initializeRazorpay = async function(plan, cycle) {
+            const button = document.getElementById(`rzp-button-${plan}-${cycle}`);
+            const originalText = button.innerHTML;
+            
+            try {
+                // 1. Show loading state
+                button.disabled = true;
+                button.innerHTML = `<svg class="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+                // 2. Create Order
+                const response = await fetch("{{ route('subscription.create-order') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ plan, cycle })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                // 3. Open Razorpay Modal
+                const options = {
+                    "key": data.razorpay_key,
+                    "amount": data.amount,
+                    "currency": data.currency,
+                    "name": "StockProNex",
+                    "description": `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan (${cycle.charAt(0).toUpperCase() + cycle.slice(1)})`,
+                    "order_id": data.order_id,
+                    "handler": async function (response) {
+                        // 4. Verify Payment
+                        const verifyRes = await fetch("{{ route('subscription.verify-payment') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                plan: plan,
+                                cycle: cycle
+                            })
+                        });
+
+                        const verifyData = await verifyRes.json();
+                        if (verifyData.success) {
+                            window.location.href = verifyData.redirect;
+                        } else {
+                            alert(verifyData.error || 'Payment verification failed');
+                        }
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            button.disabled = false;
+                            button.innerHTML = originalText;
+                        }
+                    },
+                    "prefill": {
+                        "name": "{{ Auth::user()->name }}",
+                        "email": "{{ Auth::user()->email }}",
+                        "contact": "{{ Auth::user()->phone }}"
+                    },
+                    "theme": {
+                        "color": "#3B82F6"
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        };
+    </script>
+    @endpush
 
     <!-- Global Styles for Razorpay Buttons -->
     <style>

@@ -14,51 +14,56 @@ class SubscriptionController extends Controller
         $prices = \App\Constants\Plan::PRICES;
         $razorpayKey = config('app.razorpay_key');
         
-        // Pre-create orders for each plan/cycle to simplify the frontend
-        $orders = [];
-        if (!config('app.developer_mode') && $razorpayKey) {
-            try {
-                $api = new Api($razorpayKey, config('app.razorpay_secret'));
-                
-                foreach (['standard', 'pro'] as $plan) {
-                    foreach (['monthly', 'yearly'] as $cycle) {
-                        $amount = $prices[$plan][$cycle] * 100; // to paise
-                        $order = $api->order->create([
-                            'receipt' => 'rcpt_' . Auth::id() . '_' . $plan . '_' . $cycle,
-                            'amount' => $amount,
-                            'currency' => 'INR',
-                            'notes' => [
-                                'plan' => $plan,
-                                'cycle' => $cycle,
-                                'user_id' => Auth::id()
-                            ]
-                        ]);
-                        $orders[$plan][$cycle] = $order['id'];
-                    }
-                }
-            } catch (Exception $e) {
-                // Log or handle error if needed
-            }
-        }
-
-        return view('subscription.index', compact('orders'));
+        return view('subscription.index');
     }
 
-    public function payment(Request $request)
+    public function createOrder(Request $request)
+    {
+        $request->validate([
+            'plan' => 'required|in:standard,pro',
+            'cycle' => 'required|in:monthly,yearly',
+        ]);
+
+        $prices = \App\Constants\Plan::PRICES;
+        $amount = $prices[$request->plan][$request->cycle] * 100; // to paise
+
+        try {
+            $api = new Api(config('app.razorpay_key'), config('app.razorpay_secret'));
+            
+            $order = $api->order->create([
+                'receipt' => 'rcpt_' . Auth::id() . '_' . $request->plan . '_' . $request->cycle . '_' . time(),
+                'amount' => $amount,
+                'currency' => 'INR',
+                'notes' => [
+                    'plan' => $request->plan,
+                    'cycle' => $request->cycle,
+                    'user_id' => Auth::id()
+                ]
+            ]);
+
+            return response()->json([
+                'order_id' => $order['id'],
+                'amount' => $amount,
+                'currency' => 'INR',
+                'razorpay_key' => config('app.razorpay_key')
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Could not create order: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function verifyPayment(Request $request)
     {
         // Only allow mock payments if Developer Mode is enabled in config
         $devMode = config('app.developer_mode');
         
-        $rules = [
-            'plan' => 'required|in:standard,pro',
-            'cycle' => 'required|in:monthly,yearly',
-        ];
-
         if (!$devMode) {
             $request->validate([
                 'razorpay_payment_id' => 'required',
                 'razorpay_order_id' => 'required',
                 'razorpay_signature' => 'required',
+                'plan' => 'required',
+                'cycle' => 'required',
             ]);
 
             try {
@@ -70,6 +75,9 @@ class SubscriptionController extends Controller
                 ];
                 $api->utility->verifyPaymentSignature($attributes);
             } catch (Exception $e) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Payment verification failed: ' . $e->getMessage()], 400);
+                }
                 return back()->withErrors(['payment' => 'Payment verification failed: ' . $e->getMessage()]);
             }
         }
@@ -89,6 +97,14 @@ class SubscriptionController extends Controller
         }
         
         $user->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully upgraded to ' . ucfirst($plan) . ' (' . ucfirst($cycle) . ') plan!',
+                'redirect' => route('dashboard')
+            ]);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Successfully upgraded to ' . ucfirst($plan) . ' (' . ucfirst($cycle) . ') plan!');
     }

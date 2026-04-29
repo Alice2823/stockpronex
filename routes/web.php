@@ -149,8 +149,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('subscription', [SubscriptionController::class, 'index'])
         ->name('subscription.index');
 
-    Route::post('subscription/payment', [SubscriptionController::class, 'payment'])
-        ->name('subscription.payment');
+    Route::post('subscription/create-order', [SubscriptionController::class, 'createOrder'])
+        ->name('subscription.create-order');
+
+    Route::post('subscription/verify-payment', [SubscriptionController::class, 'verifyPayment'])
+        ->name('subscription.verify-payment');
 
 
     /*
