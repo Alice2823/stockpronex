@@ -4,7 +4,7 @@
     {{-- Floating Chat Button --}}
     <button 
         @click="toggleChat()"
-        class="fixed bottom-6 right-6 z-50 group animate-float"
+        class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 group animate-float"
         :class="isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'"
         style="transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);"
     >
@@ -17,11 +17,11 @@
             <div class="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 animate-ping opacity-10" style="animation-duration: 4s; animation-delay: 1s;"></div>
             
             {{-- Button --}}
-            <div class="relative h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 shadow-[0_8px_30px_rgb(59,130,246,0.4)] flex items-center justify-center text-white hover:shadow-[0_15px_40px_rgb(59,130,246,0.6)] hover:scale-110 hover:-rotate-3 transition-all duration-500 border border-white/30 backdrop-blur-md overflow-hidden">
+            <div class="relative h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 shadow-[0_8px_30px_rgb(59,130,246,0.4)] flex items-center justify-center text-white hover:shadow-[0_15px_40px_rgb(59,130,246,0.6)] hover:scale-110 hover:-rotate-3 transition-all duration-500 border border-white/30 backdrop-blur-md overflow-hidden">
                 {{-- Shine effect --}}
                 <div class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[45deg] group-hover:left-[100%] transition-all duration-1000 ease-in-out"></div>
                 
-                <svg class="h-8 w-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <svg class="h-6 w-6 sm:h-8 sm:w-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
                 </svg>
             </div>
@@ -36,7 +36,7 @@
 
     {{-- Chat Panel --}}
     <div 
-        class="fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-2rem)]"
+        class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 w-[400px] max-w-[calc(100vw-2rem)]"
         :class="isOpen ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-8 opacity-0 scale-95 pointer-events-none'"
         style="transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);"
     >
