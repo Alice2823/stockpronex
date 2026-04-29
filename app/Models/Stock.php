@@ -49,9 +49,13 @@ class Stock extends Model
                     $user = User::find($stock->user_id);
 
                     if ($user) {
-
-                        // Send email notification
-                        $user->notify(new LowStockNotification($stock));
+                        try {
+                            // Send email notification
+                            $user->notify(new LowStockNotification($stock));
+                        } catch (\Exception $e) {
+                            // Log the error but don't crash the app
+                            \Log::error('Failed to send low stock notification: ' . $e->getMessage());
+                        }
 
                         // Mark alert as sent (prevent spam)
                         $stock->low_stock_alert_sent = true;
