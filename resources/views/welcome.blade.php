@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ __('StockProNex') }} - {{ __('Manage Your Stock Efficiently') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#111827">
+    <link rel="apple-touch-icon" href="/images/pwa-icon-192.png">
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -181,6 +187,7 @@
             border: 1px solid rgba(59, 130, 246, 0.2);
             backdrop-filter: blur(5px);
         }
+
     </style>
     <script>
         document.addEventListener('mousemove', e => {
@@ -197,6 +204,7 @@
 </head>
 
 <body class="antialiased bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+
 
     <!-- Navbar -->
     <nav x-data="{ mobileMenuOpen: false }" class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 fixed w-full z-50 top-0 transition-all duration-500">
@@ -541,6 +549,24 @@
         </div>
     </footer>
 
-</body>
+    <!-- PWA Scripts -->
+    <script>
 
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+
+        // Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+    </script>
+</body>
 </html>
