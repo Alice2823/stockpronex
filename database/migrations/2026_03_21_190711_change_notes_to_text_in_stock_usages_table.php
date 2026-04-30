@@ -9,11 +9,29 @@ class ChangeNotesToTextInStockUsagesTable extends Migration
 {
     public function up()
     {
-        DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE TEXT');
+        $driver = DB::getDriverName();
+
+        if ($driver === 'mysql') {
+            DB::statement('ALTER TABLE stock_usages MODIFY notes TEXT NULL');
+            return;
+        }
+
+        if ($driver === 'pgsql') {
+            DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE TEXT');
+        }
     }
 
     public function down()
     {
-        DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE VARCHAR(255)');
+        $driver = DB::getDriverName();
+
+        if ($driver === 'mysql') {
+            DB::statement('ALTER TABLE stock_usages MODIFY notes VARCHAR(255) NULL');
+            return;
+        }
+
+        if ($driver === 'pgsql') {
+            DB::statement('ALTER TABLE stock_usages ALTER COLUMN notes TYPE VARCHAR(255)');
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class SubscriptionController extends Controller
@@ -33,19 +34,31 @@ class SubscriptionController extends Controller
 
         try {
             $api = new Api(config('app.razorpay_key'), config('app.razorpay_secret'));
+            $plan = $request->plan;
+            $cycle = $request->cycle;
             
             $order = $api->order->create([
-                'receipt' => 'rcpt_' . Auth::id() . '_' . $request->plan . '_' . $request->cycle . '_' . time(),
+                'receipt' => 'rcpt_' . Auth::id() . '_' . $plan . '_' . $cycle . '_' . time(),
                 'amount' => $amount,
                 'currency' => 'INR',
                 'notes' => [
-                    'plan' => $request->plan,
-                    'cycle' => $request->cycle,
+                    'plan' => $plan,
+                    'cycle' => $cycle,
                     'user_id' => Auth::id()
                 ]
             ]);
 
-            \Illuminate\Support\Facades\Log::info('Razorpay Key Prefix: ' . substr(config('app.razorpay_key'), 0, 10));
+            $pendingOrders = $request->session()->get('razorpay_orders', []);
+            $pendingOrders[$order['id']] = [
+                'user_id' => Auth::id(),
+                'plan' => $plan,
+                'cycle' => $cycle,
+                'amount' => (int) $amount,
+                'currency' => 'INR',
+                'created_at' => now()->timestamp,
+            ];
+
+            $request->session()->put('razorpay_orders', array_slice($pendingOrders, -10, null, true));
 
             return response()->json([
                 'order_id' => $order['id'],
@@ -54,7 +67,7 @@ class SubscriptionController extends Controller
                 'razorpay_key' => config('app.razorpay_key')
             ]);
         } catch (Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Razorpay Order Creation Failed: ' . $e->getMessage(), [
+            Log::error('Razorpay Order Creation Failed: ' . $e->getMessage(), [
                 'exception' => $e,
                 'user_id' => Auth::id(),
                 'plan' => $request->plan,
@@ -69,33 +82,58 @@ class SubscriptionController extends Controller
         // Only allow mock payments if Developer Mode is enabled in config
         $devMode = config('app.developer_mode');
         
-        if (!$devMode) {
-            $request->validate([
-                'razorpay_payment_id' => 'required',
-                'razorpay_order_id' => 'required',
-                'razorpay_signature' => 'required',
-                'plan' => 'required',
-                'cycle' => 'required',
-            ]);
+        $request->validate($devMode ? [
+            'plan' => 'required|in:standard,pro',
+            'cycle' => 'required|in:monthly,yearly',
+        ] : [
+            'razorpay_payment_id' => 'required|string',
+            'razorpay_order_id' => 'required|string',
+            'razorpay_signature' => 'required|string',
+        ]);
 
+        $plan = $request->plan;
+        $cycle = $request->cycle;
+
+        if (!$devMode) {
             try {
                 $api = new Api(config('app.razorpay_key'), config('app.razorpay_secret'));
+                $pendingOrder = $request->session()->get('razorpay_orders.' . $request->razorpay_order_id);
+
+                if (!$pendingOrder || (int) $pendingOrder['user_id'] !== Auth::id()) {
+                    return $this->paymentFailure($request, 'Payment order expired or does not belong to this account.');
+                }
+
                 $attributes = [
                     'razorpay_order_id' => $request->razorpay_order_id,
                     'razorpay_payment_id' => $request->razorpay_payment_id,
                     'razorpay_signature' => $request->razorpay_signature
                 ];
                 $api->utility->verifyPaymentSignature($attributes);
-            } catch (Exception $e) {
-                if ($request->ajax()) {
-                    return response()->json(['error' => 'Payment verification failed: ' . $e->getMessage()], 400);
+
+                $payment = $api->payment->fetch($request->razorpay_payment_id);
+
+                if (($payment['order_id'] ?? null) !== $request->razorpay_order_id) {
+                    return $this->paymentFailure($request, 'Payment order mismatch.');
                 }
-                return back()->withErrors(['payment' => 'Payment verification failed: ' . $e->getMessage()]);
+
+                if ((int) ($payment['amount'] ?? 0) !== (int) $pendingOrder['amount']) {
+                    return $this->paymentFailure($request, 'Payment amount mismatch.');
+                }
+
+                if (($payment['currency'] ?? null) !== $pendingOrder['currency']) {
+                    return $this->paymentFailure($request, 'Payment currency mismatch.');
+                }
+
+                if (!in_array(($payment['status'] ?? null), ['authorized', 'captured'], true)) {
+                    return $this->paymentFailure($request, 'Payment is not completed.');
+                }
+
+                $plan = $pendingOrder['plan'];
+                $cycle = $pendingOrder['cycle'];
+            } catch (Exception $e) {
+                return $this->paymentFailure($request, 'Payment verification failed: ' . $e->getMessage());
             }
         }
-
-        $plan = $request->plan;
-        $cycle = $request->cycle;
 
         $user = Auth::user();
         $user->plan = $plan;
@@ -109,8 +147,11 @@ class SubscriptionController extends Controller
         }
         
         $user->save();
+        if ($request->filled('razorpay_order_id')) {
+            $request->session()->forget('razorpay_orders.' . $request->razorpay_order_id);
+        }
 
-        if ($request->ajax()) {
+        if ($this->expectsJsonResponse($request)) {
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully upgraded to ' . ucfirst($plan) . ' (' . ucfirst($cycle) . ') plan!',
@@ -119,5 +160,19 @@ class SubscriptionController extends Controller
         }
 
         return redirect()->route('dashboard')->with('success', 'Successfully upgraded to ' . ucfirst($plan) . ' (' . ucfirst($cycle) . ') plan!');
+    }
+
+    private function paymentFailure(Request $request, string $message)
+    {
+        if ($this->expectsJsonResponse($request)) {
+            return response()->json(['error' => $message], 400);
+        }
+
+        return back()->withErrors(['payment' => $message]);
+    }
+
+    private function expectsJsonResponse(Request $request): bool
+    {
+        return $request->ajax() || $request->expectsJson() || $request->isJson();
     }
 }

@@ -3,127 +3,152 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\EmailOtp;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 class EmailOtpController extends Controller
 {
+    public function sendOtp(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
 
-    /*
-    |--------------------------------------------------------------------------
-    | SEND OTP
-    |--------------------------------------------------------------------------
-    */
-     public function sendOtp(Request $request)
-{
-    try {
+            $email = strtolower(trim($request->email));
+            $rateLimitKey = 'send-otp:' . $email . '|' . $request->ip();
 
-        $request->validate([
-            'email' => 'required|email'
-        ]);
+            if (RateLimiter::tooManyAttempts($rateLimitKey, 3)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Too many OTP requests. Please try again in ' . RateLimiter::availableIn($rateLimitKey) . ' seconds.',
+                ], 429);
+            }
 
-        $otp = rand(100000, 999999);
+            RateLimiter::hit($rateLimitKey, 60);
 
-        EmailOtp::updateOrCreate(
-            ['email' => $request->email],
-            [
-                'otp' => $otp,
-                'expires_at' => Carbon::now()->addMinutes(10)
-            ]
-        );
+            $otp = (string) random_int(100000, 999999);
 
-        \Log::info("OTP for ".$request->email." is ".$otp);
+            EmailOtp::updateOrCreate(
+                ['email' => $email],
+                [
+                    'otp' => Hash::make($otp),
+                    'expires_at' => Carbon::now()->addMinutes(10),
+                ]
+            );
 
-        \Log::info("TRYING TO SEND OTP");
+            Mail::raw("Your StockProNex OTP is: {$otp}", function ($message) use ($email) {
+                $message->to($email)->subject('StockProNex Email OTP');
+            });
 
-        Mail::raw("Your StockProNex OTP is: $otp", function ($message) use ($request) {
-            $message->to($request->email)
-                    ->subject("StockProNex Email OTP");
-        });
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP sent successfully',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()->first(),
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('OTP send failed', ['email' => $request->input('email'), 'error' => $e->getMessage()]);
 
-        \Log::info("MAIL SENT SUCCESSFULLY");
-
-        return response()->json([
-            'success' => true,
-            'message' => 'OTP sent successfully'
-        ]);
-
-    } catch (\Exception $e) {
-
-        \Log::error("OTP ERROR: ".$e->getMessage());
-
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to send OTP right now. Please try again.',
+            ], 500);
+        }
     }
-}
-    /*
-    |--------------------------------------------------------------------------
-    | REGISTER USER
-    |--------------------------------------------------------------------------
-    */
+
     public function registerWithOtp(Request $request)
     {
         try {
-
             $request->validate([
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'email' => 'required|email',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
-                'otp' => 'required',
-                'business_type' => 'nullable|string'
+                'otp' => 'required|string',
+                'business_type' => 'nullable|string|max:255',
             ]);
 
-            $otp = EmailOtp::where('email', $request->email)
-                ->where('otp', $request->otp)
-                ->first();
+            $email = strtolower(trim($request->email));
+            $rateLimitKey = 'register-with-otp:' . $email . '|' . $request->ip();
 
-            if (!$otp) {
+            if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid OTP'
-                ]);
+                    'message' => 'Too many registration attempts. Please try again in ' . RateLimiter::availableIn($rateLimitKey) . ' seconds.',
+                ], 429);
             }
 
-            if (Carbon::now()->gt($otp->expires_at)) {
+            RateLimiter::hit($rateLimitKey, 60);
+
+            $otpRecord = EmailOtp::where('email', $email)->first();
+
+            if (!$otpRecord || !$this->otpMatches($request->otp, $otpRecord->otp)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'OTP expired'
-                ]);
+                    'message' => 'Invalid OTP',
+                ], 422);
+            }
+
+            if (Carbon::now()->gt($otpRecord->expires_at)) {
+                $otpRecord->delete();
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP expired',
+                ], 422);
             }
 
             $user = User::create([
-                'name' => $request->first_name . ' ' . $request->last_name,
-                'email' => $request->email,
+                'first_name' => trim($request->first_name),
+                'last_name' => trim($request->last_name),
+                'name' => trim($request->first_name) . ' ' . trim($request->last_name),
+                'email' => $email,
                 'password' => Hash::make($request->password),
-                'business_type' => $request->business_type
+                'business_type' => $request->business_type,
             ]);
 
-            EmailOtp::where('email', $request->email)->delete();
+            $otpRecord->delete();
+            RateLimiter::clear($rateLimitKey);
 
             Auth::login($user);
 
             return response()->json([
                 'success' => true,
-                'redirect' => '/dashboard'
+                'redirect' => '/dashboard',
             ]);
-
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()->first(),
+            ], 422);
         } catch (\Exception $e) {
-
-            Log::error("REGISTER ERROR: " . $e->getMessage());
+            Log::error('OTP registration failed', ['email' => $request->input('email'), 'error' => $e->getMessage()]);
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ]);
+                'message' => 'Registration failed. Please try again.',
+            ], 500);
         }
+    }
+
+    private function otpMatches(string $plainOtp, string $storedOtp): bool
+    {
+        if (Hash::check($plainOtp, $storedOtp)) {
+            return true;
+        }
+
+        return preg_match('/^\d{6}$/', $storedOtp) === 1 && hash_equals($storedOtp, $plainOtp);
     }
 }

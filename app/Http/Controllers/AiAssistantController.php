@@ -222,8 +222,7 @@ class AiAssistantController extends Controller
                 // Use v1 for 1.5 models and v1beta for 2.0/latest
                 $version = (str_contains($model, '1.5')) ? 'v1' : 'v1beta';
 
-                $response = Http::withOptions(['verify' => false])
-                    ->timeout(30)
+                $response = Http::timeout(30)
                     ->post(
                         "https://generativelanguage.googleapis.com/{$version}/models/{$model}:generateContent?key={$apiKey}",
                         [

@@ -10,6 +10,19 @@ use Exception;
 
 class SocialAuthController extends Controller
 {
+    public function redirectToProvider($provider)
+    {
+        abort_unless($provider === 'google', 404);
+
+        return $this->redirectToGoogle();
+    }
+
+    public function handleProviderCallback($provider)
+    {
+        abort_unless($provider === 'google', 404);
+
+        return $this->handleGoogleCallback();
+    }
 
     public function redirectToGoogle()
     {

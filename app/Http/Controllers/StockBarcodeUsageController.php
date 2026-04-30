@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Models\StockBarcode;
 use App\Models\StockUsage;
+use App\Services\InvoiceNumberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -77,38 +78,50 @@ class StockBarcodeUsageController extends Controller
                 'model' => $stock->business_attributes['model_number'] ?? null,
             ]];
 
-            $invoiceNumber = $this->generateInvoiceNumber();
-            $invoice = \App\Models\Invoice::create([
-                'user_id' => Auth::id(),
-                'stock_id' => $stock->id,
-                'usage_id' => $usage->id,
-                'barcode' => $processedItems[0]['barcode'],
-                'customer_name' => $customerData['customer_name'],
-                'company_name' => $customerData['company_name'] ?? null,
-                'phone' => $customerData['phone'],
-                'address' => $customerData['address'],
-                'invoice_number' => $invoiceNumber,
-                'subtotal' => $subtotal,
-                'discount_percentage' => $discountPercentage,
-                'discount_amount' => $discountAmount,
-                'tax_amount' => $taxAmount,
-                'tax_percentage' => $taxPercentage,
-                'total_amount' => $totalAmount,
-                'amount' => $totalAmount,
-                'payment_method' => $customerData['payment_method'] ?? 'cash',
-                'status' => 'paid',
-                'items' => $processedItems,
-            ]);
+            $invoice = app(InvoiceNumberService::class)->create(function ($invoiceNumber) use (
+                $stock,
+                $usage,
+                $processedItems,
+                $customerData,
+                $subtotal,
+                $discountPercentage,
+                $discountAmount,
+                $taxAmount,
+                $taxPercentage,
+                $totalAmount
+            ) {
+                return \App\Models\Invoice::create([
+                    'user_id' => Auth::id(),
+                    'stock_id' => $stock->id,
+                    'usage_id' => $usage->id,
+                    'barcode' => $processedItems[0]['barcode'],
+                    'customer_name' => $customerData['customer_name'],
+                    'company_name' => $customerData['company_name'] ?? null,
+                    'phone' => $customerData['phone'],
+                    'address' => $customerData['address'],
+                    'invoice_number' => $invoiceNumber,
+                    'subtotal' => $subtotal,
+                    'discount_percentage' => $discountPercentage,
+                    'discount_amount' => $discountAmount,
+                    'tax_amount' => $taxAmount,
+                    'tax_percentage' => $taxPercentage,
+                    'total_amount' => $totalAmount,
+                    'amount' => $totalAmount,
+                    'payment_method' => $customerData['payment_method'] ?? 'cash',
+                    'status' => 'paid',
+                    'items' => $processedItems,
+                ]);
+            });
 
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => "Product used successfully. Invoice generated: " . $invoiceNumber,
+                'message' => "Product used successfully. Invoice generated: " . $invoice->invoice_number,
                 'data' => [
                     'stock_name' => $stock->name,
                     'remaining_quantity' => $stock->quantity,
-                    'invoice_number' => $invoiceNumber,
+                    'invoice_number' => $invoice->invoice_number,
                     'invoice_id' => $invoice->id
                 ]
             ]);
@@ -184,37 +197,49 @@ class StockBarcodeUsageController extends Controller
             $taxAmount = ($discountedSubtotal * $taxPercentage) / 100;
             $totalAmount = $discountedSubtotal + $taxAmount;
 
-            $invoiceNumber = $this->generateInvoiceNumber();
-            $invoice = \App\Models\Invoice::create([
-                'user_id' => Auth::id(),
-                'stock_id' => $firstStockId, // Reference the first item
-                'usage_id' => $firstUsageId,
-                'barcode' => $request->items[0]['barcode'],
-                'invoice_number' => $invoiceNumber,
-                'subtotal' => $totalSubtotal,
-                'discount_percentage' => $discountPercentage,
-                'discount_amount' => $totalDiscountAmount,
-                'tax_amount' => $taxAmount,
-                'tax_percentage' => $taxPercentage,
-                'total_amount' => $totalAmount,
-                'amount' => $totalAmount,
-                'customer_name' => $request->customer_name,
-                'company_name' => $request->company_name,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'payment_method' => $request->payment_method,
-                'status' => 'paid',
-                'items' => $processedItems,
-            ]);
+            $invoice = app(InvoiceNumberService::class)->create(function ($invoiceNumber) use (
+                $firstStockId,
+                $firstUsageId,
+                $request,
+                $totalSubtotal,
+                $discountPercentage,
+                $totalDiscountAmount,
+                $taxAmount,
+                $taxPercentage,
+                $totalAmount,
+                $processedItems
+            ) {
+                return \App\Models\Invoice::create([
+                    'user_id' => Auth::id(),
+                    'stock_id' => $firstStockId, // Reference the first item
+                    'usage_id' => $firstUsageId,
+                    'barcode' => $request->items[0]['barcode'],
+                    'invoice_number' => $invoiceNumber,
+                    'subtotal' => $totalSubtotal,
+                    'discount_percentage' => $discountPercentage,
+                    'discount_amount' => $totalDiscountAmount,
+                    'tax_amount' => $taxAmount,
+                    'tax_percentage' => $taxPercentage,
+                    'total_amount' => $totalAmount,
+                    'amount' => $totalAmount,
+                    'customer_name' => $request->customer_name,
+                    'company_name' => $request->company_name,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'payment_method' => $request->payment_method,
+                    'status' => 'paid',
+                    'items' => $processedItems,
+                ]);
+            });
 
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Batch invoice generated successfully: ' . $invoiceNumber,
+                'message' => 'Batch invoice generated successfully: ' . $invoice->invoice_number,
                 'data' => [
                     'invoice_id' => $invoice->id,
-                    'invoice_number' => $invoiceNumber
+                    'invoice_number' => $invoice->invoice_number
                 ]
             ]);
         } catch (\Exception $e) {
@@ -232,19 +257,32 @@ class StockBarcodeUsageController extends Controller
                 $query->where('barcode', $barcodeValue)
                     ->orWhere('imei_number', $barcodeValue)
                     ->orWhere('serial_number', $barcodeValue);
-            })->with('stock')->first();
+            })
+            ->lockForUpdate()
+            ->first();
 
         if ($unit) {
-            return ['stock' => $unit->stock, 'unit' => $unit];
+            $stock = Stock::where('id', $unit->stock_id)
+                ->where('user_id', Auth::id())
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            return ['stock' => $stock, 'unit' => $unit];
         }
 
         $barcode = StockBarcode::where('barcode', $barcodeValue)
             ->where('user_id', Auth::id())
             ->where('status', 'available')
+            ->lockForUpdate()
             ->first();
 
         if ($barcode) {
-            return ['stock' => $barcode->stock, 'barcode' => $barcode];
+            $stock = Stock::where('id', $barcode->stock_id)
+                ->where('user_id', Auth::id())
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            return ['stock' => $stock, 'barcode' => $barcode];
         }
 
         throw new \Exception("Invalid barcode or already used: $barcodeValue");
@@ -262,7 +300,8 @@ class StockBarcodeUsageController extends Controller
             $barcodeModel->update(['status' => 'used']);
         }
 
-        $stock->decrement('quantity', 1);
+        $stock->quantity = $stock->quantity - 1;
+        $stock->save();
 
         $notes = "Barcode: $barcodeValue\nCustomer: {$customerData['customer_name']}\nPhone: {$customerData['phone']}";
         
@@ -289,19 +328,7 @@ class StockBarcodeUsageController extends Controller
      */
     private function generateInvoiceNumber()
     {
-        $year = date('Y');
-        $lastInvoice = \App\Models\Invoice::where('invoice_number', 'like', "INV-$year-%")
-            ->latest()
-            ->first();
-
-        if (!$lastInvoice) {
-            $number = 1;
-        } else {
-            $parts = explode('-', $lastInvoice->invoice_number);
-            $number = intval(end($parts)) + 1;
-        }
-
-        return "INV-$year-" . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return app(InvoiceNumberService::class)->next();
     }
     
     /**

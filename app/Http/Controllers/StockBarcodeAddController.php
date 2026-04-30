@@ -100,10 +100,14 @@ class StockBarcodeAddController extends Controller
             DB::beginTransaction();
 
             foreach ($request->items as $item) {
-                $stock = Stock::where('user_id', Auth::id())->findOrFail($item['stock_id']);
+                $stock = Stock::where('user_id', Auth::id())
+                    ->where('id', $item['stock_id'])
+                    ->lockForUpdate()
+                    ->firstOrFail();
                 
                 // Increment quantity
-                $stock->increment('quantity', $item['quantity']);
+                $stock->quantity = $stock->quantity + $item['quantity'];
+                $stock->save();
 
                 // If it was an 'available' unit barcode that was rescanned (maybe error?), 
                 // we don't necessarily create a new unit, we just incremented the main stock.

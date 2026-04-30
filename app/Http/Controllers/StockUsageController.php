@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Models\StockBarcode;
 use App\Models\StockUsage;
+use App\Services\InvoiceNumberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class StockUsageController extends Controller
@@ -123,9 +125,12 @@ class StockUsageController extends Controller
 
         $request->validate($rules);
 
+        return DB::transaction(function () use ($request) {
+
         // Get stock safely using Eloquent
         $stock = Stock::where('id', $request->stock_id)
             ->where('user_id', Auth::id())
+            ->lockForUpdate()
             ->firstOrFail();
 
         // Check if enough stock available
@@ -142,6 +147,7 @@ class StockUsageController extends Controller
         $units = \App\Models\StockUnit::where('stock_id', $stock->id)
             ->where('user_id', Auth::id())
             ->where('status', 'available')
+            ->lockForUpdate()
             ->limit($request->quantity)
             ->get();
 
@@ -167,6 +173,7 @@ class StockUsageController extends Controller
             $barcodes = StockBarcode::where('stock_id', $stock->id)
                 ->where('user_id', Auth::id())
                 ->where('status', 'available')
+                ->lockForUpdate()
                 ->limit($remainingNeeded)
                 ->get();
 
@@ -249,8 +256,6 @@ class StockUsageController extends Controller
         $totalAmount = $netSubtotal + $taxAmount + $tcsAmount - $tdsAmount;
         // ------------------------------
 
-        $invoiceNumber = $this->generateInvoiceNumber();
-
         // Calculate per-item discount for profit tracking
         $perItemDiscount = $request->quantity > 0 ? ($discountAmount / $request->quantity) : 0;
 
@@ -272,7 +277,24 @@ class StockUsageController extends Controller
             ];
         }
 
-        $invoice = \App\Models\Invoice::create([
+        $invoice = app(InvoiceNumberService::class)->create(function ($invoiceNumber) use (
+            $stock,
+            $usage,
+            $rawTrackingData,
+            $request,
+            $totalAmount,
+            $subtotal,
+            $discountPercentage,
+            $discountAmount,
+            $taxPercentage,
+            $taxAmount,
+            $tdsPercentage,
+            $tdsAmount,
+            $tcsPercentage,
+            $tcsAmount,
+            $invoiceItems
+        ) {
+            return \App\Models\Invoice::create([
             'user_id' => Auth::id(),
             'stock_id' => $stock->id,
             'usage_id' => $usage->id,
@@ -295,7 +317,8 @@ class StockUsageController extends Controller
             'invoice_number' => $invoiceNumber,
             'payment_method' => $request->payment_method ?? 'cash',
             'items' => $invoiceItems, 
-        ]);
+            ]);
+        });
         // ---------------------------------------------------------
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -313,6 +336,7 @@ class StockUsageController extends Controller
         return redirect()
             ->route('usage.index')
             ->with('success', 'Stock usage recorded successfully.');
+        });
     }
 
     /**
@@ -320,19 +344,7 @@ class StockUsageController extends Controller
      */
     private function generateInvoiceNumber()
     {
-        $year = date('Y');
-        $lastInvoice = \App\Models\Invoice::where('invoice_number', 'like', "INV-$year-%")
-            ->latest()
-            ->first();
-
-        if (!$lastInvoice) {
-            $number = 1;
-        } else {
-            $parts = explode('-', $lastInvoice->invoice_number);
-            $number = intval(end($parts)) + 1;
-        }
-
-        return "INV-$year-" . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return app(InvoiceNumberService::class)->next();
     }
 
     /**

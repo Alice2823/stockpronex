@@ -8,6 +8,7 @@ use App\Models\Stock;
 use App\Models\StockBarcode;
 use App\Models\StockUsage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class StockBarcodeController extends Controller
@@ -111,9 +112,11 @@ class StockBarcodeController extends Controller
             'barcode' => 'required|string',
         ]);
 
+        return DB::transaction(function () use ($request) {
         $barcode = StockBarcode::where('barcode', trim($request->barcode))
             ->where('user_id', Auth::id())
             ->where('status', 'available')
+            ->lockForUpdate()
             ->first();
 
         if (!$barcode) {
@@ -123,7 +126,10 @@ class StockBarcodeController extends Controller
             ], 404);
         }
 
-        $stock = $barcode->stock;
+        $stock = Stock::where('id', $barcode->stock_id)
+            ->where('user_id', Auth::id())
+            ->lockForUpdate()
+            ->firstOrFail();
 
         if ($stock->quantity <= 0) {
             return response()->json([
@@ -153,5 +159,6 @@ class StockBarcodeController extends Controller
             'message' => "Stock unit used successfully. Updated quantity: {$stock->quantity}",
             'stock_name' => $stock->name
         ]);
+        });
     }
 }

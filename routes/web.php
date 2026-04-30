@@ -8,6 +8,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\Auth\EmailOtpController;
 use App\Http\Controllers\StockBarcodeController;
+use App\Http\Controllers\StockBarcodeAddController;
 use App\Http\Controllers\StockBarcodeUsageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
@@ -44,9 +45,11 @@ Route::get('/', function () {
 */
 
 Route::post('/send-otp', [EmailOtpController::class, 'sendOtp'])
+    ->middleware('throttle:5,1')
     ->name('send.otp');
 
 Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp'])
+    ->middleware('throttle:10,1')
     ->name('register.otp');
 
 
@@ -83,19 +86,19 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/analytics', [App\Http\Controllers\DashboardController::class, 'index'])
         ->name('dashboard.analytics');
-    
+
     Route::get('/dashboard/analytics/data', [App\Http\Controllers\DashboardController::class, 'getData'])
         ->name('dashboard.analytics.data');
-    
+
     Route::get('/dashboard/analytics/export', [App\Http\Controllers\DashboardController::class, 'export'])
         ->name('dashboard.analytics.export');
 
     Route::get('/dashboard/payments', [App\Http\Controllers\PaymentController::class, 'index'])
         ->name('dashboard.payments');
-    
+
     Route::get('/dashboard/payments/export/csv', [App\Http\Controllers\PaymentController::class, 'exportCsv'])
         ->name('dashboard.payments.export.csv');
-        
+
     Route::get('/dashboard/payments/export/pdf', [App\Http\Controllers\PaymentController::class, 'exportPdf'])
         ->name('dashboard.payments.export.pdf');
 
@@ -104,7 +107,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/profit', [App\Http\Controllers\ProfitController::class, 'index'])
         ->name('dashboard.profit');
-    
+
     Route::get('/dashboard/profit/export/pdf', [App\Http\Controllers\ProfitController::class, 'exportPdf'])
         ->name('dashboard.profit.export.pdf');
 
@@ -122,6 +125,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('stocks/export/{type}', [StockController::class, 'export'])
         ->name('stocks.export');
+
+    Route::get('stocks/barcode', [StockBarcodeAddController::class, 'index'])
+        ->name('stocks.barcode.index');
+
+    Route::get('stocks/barcode/{barcode}/details', [StockBarcodeAddController::class, 'getDetails'])
+        ->name('stocks.barcode.details');
+
+    Route::post('stocks/barcode', [StockBarcodeAddController::class, 'store'])
+        ->name('stocks.barcode.store');
 
     Route::resource('stocks', StockController::class)
         ->except(['index']);
@@ -183,12 +195,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('usage/barcode', [StockBarcodeUsageController::class, 'index'])
         ->name('usage.barcode');
 
-    Route::post('usage/barcode/scan', [StockBarcodeUsageController::class, 'scan'])
+    Route::post('usage/barcode/scan', [StockBarcodeUsageController::class, 'useBarcode'])
         ->name('usage.barcode.scan');
 
-    Route::post('/usage/barcode/use', [StockBarcodeUsageController::class, 'processBarcode'])->name('usage.barcode.use');
+    Route::post('/usage/barcode/use', [StockBarcodeUsageController::class, 'useBarcode'])->name('usage.barcode.use');
     Route::post('/usage/barcode/multi', [StockBarcodeUsageController::class, 'useBarcodeMulti'])->name('usage.barcode.multi');
-    Route::post('usage/barcode/manual', [StockBarcodeUsageController::class, 'manualUse'])
+    Route::post('usage/barcode/manual', [StockBarcodeUsageController::class, 'useBarcode'])
         ->name('usage.barcode.manual');
 
     Route::get('barcode/{barcode}/details', [StockBarcodeUsageController::class, 'getDetails'])
@@ -236,16 +248,20 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
+$diagnosticGuard = function () {
+    abort_unless(app()->isLocal() || config('app.developer_mode'), 404);
+};
 
+Route::middleware(['auth', 'throttle:6,1'])->group(function () use ($diagnosticGuard) {
 
-Route::post('/send-otp', [EmailOtpController::class, 'sendOtp']);
-Route::post('/register-with-otp', [EmailOtpController::class, 'registerWithOtp']);
+Route::get('/make-me-pro', function () use ($diagnosticGuard) {
+    $diagnosticGuard();
 
-Route::get('/make-me-pro', function () {
     $user = \App\Models\User::where('email', 'patelalice266@gmail.com')->first();
 
     if ($user) {
-        $user->subscription = 'pro';
+        $user->plan = 'pro';
+        $user->is_subscribed = true;
         $user->save();
         return "User upgraded to PRO ✅";
     }
@@ -254,7 +270,9 @@ Route::get('/make-me-pro', function () {
 });
 
 // TEST MAIL ROUTE
-Route::get('/test-mail', function () {
+Route::get('/test-mail', function () use ($diagnosticGuard) {
+    $diagnosticGuard();
+
     try {
         \Illuminate\Support\Facades\Mail::raw('This is a test email from StockProNex using Brevo.', function ($message) {
             $message->to('pshlok594@gmail.com')->subject('Brevo SMTP Test');
@@ -266,7 +284,9 @@ Route::get('/test-mail', function () {
 });
 
 // CACHE CLEAR ROUTE (For Live Server)
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function() use ($diagnosticGuard) {
+    $diagnosticGuard();
+
     try {
         \Illuminate\Support\Facades\Artisan::call('config:clear');
         \Illuminate\Support\Facades\Artisan::call('cache:clear');
@@ -279,11 +299,13 @@ Route::get('/clear-cache', function() {
 });
 
 // RAZORPAY TEST ROUTE
-Route::get('/test-razorpay', function () {
+Route::get('/test-razorpay', function () use ($diagnosticGuard) {
+    $diagnosticGuard();
+
     try {
         $key = config('app.razorpay_key');
         $secret = config('app.razorpay_secret');
-        
+
         if (!$key || !$secret) {
             return response()->json([
                 'status' => 'error',
@@ -318,7 +340,9 @@ Route::get('/test-razorpay', function () {
 });
 
 // LOG VIEWER ROUTE
-Route::get('/view-logs', function () {
+Route::get('/view-logs', function () use ($diagnosticGuard) {
+    $diagnosticGuard();
+
     $path = storage_path('logs/laravel.log');
     if (!file_exists($path)) {
         return "Log file not found! ❌";
@@ -328,7 +352,9 @@ Route::get('/view-logs', function () {
 });
 
 // TEST LOW STOCK ALERT ROUTE
-Route::get('/test-low-stock-alert', function () {
+Route::get('/test-low-stock-alert', function () use ($diagnosticGuard) {
+    $diagnosticGuard();
+
     try {
         $user = \Illuminate\Support\Facades\Auth::user();
         if (!$user) {
@@ -348,6 +374,4 @@ Route::get('/test-low-stock-alert', function () {
         return "Low Stock Alert Error: ❌ " . $e->getMessage();
     }
 });
-
-
-
+});
