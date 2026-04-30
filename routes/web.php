@@ -252,3 +252,28 @@ Route::get('/make-me-pro', function () {
 
     return "User not found ❌";
 });
+
+// TEST MAIL ROUTE
+Route::get('/test-mail', function () {
+    try {
+        \Illuminate\Support\Facades\Mail::raw('This is a test email from StockProNex using Brevo.', function ($message) {
+            $message->to('pshlok594@gmail.com')->subject('Brevo SMTP Test');
+        });
+        return "Test email sent successfully! ✅ Check your inbox.";
+    } catch (\Exception $e) {
+        return "Error sending test email: ❌ " . $e->getMessage();
+    }
+});
+
+// CACHE CLEAR ROUTE (For Live Server)
+Route::get('/clear-cache', function() {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        return "All caches cleared successfully! 🚀";
+    } catch (\Exception $e) {
+        return "Error clearing cache: " . $e->getMessage();
+    }
+});
