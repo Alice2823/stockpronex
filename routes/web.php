@@ -285,7 +285,13 @@ Route::get('/test-razorpay', function () {
         $secret = config('app.razorpay_secret');
         
         if (!$key || !$secret) {
-            return "Razorpay keys are missing in config! ❌";
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Razorpay keys are missing in config!',
+                'key_loaded' => $key ? 'Yes (starts with ' . substr($key, 0, 8) . ')' : 'No',
+                'secret_loaded' => $secret ? 'Yes' : 'No',
+                'env_names_expected' => ['RAZORPAY_KEY', 'RAZORPAY_SECRET']
+            ]);
         }
 
         $api = new \Razorpay\Api\Api($key, $secret);
@@ -295,10 +301,53 @@ Route::get('/test-razorpay', function () {
             'currency' => 'INR'
         ]);
 
-        return "Razorpay Order Created Successfully! ✅ ID: " . $order['id'];
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Razorpay Order Created Successfully!',
+            'order_id' => $order['id'],
+            'key_used' => substr($key, 0, 8) . '...'
+        ]);
     } catch (\Exception $e) {
         \Illuminate\Support\Facades\Log::error('Razorpay Test Error: ' . $e->getMessage());
-        return "Razorpay Error: ❌ " . $e->getMessage();
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'key_used' => isset($key) ? substr($key, 0, 8) . '...' : 'none'
+        ]);
     }
 });
+
+// LOG VIEWER ROUTE
+Route::get('/view-logs', function () {
+    $path = storage_path('logs/laravel.log');
+    if (!file_exists($path)) {
+        return "Log file not found! ❌";
+    }
+    $logs = file_get_contents($path);
+    return "<pre>" . htmlspecialchars(substr($logs, -5000)) . "</pre>";
+});
+
+// TEST LOW STOCK ALERT ROUTE
+Route::get('/test-low-stock-alert', function () {
+    try {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (!$user) {
+            return "Please log in first! ❌";
+        }
+
+        // Create a dummy stock object for the notification
+        $dummyStock = new \stdClass();
+        $dummyStock->name = "Test Product (Diagnostic)";
+        $dummyStock->quantity = 5;
+
+        $user->notify(new \App\Notifications\LowStockNotification($dummyStock));
+
+        return "Low Stock Alert Test Email Sent! ✅ Check your inbox: " . $user->email;
+    } catch (\Exception $e) {
+        \Illuminate\Support\Facades\Log::error('Low Stock Alert Test Error: ' . $e->getMessage());
+        return "Low Stock Alert Error: ❌ " . $e->getMessage();
+    }
+});
+
+
 

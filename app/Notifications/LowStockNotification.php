@@ -4,12 +4,8 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Bus\Queueable;
-
-class LowStockNotification extends Notification implements ShouldQueue
+class LowStockNotification extends Notification
 {
-    use Queueable;
     protected $stock;
 
     public function __construct($stock)
