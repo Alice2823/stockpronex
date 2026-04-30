@@ -54,6 +54,12 @@ class SubscriptionController extends Controller
                 'razorpay_key' => config('app.razorpay_key')
             ]);
         } catch (Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Razorpay Order Creation Failed: ' . $e->getMessage(), [
+                'exception' => $e,
+                'user_id' => Auth::id(),
+                'plan' => $request->plan,
+                'amount' => $amount
+            ]);
             return response()->json(['error' => 'Could not create order: ' . $e->getMessage()], 500);
         }
     }

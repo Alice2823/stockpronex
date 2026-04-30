@@ -276,4 +276,29 @@ Route::get('/clear-cache', function() {
     } catch (\Exception $e) {
         return "Error clearing cache: " . $e->getMessage();
     }
-});
+});
+
+// RAZORPAY TEST ROUTE
+Route::get('/test-razorpay', function () {
+    try {
+        $key = config('app.razorpay_key');
+        $secret = config('app.razorpay_secret');
+        
+        if (!$key || !$secret) {
+            return "Razorpay keys are missing in config! ❌";
+        }
+
+        $api = new \Razorpay\Api\Api($key, $secret);
+        $order = $api->order->create([
+            'receipt' => 'test_rcpt_' . time(),
+            'amount' => 100, // 1 INR
+            'currency' => 'INR'
+        ]);
+
+        return "Razorpay Order Created Successfully! ✅ ID: " . $order['id'];
+    } catch (\Exception $e) {
+        \Illuminate\Support\Facades\Log::error('Razorpay Test Error: ' . $e->getMessage());
+        return "Razorpay Error: ❌ " . $e->getMessage();
+    }
+});
+
