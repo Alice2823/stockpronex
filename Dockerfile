@@ -33,4 +33,4 @@ RUN chmod -R 777 storage bootstrap/cache || true
 
 EXPOSE 10000
 
-CMD php -S 0.0.0.0:${PORT:-10000} -t public
+CMD ["sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
