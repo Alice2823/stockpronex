@@ -1,0 +1,21 @@
+Schema for invoices:
+ - id: bigint(20) unsigned
+ - user_id: bigint(20) unsigned
+ - stock_id: bigint(20) unsigned
+ - usage_id: bigint(20) unsigned
+ - items: longtext
+ - barcode: varchar(255)
+ - customer_name: varchar(255)
+ - company_name: varchar(255)
+ - phone: varchar(255)
+ - address: text
+ - amount: decimal(10,2)
+ - subtotal: decimal(10,2)
+ - tax_percentage: decimal(5,2)
+ - tax_amount: decimal(10,2)
+ - total_amount: decimal(10,2)
+ - status: varchar(255)
+ - invoice_number: varchar(255)
+ - payment_method: varchar(255)
+ - created_at: timestamp
+ - updated_at: timestamp

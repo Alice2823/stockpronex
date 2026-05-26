@@ -1,0 +1,798 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-black text-3xl text-gray-800 dark:text-white leading-tight">
+            {{ __('Account Settings') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            <!-- Profile Information -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Profile Information') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Update your account's profile information and email address.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="first_name" :value="__('First Name')" />
+                                    <x-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', explode(' ', $user->name)[0])" required autofocus />
+                                    <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+                                </div>
+
+                                <div>
+                                    <x-label for="last_name" :value="__('Last Name')" />
+                                    <x-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" :value="old('last_name', explode(' ', $user->name)[1] ?? '')" required />
+                                    <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="email" :value="__('Email')" />
+                                    <x-input id="email" type="email" class="mt-1 block w-full bg-gray-50 dark:bg-gray-800 cursor-not-allowed opacity-60" :value="$user->email" readonly />
+                                </div>
+
+                                <div>
+                                    <x-label for="phone" :value="__('Phone Number')" />
+                                    <x-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                                </div>
+                            </div>
+
+                            <!-- Subscription Plan Information -->
+                            <div class="p-4 bg-gray-50 dark:bg-gray-800/40 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 rounded-xl {{ $user->plan === 'pro' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-600' : ($user->plan === 'standard' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500') }}">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Current Plan') }}</p>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg font-black text-gray-900 dark:text-white uppercase">{{ $user->plan ?? 'FREE' }}</span>
+                                            @if($user->plan !== 'free')
+                                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 font-bold uppercase">{{ $user->billing_cycle }}</span>
+                                            @endif
+                                        </div>
+                                        @if($user->subscription_ends_at)
+                                            <p class="text-[10px] text-gray-400 dark:text-gray-500">
+                                                {{ __('Expires on') }}: {{ \Carbon\Carbon::parse($user->subscription_ends_at)->format('M d, Y') }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <a href="{{ route('subscription.index') }}" class="text-sm font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 group">
+                                    {{ __('Manage / Upgrade') }}
+                                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-95 transition-all">
+                                    {{ __('Save Profile') }}
+                                </button>
+
+                                @if (session('status') === 'profile-updated')
+                                    <p
+                                        x-data="{ show: true }"
+                                        x-show="show"
+                                        x-transition
+                                        x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-green-600 dark:text-green-400 font-bold"
+                                    >{{ __('Saved.') }}</p>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Details -->
+            <div x-data="{ 
+                open: false,
+                currency: '{{ $user->currency ?? 'USD' }}'
+            }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-2xl text-purple-600 dark:text-purple-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Business Details') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Manage your business-specific information and preferences.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+                            <input type="hidden" name="first_name" value="{{ explode(' ', $user->name)[0] }}">
+                            <input type="hidden" name="last_name" value="{{ explode(' ', $user->name)[1] ?? '' }}">
+
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="business_name" :value="__('Business Name')" />
+                                    <x-input id="business_name" name="business_name" type="text" class="mt-1 block w-full" :value="old('business_name', $user->business_name)" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_name')" />
+                                </div>
+
+                                <div>
+                                    <x-label for="business_type" :value="__('Business Type')" />
+                                    <select id="business_type" name="business_type" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
+                                        <optgroup label="{{ __('Services') }}">
+                                            @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['Services'] as $industry)
+                                                <option value="{{ $industry }}" {{ $user->business_type == $industry ? 'selected' : '' }}>{{ __($industry) }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                        <optgroup label="{{ __('All Industries') }}">
+                                            @foreach(\App\Constants\BusinessIndustry::INDUSTRIES['General Industries'] as $industry)
+                                                <option value="{{ $industry }}" {{ $user->business_type == $industry ? 'selected' : '' }}>{{ __($industry) }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_type')" />
+                                    <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">{{ __('Selecting a type will automatically adjust your tax rates and forms') }}</p>
+                                </div>
+                             </div>
+
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <x-label for="business_phone" :value="__('Business Phone Number')" />
+                                    <x-input id="business_phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="{{ __('e.g. +91 98765 43210') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                                </div>
+
+                                <div>
+                                    <x-label for="business_email" :value="__('Business Email')" />
+                                    <x-input id="business_email" name="business_email" type="email" class="mt-1 block w-full" :value="old('business_email', $user->business_email)" placeholder="{{ __('e.g. contact@business.com') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('business_email')" />
+                                </div>
+                             </div>
+
+                             <div>
+                                <x-label for="address" :value="__('Business Address')" />
+                                <x-textarea id="address" name="address" class="mt-1 block w-full">{{ old('address', $user->address) }}</x-textarea>
+                                <x-input-error class="mt-2" :messages="$errors->get('address')" />
+                             </div>
+
+                             <div>
+                                <x-label for="currency" :value="__('Currency')" />
+                                <select id="currency" name="currency" @change="currency = $event.target.value" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-blue-500 dark:focus:border-blue-600 focus:ring focus:ring-blue-200 dark:focus:ring-blue-900 rounded-lg shadow-sm">
+                                    <option value="USD" {{ $user->currency == 'USD' ? 'selected' : '' }}>{{ __('USD ($)') }}</option>
+                                    <option value="INR" {{ $user->currency == 'INR' ? 'selected' : '' }}>{{ __('INR (₹)') }}</option>
+                                    <option value="GBP" {{ $user->currency == 'GBP' ? 'selected' : '' }}>{{ __('GBP (£)') }}</option>
+                                    <option value="EUR" {{ $user->currency == 'EUR' ? 'selected' : '' }}>{{ __('EUR (€)') }}</option>
+                                </select>
+                                <x-input-error class="mt-2" :messages="$errors->get('currency')" />
+                             </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-purple-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-purple-700 transform active:scale-95 transition-all">
+                                    {{ __('Save Business Details') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GST Settings -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('GST Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Manage your GST number and tax compliance toggles.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+
+                            <div>
+                                <x-label for="gst_number" :value="__('GST Number')" />
+                                <x-input id="gst_number" name="tax_number" type="text" class="mt-1 block w-full" :value="old('tax_number', $user->tax_number)" placeholder="{{ __('e.g. 27AAAAA0000A1Z5') }}" />
+                                <x-input-error class="mt-2" :messages="$errors->get('tax_number')" />
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                    <div>
+                                        <span class="text-sm font-bold text-gray-900 dark:text-white">{{ __('TDS') }}</span>
+                                        <p class="text-xs text-gray-500">{{ __('Tax Deducted at Source') }}</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="hidden" name="tds_enabled" value="0">
+                                        <input type="checkbox" name="tds_enabled" value="1" class="sr-only peer" {{ $user->tds_enabled ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                    <div>
+                                        <span class="text-sm font-bold text-gray-900 dark:text-white">{{ __('TCS') }}</span>
+                                        <p class="text-xs text-gray-500">{{ __('Tax Collected at Source') }}</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="hidden" name="tcs_enabled" value="0">
+                                        <input type="checkbox" name="tcs_enabled" value="1" class="sr-only peer" {{ $user->tcs_enabled ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-95 transition-all">
+                                    {{ __('Save GST Settings') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Online Payment Settings -->
+            <div x-data="{
+                open: false,
+                currency: '{{ $user->currency ?? 'USD' }}',
+                get paymentLabel() {
+                    const labels = {
+                        'INR': '{{ __("UPI ID") }}',
+                        'USD': '{{ __("PayPal Email") }}',
+                        'GBP': '{{ __("Revolut / Bank ID") }}',
+                        'EUR': '{{ __("SEPA / PayPal ID") }}'
+                    };
+                    return labels[this.currency] || '{{ __("Payment ID") }}';
+                },
+                get paymentPlaceholder() {
+                    const placeholders = {
+                        'INR': '{{ __("e.g. yourname@upi") }}',
+                        'USD': '{{ __("e.g. you@email.com") }}',
+                        'GBP': '{{ __("e.g. @yourrevtag") }}',
+                        'EUR': '{{ __("e.g. you@email.com") }}'
+                    };
+                    return placeholders[this.currency] || '{{ __("Enter your payment ID") }}';
+                },
+                get paymentHint() {
+                    const hints = {
+                        'INR': '{{ __("Your UPI ID will be used to generate a payment QR code on invoices. Customers can scan and pay directly.") }}',
+                        'USD': '{{ __("Your PayPal email will appear as a QR code on invoices for easy online payments.") }}',
+                        'GBP': '{{ __("Your Revolut tag or bank ID will be shown as a QR code on invoices.") }}',
+                        'EUR': '{{ __("Your SEPA/PayPal ID will be used to generate a payment QR code on invoices.") }}'
+                    };
+                    return hints[this.currency] || '{{ __("Your payment ID will be shown on invoices for customer payments.") }}';
+                }
+            }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-2xl text-green-600 dark:text-green-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Online Payment Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Set up your payment ID for QR code generation on invoices.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+                            <input type="hidden" name="first_name" value="{{ explode(' ', $user->name)[0] }}">
+                            <input type="hidden" name="last_name" value="{{ explode(' ', $user->name)[1] ?? '' }}">
+
+                            <!-- Current Currency Display -->
+                            <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                                <div class="p-2 rounded-lg bg-green-100 dark:bg-green-900/40">
+                                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('Current Currency') }}</p>
+                                    <p class="text-sm font-black text-gray-900 dark:text-white">{{ $user->currency ?? 'USD' }}</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="text-xs text-gray-400 dark:text-gray-500">{{ __('Change in Business Details above') }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Payment ID Input -->
+                            <div>
+                                <label for="payment_id" class="block text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider" x-text="paymentLabel"></label>
+                                <input id="payment_id" name="payment_id" type="text"
+                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 focus:border-green-500 dark:focus:border-green-600 focus:ring focus:ring-green-200 dark:focus:ring-green-900 rounded-lg shadow-sm"
+                                    value="{{ old('payment_id', $user->payment_id) }}"
+                                    x-bind:placeholder="paymentPlaceholder" />
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400" x-text="paymentHint"></p>
+                                <x-input-error class="mt-2" :messages="$errors->get('payment_id')" />
+                            </div>
+
+                            <!-- Preview Info -->
+                            @if($user->payment_id)
+                                <div class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+                                    <svg class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm font-bold text-green-800 dark:text-green-300">{{ __('Payment QR Active') }}</p>
+                                        <p class="text-xs text-green-600 dark:text-green-400">{{ __('A payment QR code will be generated on all your invoices.') }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-green-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-green-700 transform active:scale-95 transition-all">
+                                    {{ __('Save Payment Settings') }}
+                                </button>
+
+                                @if (session('status') === 'profile-updated')
+                                    <p
+                                        x-data="{ show: true }"
+                                        x-show="show"
+                                        x-transition
+                                        x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-green-600 dark:text-green-400 font-bold"
+                                    >{{ __('Saved.') }}</p>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Settings -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl text-blue-600 dark:text-blue-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Invoice Settings') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Customize your invoice appearance and payment details.") }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                            @csrf
+                            @method('patch')
+                            <input type="hidden" name="first_name" value="{{ explode(' ', $user->name)[0] }}">
+                            <input type="hidden" name="last_name" value="{{ explode(' ', $user->name)[1] ?? '' }}">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Visual Customization') }}</h3>
+                                
+                                <div>
+                                    <x-label for="invoice_color" :value="__('Invoice Accent Color')" />
+                                    <div class="flex items-center gap-4 mt-1">
+                                        <input id="invoice_color" name="invoice_color" type="color" class="h-10 w-20 rounded border border-gray-300 dark:border-gray-700 bg-transparent p-1" value="{{ old('invoice_color', $user->invoice_color ?? '#2563eb') }}" />
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ __('This color will be used for headers, totals, and buttons in your PDF invoice.') }}</span>
+                                    </div>
+                                    <x-input-error class="mt-2" :messages="$errors->get('invoice_color')" />
+                                </div>
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Business Info (Shown on Invoice)') }}</h3>
+                                
+                                <div>
+                                    <x-label for="business_name_inv" :value="__('Company Name')" />
+                                    <x-input id="business_name_inv" name="business_name" type="text" class="mt-1 block w-full" :value="old('business_name', $user->business_name)" placeholder="{{ __('Your Business Name') }}" />
+                                </div>
+
+                                <div>
+                                    <x-label for="address_inv" :value="__('Address')" />
+                                    <x-textarea id="address_inv" name="address" class="mt-1 block w-full" placeholder="{{ __('Your Business Address') }}">{{ old('address', $user->address) }}</x-textarea>
+                                </div>
+
+                                <div>
+                                    <x-label for="phone_inv" :value="__('Phone Number')" />
+                                    <x-input id="phone_inv" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="{{ __('Your Business Phone') }}" />
+                                </div>
+
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('Bank Account Details') }}</h3>
+                                
+                                <div>
+                                    <x-label for="bank_name" :value="__('Bank Name')" />
+                                    <x-input id="bank_name" name="bank_name" type="text" class="mt-1 block w-full" :value="old('bank_name', $user->bank_name)" placeholder="{{ __('e.g. State Bank of India') }}" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('bank_name')" />
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <x-label for="account_number" :value="__('Account Number')" />
+                                        <x-input id="account_number" name="account_number" type="text" class="mt-1 block w-full" :value="old('account_number', $user->account_number)" placeholder="{{ __('e.g. 1234567890') }}" />
+                                        <x-input-error class="mt-2" :messages="$errors->get('account_number')" />
+                                    </div>
+                                    <div>
+                                        <x-label for="ifsc_code" :value="__('IFSC / SWIFT Code')" />
+                                        <x-input id="ifsc_code" name="ifsc_code" type="text" class="mt-1 block w-full" :value="old('ifsc_code', $user->ifsc_code)" placeholder="{{ __('e.g. SBIN0001234') }}" />
+                                        <x-input-error class="mt-2" :messages="$errors->get('ifsc_code')" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-gray-100 dark:border-gray-800">
+
+                            <div class="space-y-4">
+                                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">{{ __('UPI Details') }}</h3>
+                                
+                                <div>
+                                    <x-label for="upi_id" :value="__('UPI ID')" />
+                                    <x-input id="upi_id" name="upi_id" type="text" class="mt-1 block w-full" :value="old('upi_id', $user->upi_id)" placeholder="{{ __('e.g. yourname@okaxis') }}" />
+                                    <p class="mt-1 text-[10px] text-gray-500">{{ __('This will be used for QR code generation if provided. Otherwise, the default payment ID will be used.') }}</p>
+                                    <x-input-error class="mt-2" :messages="$errors->get('upi_id')" />
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-blue-700 transform active:scale-95 transition-all">
+                                    {{ __('Save Invoice Settings') }}
+                                </button>
+
+                                @if (session('status') === 'profile-updated')
+                                    <p
+                                        x-data="{ show: true }"
+                                        x-show="show"
+                                        x-transition
+                                        x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-green-600 dark:text-green-400 font-bold"
+                                    >{{ __('Saved.') }}</p>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CA Report Sharing -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('CA Report Sharing') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Automatically share monthly reports with your CA') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="px-8 pb-8 space-y-8">
+                    <form method="post" action="{{ route('profile.update') }}" class="space-y-6">
+                        @csrf
+                        @method('patch')
+
+                        <div class="flex items-center justify-between p-4 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-900/30">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-bold text-indigo-900 dark:text-indigo-100">{{ __('Enable Automatic Sharing') }}</span>
+                                    <p class="text-xs text-indigo-600 dark:text-indigo-400">{{ __('Reports sent on 1st of every month') }}</p>
+                                </div>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="hidden" name="ca_sharing_enabled" value="0">
+                                <input type="checkbox" name="ca_sharing_enabled" value="1" class="sr-only peer" {{ $user->ca_sharing_enabled ? 'checked' : '' }}>
+                                <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <x-label for="ca_name" :value="__('Chartered Accountant Name')" class="ml-1 text-sm font-semibold" />
+                                <x-input id="ca_name" name="ca_name" type="text" class="w-full h-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_name', $user->ca_name)" placeholder="e.g., CA Rahul Sharma" />
+                            </div>
+
+                            <div class="space-y-2">
+                                <x-label for="ca_whatsapp" :value="__('CA WhatsApp Number')" class="ml-1 text-sm font-semibold" />
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                                        </svg>
+                                    </div>
+                                    <x-input id="ca_whatsapp" name="ca_whatsapp" type="text" class="w-full h-12 pl-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_whatsapp', $user->ca_whatsapp)" placeholder="91XXXXXXXXXX" />
+                                </div>
+                            </div>
+
+                            <div class="col-span-full space-y-2">
+                                <x-label for="ca_email" :value="__('CA Email Address')" class="ml-1 text-sm font-semibold" />
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <x-input id="ca_email" name="ca_email" type="email" class="w-full h-12 pl-12 rounded-2xl border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-indigo-500 transition-shadow" :value="old('ca_email', $user->ca_email)" placeholder="ca.name@example.com" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end space-x-4 pt-4">
+                            @if (session('status') === 'profile-updated')
+                                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-green-600 dark:text-green-400 font-medium">
+                                    {{ __('Settings Saved Successfully') }}
+                                </p>
+                            @endif
+                            <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-[0.98]">
+                                {{ __('Save CA Settings') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div x-data="{ open: false }" class="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl border border-gray-100 dark:border-gray-800 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-red-100 dark:bg-red-900/30 rounded-2xl text-red-600 dark:text-red-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('Security') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Ensure your account is using a long, random password to stay secure.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <form method="post" action="{{ route('profile.password') }}" class="space-y-6">
+                            @csrf
+                            @method('put')
+
+                            <div>
+                                <x-label for="current_password" :value="__('Current Password')" />
+                                <x-password-input id="current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-label for="password" :value="__('New Password')" />
+                                <x-password-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+                                <x-password-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                                <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+                            </div>
+
+                            <div class="flex items-center gap-4 pt-4">
+                                <button type="submit" class="bg-gray-900 dark:bg-red-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-black dark:hover:bg-red-700 transform active:scale-95 transition-all">
+                                    {{ __('Update Password') }}
+                                </button>
+
+                                @if (session('status') === 'password-updated')
+                                    <p
+                                        x-data="{ show: true }"
+                                        x-show="show"
+                                        x-transition
+                                        x-init="setTimeout(() => show = false, 2000)"
+                                        class="text-sm text-green-600 dark:text-green-400 font-bold"
+                                    >{{ __('Updated.') }}</p>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div x-data="{ open: false }" class="bg-blue-50 dark:bg-blue-900/10 shadow-2xl rounded-3xl border border-blue-100 dark:border-blue-900/20 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-blue-100/50 dark:hover:bg-blue-900/20 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-400">{{ __('Support') }}</h3>
+                            <p class="text-sm text-blue-600 dark:text-blue-500/80 mt-1">{{ __('Need help? Contact our support team directly.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-blue-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-md">
+                        <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-blue-100 dark:border-blue-900/40 flex items-center gap-4">
+                            <div class="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{{ __('Email Support') }}</h3>
+                                <a href="mailto:allipatel33@gmail.com" class="text-lg font-black text-blue-600 dark:text-blue-400 hover:underline decoration-2 underline-offset-4">
+                                    allipatel33@gmail.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                            <a href="{{ route('legal.terms') }}" class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl border border-blue-100 dark:border-blue-900/40 group hover:border-blue-400 transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors">
+                                        <svg class="w-5 h-5 text-gray-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-bold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 transition-colors">{{ __('Terms and Conditions') }}</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-300 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+
+                            <a href="{{ route('legal.privacy') }}" class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-2xl border border-blue-100 dark:border-blue-900/40 group hover:border-blue-400 transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors">
+                                        <svg class="w-5 h-5 text-gray-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-bold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 transition-colors">{{ __('Privacy Policy') }}</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-300 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Account -->
+            <div x-data="{ open: false }" class="bg-red-50 dark:bg-red-900/10 shadow-2xl rounded-3xl border border-red-100 dark:border-red-900/20 transition-all duration-300 overflow-hidden">
+                <button @click="open = !open" class="w-full px-8 py-6 flex items-center justify-between hover:bg-red-100/50 dark:hover:bg-red-900/20 transition-colors group">
+                    <div class="flex items-center space-x-5">
+                        <div class="p-3 bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 rounded-2xl shadow-sm">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-red-900 dark:text-red-500">{{ __('Account Delete') }}</h3>
+                            <p class="text-sm text-red-600 dark:text-red-500/80 mt-1">{{ __('Permanently delete your account and all associated data.') }}</p>
+                        </div>
+                    </div>
+                    <svg :class="{'rotate-180': open}" class="w-6 h-6 text-red-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="open" x-collapse x-cloak class="px-8 pb-8">
+                    <div class="max-w-xl">
+                        <p class="text-sm text-red-600 dark:text-red-400 mb-6 font-medium">
+                            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+                        </p>
+
+                        <div x-data="{ confirmingUserDeletion: false }">
+                            <button @click="confirmingUserDeletion = true" class="bg-red-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-red-700 transform active:scale-95 transition-all">
+                                {{ __('Delete Account') }}
+                            </button>
+
+                            <!-- Delete Confirmation Modal would go here, but for simplicity we can use a small form if Alpine is enabled -->
+                            <template x-if="confirmingUserDeletion">
+                                <div class="mt-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-red-200 dark:border-red-900/40">
+                                    <form method="post" action="{{ route('profile.destroy') }}" class="space-y-4">
+                                        @csrf
+                                        @method('delete')
+
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                                            {{ __('Are you sure you want to delete your account?') }}
+                                        </h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            {{ __('Please enter your password to confirm you would like to permanently delete your account.') }}
+                                        </p>
+
+                                        <div class="max-w-xs">
+                                            <x-label for="delete_password" value="{{ __('Password') }}" class="sr-only" />
+                                            <x-password-input id="delete_password" name="password" placeholder="{{ __('Password') }}" class="w-full" />
+                                            <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                        </div>
+
+                                        <div class="flex gap-4">
+                                            <button type="button" @click="confirmingUserDeletion = false" class="text-gray-600 dark:text-gray-400 font-bold hover:underline">
+                                                {{ __('Cancel') }}
+                                            </button>
+                                            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700">
+                                                {{ __('Confirm Deletion') }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</x-app-layout>
