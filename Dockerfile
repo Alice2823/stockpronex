@@ -32,5 +32,3 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chmod -R 777 storage bootstrap/cache || true
 
 EXPOSE 10000
-
-CMD ["sh", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
