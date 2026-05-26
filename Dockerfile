@@ -40,5 +40,6 @@ RUN php artisan key:generate || true
 # Expose port
 EXPOSE 8080
 
+
 # Start app
 CMD ["sh", "-c", "sleep 20 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
