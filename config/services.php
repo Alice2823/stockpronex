@@ -3,25 +3,25 @@
 return [
 
     'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'client_id' => trim(env('GOOGLE_CLIENT_ID', '')),
+        'client_secret' => trim(env('GOOGLE_CLIENT_SECRET', '')),
+        'redirect' => trim(env('GOOGLE_REDIRECT_URI', '')),
     ],
 
     'whatsapp' => [
-        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
-        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'phone_number_id' => trim(env('WHATSAPP_PHONE_NUMBER_ID', '')),
+        'access_token' => trim(env('WHATSAPP_ACCESS_TOKEN', '')),
         'business_name' => env('WHATSAPP_BUSINESS_NAME', 'StockProNex'),
         'template_name' => env('WHATSAPP_TEMPLATE_NAME', 'hello_world'),
     ],
 
     'gemini' => [
-        'api_key' => env('GEMINI_API_KEY'),
+        'api_key' => trim(env('GEMINI_API_KEY', '')),
     ],
 
     'turnstile' => [
-        'site_key' => trim(env('TURNSTILE_SITE_KEY')),
-        'secret_key' => trim(env('TURNSTILE_SECRET_KEY')),
+        'site_key' => trim(env('TURNSTILE_SITE_KEY', '')),
+        'secret_key' => trim(env('TURNSTILE_SECRET_KEY', '')),
     ],
 
 ];
