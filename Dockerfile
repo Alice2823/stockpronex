@@ -1,14 +1,14 @@
 FROM php:8.2-cli
 
-# Install system dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    zip \
+    unzip \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    curl \
     libzip-dev \
     libpq-dev
 
@@ -26,23 +26,21 @@ RUN docker-php-ext-install \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# App directory
 WORKDIR /app
 
-# Copy project files
+# Copy files
 COPY . .
 
-# Install Laravel dependencies
+# Install Laravel packages
 RUN composer install --no-dev --optimize-autoloader
 
-# Clear Laravel caches
-RUN php artisan config:clear \
- && php artisan route:clear \
- && php artisan cache:clear \
- && php artisan view:clear
+# Create storage links and permissions
+RUN chmod -R 777 storage bootstrap/cache || true
 
-# Expose Render port
-EXPOSE 8080
+# Expose port
+EXPOSE 10000
 
-# Start Laravel app
-CMD ["sh", "-c", "sleep 20 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
+
+# Start app
+CMD sh -c "php artisan config:clear && php artisan cache:clear && php artisan key:generate --force && php artisan migrate --force || true && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"
